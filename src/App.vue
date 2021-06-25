@@ -1,26 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="flex flex-col justify-start items-center h-full w-full overflow-auto space-y-10">
+    <div class="h-12 w-full bg-gray-100 shadow-md flex items-center justify-between" >
+      <div>
+        <div>W</div>
+        <div>Webinar Ensat</div>
+      </div>
+      <div class="flex">
+        <div>HOME</div>
+        <div>ABOUT</div>
+        <div>CONTACT US</div>
+      </div>
+      <div>Profile</div>
+    </div>
+      <carousel />
+      <div>
+        <div>search</div>
+        <div>items</div>
+      </div>
+    
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Carousel from './components/Carousel'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Carousel
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,body,#app{
+  @apply bg-gray-50
 }
 </style>
