@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="w-full h-full flex flex-col justify-start items-center px-14">
-      <div class="h-36 w-full bg-red-300 rounded-3xl flex-shrink-0"></div>
+      <div class="aspect-w-4 aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0"></div>
       <p class="line-clamp-5 px-8 pt-2 pb-1 font-semibold text-lg">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa eos
         rerum magnam explicabo, aliquam ullam cumque distinctio inventore

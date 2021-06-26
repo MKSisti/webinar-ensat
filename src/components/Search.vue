@@ -29,7 +29,7 @@
         </select>
         <label
           for="orderBy"
-          class="font-bold text-xl pl-4 transform translate-y-3 translate-x-2 scale-125 order-1 transition duration-300"
+          class="font-bold text-lg pl-4 transform translate-y-3 translate-x-2 scale-125 order-1 transition duration-300"
         >
           Order By
         </label>
