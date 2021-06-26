@@ -22,10 +22,15 @@ module.exports = {
   },
   variants: {
     extend: {
-      translate: ['active', 'group-hover'],
-      scale: ['active', 'group-hover'],
-      height: ['hover', 'group-hover'],
+      translate: ['active', 'group-hover','group-focus'],
+      scale: ['active', 'group-hover','group-focus'],
+      height: ['hover', 'group-hover','group-focus'],
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/aspect-ratio'),
+  ]
 }

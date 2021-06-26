@@ -1,7 +1,9 @@
 <template>
-  <div class="flex flex-col justify-start items-center h-full w-full space-y-10">
+  <div
+    class="flex flex-col justify-start items-center h-full w-full space-y-10"
+  >
     <nav-bar></nav-bar>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -11,8 +13,8 @@ import NavBar from "./components/NavBar";
 export default {
   name: "App",
   components: {
-    NavBar,
-  },
+    NavBar
+  }
 };
 </script>
 
@@ -26,5 +28,12 @@ html,
 body,
 #app {
   @apply bg-gray-50;
+}
+
+::-moz-selection {
+  @apply bg-red-300;
+}
+::selection {
+  @apply bg-red-300;
 }
 </style>
