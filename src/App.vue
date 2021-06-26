@@ -30,6 +30,11 @@ body,
   @apply bg-gray-50;
 }
 
+html, body {
+  height: 100vh!important;
+  width: 100vw!important;
+}
+
 ::-moz-selection {
   @apply bg-red-300;
 }

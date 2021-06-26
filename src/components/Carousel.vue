@@ -2,7 +2,7 @@
   <div
     @mouseenter="stopInterval"
     @mouseleave="startInterval"
-    class="bg-gradient-to-br from-red-300 to-pink-300 rounded-6xl w-4/6 overflow-hidden relative select-none aspect-w-4 aspect-h-1"
+    class="bg-gradient-to-br from-red-300 to-pink-300 h-96 rounded-6xl w-4/6 overflow-hidden relative select-none aspect-w-4 aspect-h-1"
   >
     <div
       class="w-full h-full z-40 pointer-events-none flex justify-center items-start absolute space-x-3 px-4 py-4"
@@ -42,7 +42,7 @@
       <div
         :key="items[current].id"
         :style="currentImg"
-        class="w-full h-full relative flex justify-center items-center bg-center bg-contain transition duration-300 bg-no-repeat"
+        class="w-full h-full absolute flex justify-center items-center bg-center bg-contain transition duration-300 bg-no-repeat"
       >
         <div
           class="h-20 left-0 bottom-0 absolute w-full group hover:h-28 transition-all duration-300"
