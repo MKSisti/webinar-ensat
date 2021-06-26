@@ -16,9 +16,7 @@
       </span>
     </div>
     <!-- controls -->
-    <div
-      class="w-full h-full z-40 pointer-events-none flex justify-between items-center absolute"
-    >
+    <div class="w-full h-full z-40 pointer-events-none flex justify-between items-center absolute">
       <div
         @click="goToPrev()"
         class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer"
@@ -62,9 +60,7 @@
               class="rounded-full bg-yellow-400 h-20 w-20 pointer-events-auto transform scale-75 group-hover:scale-100 transition duration-300"
             >
             </span>
-            <div
-              class="flex flex-col justify-center items-start pl-4 pointer-events-auto"
-            >
+            <div class="flex flex-col justify-center items-start pl-4 pointer-events-auto">
               <h1
                 :key="items[current].title + 'title'"
                 class="font-bold opacity-25 text-3xl transition duration-300 transform translate-y-3 -translate-x-3 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0"
@@ -91,7 +87,7 @@ export default {
   computed: {
     currentImg() {
       return `background-image: url(${this.items[this.current].img})`;
-    }
+    },
   },
   data() {
     return {
@@ -102,18 +98,18 @@ export default {
           img: "",
           title: "qwhqwkdhqwkhd  wdwdwdwdwdqwuygdqwdg wdwd",
           user: {
-            uid: "peepee poopoo bro"
-          }
+            uid: "peepee poopoo bro",
+          },
         },
         {
           id: "92131231232983712983791273123",
           img: "",
           title: "qwhq sssss sssswk dhqwkhd",
           user: {
-            uid: "piss dude"
-          }
-        }
-      ]
+            uid: "piss dude",
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -132,14 +128,14 @@ export default {
     startInterval() {
       this.stopInterval();
       this.autoPlayInterval = setInterval(this.goToNext, 6000);
-    }
+    },
   },
   mounted() {
     this.startInterval();
   },
   props: {
-    loop: Boolean
-  }
+    loop: Boolean,
+  },
 };
 </script>
 
