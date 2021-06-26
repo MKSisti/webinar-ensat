@@ -12,3 +12,5 @@ app.use(store);
 
 app.mount("#app");
 
+import "./auth";
+

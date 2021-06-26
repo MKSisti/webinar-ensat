@@ -9,12 +9,38 @@
       <div>ABOUT</div>
       <div>CONTACT US</div>
     </div>
-    <div>Profile</div>
+    <div>
+      <div v-if="getLoggedState">
+        connected!!
+      </div>
+      <div v-else >
+        <div @click="logIn()" class="cursor-pointer" >LogIn</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from "vuex"
+import {auth, provider} from "../firebase"
+
 export default {
-    
+    name:"NavBar",
+    computed: {
+      ...mapGetters('user',[
+        'getLoggedState', //usage : this.getLoggedState()
+        'getUserInfo',
+      ])
+    },
+    methods:{
+      async logIn(){
+        console.log("clicked");
+        try {
+          await auth.signInWithPopup(provider);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
 }
 </script>
