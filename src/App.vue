@@ -1,9 +1,11 @@
 <template>
   <div
-    class="flex flex-col justify-start items-center h-full w-full space-y-10"
+    class="flex flex-col justify-start items-center relative h-screen w-screen overflow-x-hidden"
   >
     <nav-bar></nav-bar>
-    <router-view />
+    <div class="w-full h-full pt-10">
+    <router-view/>
+    </div>
   </div>
 </template>
 
@@ -30,15 +32,29 @@ body,
   @apply bg-gray-50;
 }
 
-html, body {
-  height: 100vh!important;
-  width: 100vw!important;
-}
-
 ::-moz-selection {
   @apply bg-red-300;
 }
 ::selection {
   @apply bg-red-300;
 }
+
+@property --cs {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
+@property --cs1 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
+@property --cs2 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
 </style>

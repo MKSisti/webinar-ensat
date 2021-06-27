@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-4xl relative h-108 w-full bg-gray-100 shadow-2xl flex flex-col justify-start items-center overflow-hidden"
+    class="rounded-4xl relative w-full pb-6 shadow-2xl flex flex-col justify-start items-center overflow-hidden"
   >
     <div
       class="absolute text-black font-semibold top-0 right-0 pl-5 pr-5 py-2 text-xs text-opacity-30 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
@@ -46,4 +46,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.adaptiveBg{
+  --cs: #F1F5F9;
+  transition: --cs 300ms;
+  background:linear-gradient(0deg, var(--cs),#F1F5F9);
+}
+
+.adaptiveBg:hover{
+  --cs: #FCA5A5;
+}
+
+</style>

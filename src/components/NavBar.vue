@@ -1,5 +1,5 @@
 <template>
-  <div class="h-12 w-full bg-gray-100 shadow-md flex items-center justify-between">
+  <div class="p-4 h-12 w-full bg-gray-100 shadow-md flex items-center justify-between">
     <div>
       <div>W</div>
       <div>Webinar Ensat</div>
