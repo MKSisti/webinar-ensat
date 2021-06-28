@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex flex-col justify-start items-center relative h-screen w-screen overflow-x-hidden"
+    class="flex flex-col justify-start items-center relative h-screen w-screen overflow-x-hidden "
   >
-    <nav-bar></nav-bar>
-    <div class="w-full h-full pt-10">
-    <router-view/>
+    <nav-bar class="z-50"></nav-bar>
+    <div class="w-full h-full xl:pt-10 z-20">
+      <router-view/>
     </div>
   </div>
 </template>

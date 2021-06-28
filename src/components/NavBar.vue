@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 h-12 w-full bg-gray-100 shadow-md flex items-center justify-between">
+  <div class="px-10 py-4 h-16 w-full bg-gray-100 shadow-md flex items-center justify-between xl:rounded-b-4xl">
     <div>
       <div>W</div>
       <div>Webinar Ensat</div>
@@ -14,7 +14,7 @@
         connected!!
       </div>
       <div v-else >
-        <div @click="logIn()" class="cursor-pointer" >LogIn</div>
+        <div @click="logIn()" class="cursor-pointer py-2 px-4 bg-red-300 rounded-xl" >Sign In</div>
       </div>
     </div>
   </div>

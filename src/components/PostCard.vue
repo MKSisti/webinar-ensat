@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-4xl relative w-full pb-6 shadow-2xl flex flex-col justify-start items-center overflow-hidden"
+    class="rounded-none sm:rounded-4xl relative w-full pb-6 sm:shadow-2xl flex flex-col justify-start items-center overflow-hidden border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
   >
     <div
       class="absolute text-black font-semibold top-0 right-0 pl-5 pr-5 py-2 text-xs text-opacity-30 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
@@ -21,9 +21,9 @@
         <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0">User</h1>
       </div>
     </div>
-    <div class="w-full h-full flex flex-col justify-start items-center px-14">
-      <div class="aspect-w-4 aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0"></div>
-      <p class="line-clamp-5 px-8 pt-2 pb-1 font-semibold text-lg">
+    <div class="w-full h-full flex flex-col justify-start items-center px-8 sm:px-14">
+      <div class="aspect-w-2 aspect-h-1 sm:aspect-w-4 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0"></div>
+      <p class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa eos
         rerum magnam explicabo, aliquam ullam cumque distinctio inventore
         architecto maxime pariatur a voluptatum vel natus, veritatis, iusto est

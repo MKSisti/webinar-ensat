@@ -1,11 +1,13 @@
 <template>
-  <div class="flex flex-col justify-start items-center space-y-10">
+  <div class="flex flex-col justify-start items-center sm:space-y-10">
     <carousel />
-    <div class="w-7/12 flex justify-between items-start space-x-10">
-      <div class="flex flex-col justify-start items-center w-7/12 space-y-10 pb-8">
-        <post-card :key="n" v-for="n in 10" />
+    <div class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
+      <div
+        class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10 pb-8"
+      >
+        <post-card :key="n" v-for="n in offsetPosts" />
       </div>
-      <search />
+      <search class="w-full border-b-2 border-gray-200 border-opacity-70 bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky"/>
     </div>
   </div>
 </template>
@@ -17,6 +19,46 @@ import Search from "../components/Search";
 
 export default {
   name: "App",
+  data() {
+    return {
+      offset: 0,
+      postsToShow: 5,
+      posts: [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
+    };
+  },
+  methods: {},
+  computed: {
+    offsetPosts() {
+      return [...this.posts].splice(
+        0 + this.offset,
+        this.postsToShow + this.offset
+      );
+    }
+  },
+  mounted() {
+    console.log("mounted");
+  },
   components: {
     Carousel,
     PostCard,

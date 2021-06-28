@@ -2,7 +2,7 @@
   <div
     @mouseenter="stopInterval"
     @mouseleave="startInterval"
-    class="bg-gradient-to-br from-red-300 to-pink-300 rounded-6xl w-4/6 overflow-hidden relative select-none aspect-w-4 aspect-h-1 flex-1"
+    class="bg-gradient-to-br from-red-300 to-pink-300 xl:rounded-6xl xl:w-4/6 w-full rounded-none overflow-hidden relative select-none aspect-w-2 aspect-h-1 xl:aspect-w-4"
   >
     <div
       class="w-full h-full z-40 pointer-events-none flex justify-center items-start absolute space-x-3 px-4 py-4"
@@ -45,7 +45,7 @@
         class="w-full h-full absolute flex justify-center items-center bg-center bg-contain transition duration-300 bg-no-repeat"
       >
         <div
-          class="h-20 left-0 bottom-0 absolute w-full group hover:h-28 transition-all duration-300"
+          class="h-16 md:h-20 left-0 bottom-0 absolute w-full group hover:h-20 md:hover:h-28 transition-all duration-300"
         >
           <!-- bottom fade to white -->
           <div
@@ -54,22 +54,22 @@
 
           <!-- bottom user/article info -->
           <div
-            class="absolute left-0 bottom-0 w-full h-full px-8 flex justify-start items-center z-50 opacity-50 group-hover:opacity-100"
+            class="absolute left-0 bottom-0 w-full h-full px-2 md:px-8 flex justify-start items-center z-50 opacity-50 group-hover:opacity-100"
           >
             <span
-              class="rounded-full bg-yellow-400 h-20 w-20 pointer-events-auto transform scale-75 group-hover:scale-100 transition duration-300"
+              class="rounded-full bg-yellow-400 h-16 w-16 md:h-20 md:w-20 pointer-events-auto transform scale-75 group-hover:scale-100 transition duration-300 flex-none"
             >
             </span>
-            <div class="flex flex-col justify-center items-start pl-4 pointer-events-auto">
+            <div class="flex flex-col justify-center items-start pl-4 pointer-events-auto w-full">
               <h1
                 :key="items[current].title + 'title'"
-                class="font-bold opacity-25 text-3xl transition duration-300 transform translate-y-3 -translate-x-3 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0"
+                class="font-bold opacity-25 text-2xl md:text-3xl truncate w-8/12 transition duration-300 transform translate-y-3 -translate-x-3 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0"
               >
                 {{ items[current].title }}
               </h1>
               <h2
                 :key="items[current].user.uid + 'user'"
-                class="capitalize text-2xl text-gray-900 transition duration-300 opacity-0 group-hover:opacity-100"
+                class="capitalize text-xl md:text-2xl text-gray-900 transition duration-300 opacity-0 group-hover:opacity-100"
               >
                 {{ items[current].user.uid }}
               </h2>

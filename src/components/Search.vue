@@ -1,6 +1,6 @@
 <template>
   <div
-    class="sticky top-10 w-5/12 bg-gray-100 shadow-2xl rounded-3xl pt-4 pb-8 px-4 flex flex-col justify-start items-center space-y-6"
+    class="sm:shadow-2xl sm:rounded-3xl pt-4 pb-8 px-4 flex flex-col justify-start items-center space-y-6"
   >
     <div class="flex flex-col justify-center items-start w-11/12">
       <input
@@ -17,7 +17,7 @@
       </label>
     </div>
     <div class="flex justify-between items-center w-11/12 space-x-8">
-      <div class="flex flex-col justify-center items-start w-full ">
+      <div class="flex flex-col justify-center items-start w-7/12 ">
         <select
           class="searchInput outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 ring-0 w-full text-2xl order-2 rounded-2xl"
           name="orderBy"
@@ -35,8 +35,8 @@
         </label>
       </div>
 
-      <div class="w-full h-12 bg-red-300 transform translate-y-3 rounded-2xl flex justify-center items-center">
-        <h1 class="text-2xl font-bold mb-1">
+      <div class="w-5/12 h-12 bg-red-300 transform translate-y-3 rounded-2xl flex justify-center items-center cursor-pointer group">
+        <h1 class="text-2xl font-bold mb-1 transition duration-300 transform group-hover:-translate-y-1">
           Apply
         </h1>
       </div>
