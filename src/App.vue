@@ -3,7 +3,7 @@
     class="flex flex-col justify-start items-center relative h-screen w-screen overflow-x-hidden "
   >
     <nav-bar class="z-50"></nav-bar>
-    <div class="w-full h-full xl:pt-10 z-20">
+    <div class="w-full h-full z-20">
       <router-view/>
     </div>
   </div>
@@ -56,5 +56,30 @@ body,
   inherits: false;
   initial-value: transparent;
 }
+
+.btnTransform{
+  @apply transform transition duration-300
+}
+
+.btnTransform:hover{
+  @apply -translate-y-1
+}
+
+.btnTransform *{
+  @apply transform transition duration-300
+}
+
+.btnTransform:hover *{
+  @apply -translate-y-1
+} 
+
+.btnRing{
+  @apply ring-0 ring-red-300 ring-opacity-0 transition duration-300 
+}
+
+.btnRing:hover{
+  @apply ring-2 ring-opacity-100
+}
+
 
 </style>

@@ -14,7 +14,7 @@
         connected!!
       </div>
       <div v-else >
-        <div @click="logIn()" class="cursor-pointer py-2 px-4 bg-red-300 rounded-xl" >Sign In</div>
+        <div @click="logIn()" class="cursor-pointer py-2 px-4 bg-red-100 rounded-xl btnRing" tabindex="-1">Sign In</div>
       </div>
     </div>
   </div>

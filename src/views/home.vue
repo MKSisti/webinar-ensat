@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-start items-center sm:space-y-10">
+  <div class="flex flex-col justify-start items-center sm:space-y-10 xl:pt-10">
     <carousel />
     <div class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
       <div
