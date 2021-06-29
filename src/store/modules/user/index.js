@@ -35,17 +35,16 @@ export default {
     async logIn({ commit }, user) {
       var p = 0;
       var extraInfo = null;
-      await users.child(user.uid).once("value", (ds) => {
+      await users.child(user.uid).once("value", async (ds) => {
           
-        if (ds.val()) {
+        if (await ds.val()) {
           //user exists in the db already
           //read privilege level
-          console.log("old user");
-          p = ds.child("priv").val();
-          console.log(p);
+          // console.log("old user");
+          p = await ds.child("priv").val();
+          // console.log(p);
           if (p > 0) {
-            var u = ds.val();
-            
+            var u = await ds.val();
             extraInfo = {
               phone: u.phone,
               uni: u.uni,
@@ -56,12 +55,13 @@ export default {
         else{
             //first time user logged in
             //create a user entry in db
-            console.log("first time");
+            // console.log("first time");
             var newUser = users.child(user.uid);
             newUser.set({
                 priv: 0,
                 email: user.email,
                 userName: user.displayName,
+                img: user.photoURL,
             })
         }
       });
