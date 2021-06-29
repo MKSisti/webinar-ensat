@@ -1,11 +1,9 @@
 <template>
   <div
-    class="flex flex-col justify-start items-center relative h-screen w-screen overflow-x-hidden "
+    class="flex flex-col justify-start items-center relative h-screen w-screen overflow-hidden "
   >
     <nav-bar class="z-50"></nav-bar>
-    <div class="w-full h-full z-20">
-      <router-view/>
-    </div>
+      <router-view class="w-full h-full overflow-auto z-20"/>
   </div>
 </template>
 
