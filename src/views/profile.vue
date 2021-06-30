@@ -10,7 +10,7 @@
         <div class="flex justify-start items-start">
           <h1 class="text-4xl font-bold">{{ userInfo?.userName }}</h1>
           <h4 class="ml-2 px-1 py-px text-xs bg-yellow-300 rounded-md font-semibold select-none">
-            Verified
+            {{tags[userInfo?.priv]}}
           </h4>
         </div>
         <h2 class="text-2xl font-semibold">{{userInfo.email}}</h2>
@@ -45,7 +45,13 @@ export default {
   data() {
     return {
       userInfo: {},
+      tags: ["user","host","admin"],
     };
+  },
+  computed:{
+    tag(){
+      return this.userInfo?.p ? this.tags[this.userInfo.priv]:"" ;
+    }
   },
   async created() {
     this.$nextTick(async () => {

@@ -12,16 +12,21 @@ async function getUser(uid) {
 // };
 
 const getInitialPosts = async () => {
-  var all = null;
+  var initial = null;
   await posts
     .orderByChild("hosting_date")
     .limitToFirst(10)
     .once("value", async (ds) => {
-      all = await ds.val();
+      initial = await ds.val();
     });
-  return all;
+  return initial;
 };
 
+/**
+ * 
+ * @param {Unix timestamp} LastDate 
+ * @returns 10 more posts from db
+ */
 const getExtraPosts = async (LastDate) => {
   var extra = null;
   await posts
@@ -42,9 +47,35 @@ const getPost = async (pid) => {
   return post; // same for post as user
 };
 
-export {
-  getUser,
-  getPost,
-  getInitialPosts,
-  getExtraPosts,
+/**
+ * 
+ * @param {object} newPost 
+ */
+const createPost = async (newPost) => {
+  var np = await posts.push();
+  var owner = users.child(newPost.uid);
+  await owner.child('posts').push(np.key);
+  await np.set(newPost);
 };
+
+const removePost = async (pid) => {
+  var ownerId = null;
+  await posts.child(pid).once('value', async (ds)=>{
+    if (await ds.val()) {
+      ownerId = await ds.val().uid
+    }
+    else{
+      console.error("something went wrong reading owner id while deleting post");
+      return;
+    }
+  });
+  await users.child(ownerId+"/posts/"+pid).remove((err)=>{
+    console.error(err);
+  });
+  await posts.child(pid).remove((err)=>{
+    console.error(err);
+  })
+
+}
+
+export { getUser, getPost, getInitialPosts, getExtraPosts, createPost, removePost };
