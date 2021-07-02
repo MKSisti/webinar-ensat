@@ -52,7 +52,5 @@ export default {
 </script>
 
 <style>
-.searchInput:focus + label {
-  @apply -translate-y-2 translate-x-0 scale-100;
-}
+
 </style>

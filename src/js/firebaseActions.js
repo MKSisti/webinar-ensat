@@ -61,8 +61,9 @@ const createPost = async (newPost) => {
 const removePost = async (pid) => {
   var ownerId = null;
   await posts.child(pid).once('value', async (ds)=>{
-    if (await ds.val()) {
-      ownerId = await ds.val().uid
+    var val = await ds.val();
+    if (val) {
+      ownerId = val.uid
     }
     else{
       console.error("something went wrong reading owner id while deleting post");
