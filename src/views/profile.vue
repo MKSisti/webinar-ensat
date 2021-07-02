@@ -1,23 +1,17 @@
 <template>
-  <div class="w-full flex justify-start items-start bg-yellow-300 -mt-10 pt-10">
-    <div
-      class="h-44 w-1/2 bg-gradient-to-bl from-red-300 to-red-400 -mt-10 pt-10 px-24 rounded-br-6xl flex-none"
-    >
-      <div class="flex justify-start items-start h-full">
-        <div class="flex justify-center items-center h-full rounded-full ">
-          <img :src="userInfo.img" alt="Avatar" class="rounded-full w-full" />
-        </div>
-        <div class="pl-4 flex flex-col justify-end items-start h-full pb-4 w-full">
-          <div class="flex justify-start items-start w-full">
-            <h1 class="text-4xl font-bold truncate max-w-full">{{ userInfo?.userName }}</h1>
-            <h4
-              class="ml-2 px-1 py-px text-xs bg-yellow-300 rounded-md font-semibold select-none"
-            >
-              Verified
-            </h4>
-          </div>
-          <h2 class="text-2xl font-semibold">{{ userInfo.email }}</h2>
-          <h3 class="text-xl">very famous university</h3>
+  <div class="h-44 bg-gradient-to-bl from-red-300 to-red-400 -mt-10 pt-10 px-24">
+    <div class="flex justify-start items-start h-full">
+      <div
+        class="flex justify-center items-center h-full rounded-full "
+      >
+      <img :src="userInfo.img" alt="Avatar" class="rounded-full w-full">
+      </div>
+      <div class="pl-4 flex flex-col justify-end items-start h-full pb-4">
+        <div class="flex justify-start items-start">
+          <h1 class="text-4xl font-bold">{{ userInfo?.userName }}</h1>
+          <h4 class="ml-2 px-1 py-px text-xs bg-yellow-300 rounded-md font-semibold select-none">
+            {{tags[userInfo?.priv]}}
+          </h4>
         </div>
       </div>
     </div>
@@ -49,8 +43,14 @@ export default {
   props: ["uid"],
   data() {
     return {
-      userInfo: {}
+      userInfo: {},
+      tags: ["user","host","admin"],
     };
+  },
+  computed:{
+    tag(){
+      return this.userInfo?.p ? this.tags[this.userInfo.priv]:"" ;
+    }
   },
   async created() {
     this.$nextTick(async () => {
