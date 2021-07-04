@@ -1,15 +1,43 @@
 <template>
-  <div class="flex flex-col justify-center items-start w-11/12 relative">
+  <div class="flex flex-col justify-center items-start w-full relative">
     <input
+      v-if="!dropDown"
       v-model="value"
       type="text"
       :name="name"
       :id="id || name"
-      class="searchInput outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 ring-0 w-full text-2xl order-2 rounded-2xl"
+      :class="{
+        'text-xl': size == 0,
+        'text-2xl': size == 1 || size == 2,
+        'text-4xl': size == 3 || size == 4,
+        'text-5xl': size == 5 || size == 6
+      }"
+      class="searchInput outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 ring-0 w-full order-2 rounded-2xl"
     />
+    <select
+      v-else
+      v-model="value"
+      :name="name"
+      :id="id || name"
+      :class="{
+        'text-xl': size == 0,
+        'text-2xl': size == 1 || size == 2,
+        'text-4xl': size == 3 || size == 4,
+        'text-5xl': size == 5 || size == 6
+      }"
+      class="searchInput outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 ring-0 w-full order-2 rounded-2xl"
+    >
+      <slot>No options</slot>
+    </select>
     <label
       :for="id || name"
-      class="absolute h-0 top-0 font-bold text-2xl pl-4 transform translate-x-2 scale-125 order-1 transition duration-300 flex justify-center items-center -mt-1"
+      :class="{
+        'text-lg': size == 0,
+        'text-xl': size == 1,
+        'text-2xl': size == 2 || size == 3 || size == 4,
+        'text-4xl': size == 5 || size == 6,
+      }"
+      class="absolute h-0 top-0 w-0 font-bold pl-4 whitespace-nowrap transform translate-x-2 scale-125 order-1 transition duration-300 flex justify-start items-center -mt-1 -ml-2.5"
     >
       {{ label || name }}
     </label>
@@ -19,7 +47,12 @@
 <script>
 export default {
   name: "BaseInput",
-  props: ["label", "name", "id", "modelValue"],
+  data(){
+    return{
+      lazyTimeout:null
+    }
+  },
+  props: ["label", "name", "id", "modelValue", "size", "dropDown","lazy"],
   emits: ["update:modelValue"],
   computed: {
     value: {
@@ -27,10 +60,14 @@ export default {
         return this.modelValue;
       },
       set(val) {
-        this.$emit("update:modelValue", val);
-      },
-    },
-  },
+        if(this.lazyTimeout) clearTimeout(this.lazyTimeout);
+        this.lazyTimeout = null;
+        this.lazyTimeout = setTimeout(() => {
+          this.$emit("update:modelValue", val);
+        },this.lazy ?? 0);
+      }
+    }
+  }
 };
 </script>
 
@@ -40,12 +77,11 @@ export default {
 }
 </style>
 
-/**
-*
-* Usage : -if you have a data to show inside the input say from a db : provide the 'modelValue' prop with that data and then listen 
-*           to the event 'update:modelValue' for the new value you can then store that new value or give it to some function to update
-*         -if it's meant to be used just as a simple input then no need to provide the 'modelValue' prop and you can simplu use 
-*           v-model to bind the data with a variable in you component like you would with a normal input
-*         For the data to include if you only provide the name that name will be used as id and label aswell ...
-*
-*/
+/** * * Usage : -if you have a data to show inside the input say from a db :
+provide the 'modelValue' prop with that data and then listen * to the event
+'update:modelValue' for the new value you can then store that new value or give
+it to some function to update * -if it's meant to be used just as a simple input
+then no need to provide the 'modelValue' prop and you can simplu use * v-model
+to bind the data with a variable in you component like you would with a normal
+input * For the data to include if you only provide the name that name will be
+used as id and label aswell ... * */

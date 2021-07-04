@@ -66,7 +66,7 @@ export default {
 
     let debScrollBottom = debounce(() => {
        console.log(this.$refs.home.scrollHeight - this.$refs.home.scrollTop === this.$refs.home.clientHeight);
-       this.offset = Math.min(this.offset + this.postsToShow,this.posts.length - 1 - this.postsToShow);
+       if(this.$refs.home.scrollHeight - this.$refs.home.scrollTop === this.$refs.home.clientHeight) this.offset = Math.min(this.offset + this.postsToShow,this.posts.length - 1 - this.postsToShow);
        console.log(this.offset);
     },200); 
 

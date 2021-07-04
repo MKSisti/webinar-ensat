@@ -79,5 +79,24 @@ body,
   @apply ring-2 ring-opacity-100
 }
 
+.fade-leave-to,
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-y-enter-from {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.fade-y-leave-to{
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.squash-y-leave-to,
+.squash-y-enter-from {
+  height:0px;
+}
 
 </style>

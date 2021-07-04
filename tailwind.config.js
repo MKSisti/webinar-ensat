@@ -25,6 +25,8 @@ module.exports = {
       translate: ['active', 'group-hover','group-focus'],
       scale: ['active', 'group-hover','group-focus'],
       height: ['hover', 'group-hover','group-focus'],
+      width: ['hover', 'group-hover','group-focus'],
+      borderRadius: ['hover', 'group-hover','group-focus'],
     },
   },
   plugins: [

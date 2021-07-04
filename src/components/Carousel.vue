@@ -115,11 +115,11 @@ export default {
   methods: {
     goToNext() {
       this.current = (this.current + 1) % this.items.length;
-      console.log(this.current);
+      // console.log(this.current);
     },
     goToPrev() {
       this.current = (this.current - 1 + this.items.length) % this.items.length;
-      console.log(this.current);
+      // console.log(this.current);
     },
     stopInterval() {
       if (this.autoPlayInterval) clearInterval(this.autoPlayInterval);
@@ -140,8 +140,5 @@ export default {
 </script>
 
 <style>
-.fade-leave-to,
-.fade-enter-from {
-  opacity: 0;
-}
+
 </style>
