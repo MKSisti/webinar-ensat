@@ -20,5 +20,6 @@ const firebaseConfig = {
 
   const posts = firebase.database().ref("posts");
   const users = firebase.database().ref("users");
+  const waiting_Room = firebase.database().ref("waitingRoom");
 
-  export {db, auth, provider, posts, users}
+  export {db, auth, provider, posts, users, waiting_Room}

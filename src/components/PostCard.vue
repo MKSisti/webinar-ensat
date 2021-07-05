@@ -5,7 +5,7 @@
     <div
       class="absolute text-black font-semibold top-0 right-0 pl-5 pr-5 py-2 text-xs text-opacity-30 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
-      19-04-2021
+      {{d}}
     </div>
     <div class="h-32 w-full px-8 flex justify-start items-center">
       <div
@@ -18,20 +18,13 @@
           Title of very good post is very long as u can see, damn this boi long
           bruh
         </h1>
-        <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0">User</h1>
+        <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0">{{post.uid}}</h1>
       </div>
     </div>
     <div class="w-full h-full flex flex-col justify-start items-center px-8 sm:px-14">
       <div class="aspect-w-2 aspect-h-1 sm:aspect-w-4 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0"></div>
       <p class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa eos
-        rerum magnam explicabo, aliquam ullam cumque distinctio inventore
-        architecto maxime pariatur a voluptatum vel natus, veritatis, iusto est
-        at iure. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Excepturi architecto sunt debitis rem assumenda corporis expedita
-        temporibus fugit? Sed aspernatur inventore quod? Quis et fuga molestias
-        optio libero eos harum velit, dicta voluptas cum sequi perspiciatis at
-        reiciendis dolore. Voluptatum!
+        {{post.content}}
       </p>
     </div>
   </div>
@@ -40,9 +33,16 @@
 <script>
 export default {
   name: "PostCard",
+  props:['post'],
   data() {
     return {};
-  }
+  },
+  computed:{
+    d(){
+      var sda = new Date(this.post.hosting_date).toJSON();
+      return sda.split("T")[0].replaceAll("-","/") + " " + sda.split("T")[1].split(".")[0];
+    }
+  },
 };
 </script>
 

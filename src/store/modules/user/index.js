@@ -48,7 +48,6 @@ export default {
             extraInfo = {
               phone: u.phone,
               uni: u.uni,
-              proffession: u.proffession,
             };
           }
         }

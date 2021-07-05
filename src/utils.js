@@ -41,7 +41,8 @@ function getAbbreviation(text) {
 }
 
 
+
 export {
   debounce,
-  getAbbreviation
+  getAbbreviation,
 };
