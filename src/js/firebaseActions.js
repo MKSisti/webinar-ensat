@@ -1,4 +1,4 @@
-import { users, posts, waiting_Room } from "../firebase";
+import { users, posts, waiting_Room, waiting_Room_Posts } from "../firebase";
 
 async function getUser(uid) {
   var user = null;
@@ -51,12 +51,19 @@ const getPost = async (pid) => {
 /**
  *
  * @param {object} newPost
+ * assumes the uid is provided
  */
 const createPost = async (newPost) => {
+  //The offset is in minutes -- convert it to ms
+  var tmLoc = new Date();
+  let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
   var np = await posts.push();
   var owner = users.child(newPost.uid);
   await owner.child("posts").push(np.key);
-  await np.set(newPost);
+  await np.set({
+    hosting_date: t,
+    ...newPost,
+  });
 };
 
 const removePost = async (pid) => {
@@ -100,6 +107,32 @@ const denyHost = async (uid) => {
   });
 };
 
+const getUserInfo = async (uid) => {
+  await users.child(uid).once("value", async (ds) => {
+    var data = await ds.val();
+    return {
+      uid: ds.key,
+      email: data.email,
+      img: data.img,
+      userName: data.userName,
+    };
+  });
+};
+
+const getUsersData = async (List) => {
+  var l = [];
+  for (const p in List) {
+    l.findIndex((a) => a.uid == p.uid) == -1 ? l.push(await getUserInfo(p.uid)) : null;
+  }
+  return l;
+};
+
+const getPostsAwaitingApproval = async () => {
+  await waiting_Room_Posts.once("value", async (ds) => {
+    return await ds.val();
+  });
+};
+
 export {
   getUser,
   getPost,
@@ -110,4 +143,7 @@ export {
   requestHost,
   confirmHost,
   denyHost,
+  getUsersData,
+  getPostsAwaitingApproval,
+  getUserInfo,
 };
