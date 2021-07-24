@@ -5,6 +5,7 @@ async function getUser(uid) {
   await users.child(uid).once("value", async (ds) => {
     user = await ds.val();
     console.log(user);
+    console.log(posts);
   });
   return user; // no checks are needed if user is found then it's an 'object' otherwise it's 'null'
 }

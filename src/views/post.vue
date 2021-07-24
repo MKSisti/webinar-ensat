@@ -1,0 +1,36 @@
+<template>
+  <div class="flex justify-start items-start flex-col space-y-20 w-full h-full">
+    <div class="flex-shrink-0 w-full h-auto">
+      <img class="aspect-w-4 aspect-h-1 bg-black flex-shrink-0" src="" alt="" />
+      <div class="absolute transform -translate-y-28 px-10 flex justify-between items-center w-full">
+        <user-card
+          :userInfo="{}"
+        />
+        <div class=" bg-gray-100 h-10 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold">
+          Hosting date: xx/xx/xxxx at xx:xx
+        </div>
+      </div>
+    </div>
+    <div class="px-10 py-5 bg-gray-100 w-full h-full rounded-t-6xl shadow-3xl">
+        <Tiptap :editable="true"/>
+    </div>
+  </div>
+</template>
+
+<script>
+import UserCard from '../components/UserCard';
+import Tiptap from '../components/TipTap'
+
+export default {
+  methods: {},
+  props: {
+    pid: String
+  },
+  components: {
+    UserCard,
+    Tiptap
+  }
+};
+</script>
+
+<style></style>
