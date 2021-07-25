@@ -1,8 +1,6 @@
 <template>
   <div class="w-full h-full -mt-10 pt-10">
-    <div
-      class="w-full h-full flex justify-start items-start flex-col space-y-10"
-    >
+    <div class="w-full h-full flex justify-start items-start flex-col space-y-10">
       <!-- //TODO user card needs to be a component-->
       <div class="flex justify-center items-center m-10 mb-0">
         <user-card :userInfo="userInfo" :editable="true" />
@@ -15,7 +13,7 @@
           Posts
         </div>
         <!-- //!Create post button -->
-        <div class="flex justify-center items-center space-x-2">
+        <div @click="goToCreate" class="flex justify-center items-center space-x-2">
           <div
             class="flex-grow-0 flex justify-start items-center bg-gray-100 rounded-2xl shadow-xl overflow-hidden group duration-300 cursor-pointer btnRing px-4 py-3 space-x-3 relative flex-shrink-0"
           >
@@ -42,9 +40,7 @@
               <i
                 class="fa fa-info ring ring-red-50 rounded-full w-5 h-5 text-base flex items-center justify-center mr-2"
               ></i>
-              <div
-                class="font-bold text-lg flex items-start justify-center flex-col"
-              >
+              <div class="font-bold text-lg flex items-start justify-center flex-col">
                 You don't yet meet the requirements to post
                 <h1 class="font-semibold text-sm -mt-1">
                   click here button to fill the necessary info
@@ -63,26 +59,33 @@
 <script>
 import { getUser } from "../js/firebaseActions.js";
 import UserCard from "../components/UserCard";
+import {posts} from "../firebase";
 
 export default {
   name: "profile",
   props: ["uid"],
+  components: {
+    UserCard,
+    // BaseInput
+  },
   data() {
     return {
       userInfo: {},
       becomingHost: false,
-      editingProfile: false
+      editingProfile: false,
     };
+  },
+  methods:{
+    goToCreate(){
+      this.$router.push({ name: 'post', params: { pid: posts.push().key } });
+    }
   },
   async created() {
     this.$nextTick(async () => {
       this.userInfo = await getUser(this.uid);
     });
   },
-  components: {
-    UserCard
-    // BaseInput
-  }
+  
 };
 </script>
 
