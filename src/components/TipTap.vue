@@ -172,7 +172,7 @@
     </div>
     <div
       v-if="editor"
-      :class="{'toolbarFocus':focused}"
+      :class="{ toolbarFocus: focused }"
       class="toolbar flex flex-wrap justify-between items-center px-5 py-2 bg-black text-white rounded-2xl shadow-2xl mx-auto transition duration-300"
     >
       <!-- //!set bold -->
@@ -432,16 +432,18 @@ import { Editor, EditorContent, BubbleMenu, FloatingMenu } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 
 export default {
+  props: ["modelValue"],
+  emits: ["update:modelValue"],
   components: {
     EditorContent,
     BubbleMenu,
-    FloatingMenu
+    FloatingMenu,
   },
 
   data() {
     return {
       editor: null,
-      focused: false
+      focused: false,
     };
   },
 
@@ -449,35 +451,34 @@ export default {
     let proxy = this;
 
     this.editor = new Editor({
-      content: `
-        <h1>This is a test</h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam, blanditiis aut? Corporis sapiente, cum quia nam iure necessitatibus dolore esse illo veniam accusantium hic laborum ducimus sed odit fugiat iusto!
-        </p>
-        <p></p>
-      `,
+      content: this.modelValue,
       extensions: [
         StarterKit.configure({
           // Configure an included extension
           heading: {
-            levels: [1, 2, 3, 4, 5, 6]
-          }
-        })
-      ]
+            levels: [1, 2, 3, 4, 5, 6],
+          },
+        }),
+      ],
     });
-
+    
     this.editor.on("focus", () => {
       proxy.focused = true;
+    });
+
+    this.editor.on("update", () => {
+      proxy.$emit("update:modelValue", proxy.editor.getHTML());
     });
 
     this.editor.on("blur", () => {
       proxy.focused = false;
     });
   },
+  
 
   beforeUnmount() {
     this.editor.destroy();
-  }
+  },
 };
 </script>
 
@@ -492,7 +493,7 @@ export default {
 //   @apply opacity-0 w-0;
 // }
 
-.toolbarFocus{
+.toolbarFocus {
   @apply opacity-20;
 }
 

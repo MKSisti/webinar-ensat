@@ -44,11 +44,10 @@ export default {
   },
   methods: {
     async logIn() {
-      console.log("clicked");
       try {
         await auth.signInWithPopup(provider);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

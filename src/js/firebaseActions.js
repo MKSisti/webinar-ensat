@@ -9,9 +9,14 @@ async function getUser(uid) {
   });
   return user; // no checks are needed if user is found then it's an 'object' otherwise it's 'null'
 }
-// const getUser = async (uid) => {
 
-// };
+const checkUserInwaitingRoom = async (uid) => {
+  var e = false;
+  await waiting_Room_Posts.child(uid).once("value",async (ds)=>{
+    e = ds.exists();
+  })
+  return e;
+}
 
 const getInitialPosts = async () => {
   var initial = null;
@@ -43,27 +48,42 @@ const getExtraPosts = async (LastDate) => {
 
 const getPost = async (pid) => {
   var post = null;
+  // this checks if the post is in published and gets it
   await posts.child(pid).once("value", async (ds) => {
-    post = await ds.val();
+    if (ds.exists()) {
+      console.log('post exists');
+      post = await ds.val();
+    }
   });
-  return post; // same for post as user
+  // if post is not in published this checks draft (waiting room for posts)
+  if (post == null) {
+    await waiting_Room_Posts.child(pid).once("value",async (ds)=>{
+      if (ds.exists()) {
+        console.log('post awaiting');
+        post = await ds.val();
+      }
+    })
+  }
+  // by this time if the post is either found and read or it doesn't exist and it's null
+  return post; 
 };
+
 
 /**
  *
  * @param {object} newPost
  * assumes the uid is provided
  */
-const createPost = async (newPost) => {
+const createPost = async (pid, content, owner, hosting_date) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
-  var np = await posts.push();
-  var owner = users.child(newPost.uid);
-  await owner.child("posts").push(np.key);
-  await np.set({
-    hosting_date: t,
-    ...newPost,
+  await users.child(owner+"/posts").push(pid);
+  await posts.child(pid).set({
+    creation_date: t,
+    hosting_date,
+    content,
+    owner,
   });
 };
 
@@ -147,4 +167,5 @@ export {
   getUsersData,
   getPostsAwaitingApproval,
   getUserInfo,
+  checkUserInwaitingRoom,
 };
