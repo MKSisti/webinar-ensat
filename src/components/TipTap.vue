@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-start items-start space-y-5 flex-col">
-    <div>
+  <div class="flex justify-start items-start space-y-5 flex-col h-full w-full">
+    <div class="w-full relative">
       <bubble-menu
         class="flex justify-center items-center px-5 py-2 space-x-4 bg-black text-white bg-opacity-100 rounded-2xl shadow-2xl"
         :editor="editor"
@@ -47,7 +47,7 @@
         </button>
       </bubble-menu>
       <floating-menu
-        class="flex justify-start items-center px-2 py-2 space-x-4 bg-black text-white rounded-2xl shadow-2xl flex-shrink-0 w-108"
+        class="flex justify-center items-center px-2 py-1 space-x-4 bg-black text-white rounded-xl shadow-2xl flex-shrink-0 w-96"
         :editor="editor"
         v-if="editor"
       >
@@ -60,7 +60,7 @@
               .setParagraph()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('paragraph') }"
+          :class="{ 'is-active': editor.isActive('normal') }"
         >
           paragraph
         </button>
@@ -153,7 +153,7 @@
           "
           :class="{ 'is-active': editor.isActive('bulletList') }"
         >
-          bullet list
+          bullet
         </button>
         <!-- //!set ordered list-->
         <button
@@ -166,13 +166,14 @@
           "
           :class="{ 'is-active': editor.isActive('orderedList') }"
         >
-          ordered list
+          list
         </button>
       </floating-menu>
     </div>
     <div
       v-if="editor"
-      class="flex justify-center items-center px-5 py-2 space-x-4 bg-black text-white rounded-2xl shadow-2xl mx-auto"
+      :class="{'toolbarFocus':focused}"
+      class="toolbar flex flex-wrap justify-between items-center px-5 py-2 bg-black text-white rounded-2xl shadow-2xl mx-auto transition duration-300"
     >
       <!-- //!set bold -->
       <button
@@ -418,7 +419,11 @@
         redo
       </button>
     </div>
-    <editor-content class="focus:outline-none" :editor="editor" />
+    <editor-content
+      @click="editor.chain().focus()"
+      class="ring-2 ring-gray-300 w-full h-full cursor-text px-4 py-4 rounded-xl"
+      :editor="editor"
+    />
   </div>
 </template>
 
@@ -435,11 +440,14 @@ export default {
 
   data() {
     return {
-      editor: null
+      editor: null,
+      focused: false
     };
   },
 
   mounted() {
+    let proxy = this;
+
     this.editor = new Editor({
       content: `
         <h1>This is a test</h1>
@@ -457,6 +465,14 @@ export default {
         })
       ]
     });
+
+    this.editor.on("focus", () => {
+      proxy.focused = true;
+    });
+
+    this.editor.on("blur", () => {
+      proxy.focused = false;
+    });
   },
 
   beforeUnmount() {
@@ -467,6 +483,23 @@ export default {
 
 <style lang="scss">
 /* Basic editor styles */
+
+.toolbar button {
+  @apply px-1 rounded-md whitespace-nowrap transition-all duration-300;
+}
+
+// .toolbarFocus button{
+//   @apply opacity-0 w-0;
+// }
+
+.toolbarFocus{
+  @apply opacity-20;
+}
+
+.ProseMirror:focus {
+  @apply outline-none;
+}
+
 .ProseMirror {
   > * + * {
     margin-top: 0.75em;
