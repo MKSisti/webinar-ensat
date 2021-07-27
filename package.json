@@ -24,6 +24,7 @@
     "vue": "^3.0.0",
     "vue-router": "^4.0.10",
     "vue3-carousel": "^0.1.23",
+    "vue3-datepicker": "^0.2.5",
     "vuex": "^4.0.2",
     "webpack": "^4.42.0"
   },

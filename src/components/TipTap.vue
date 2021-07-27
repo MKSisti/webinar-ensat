@@ -430,6 +430,7 @@
 <script>
 import { Editor, EditorContent, BubbleMenu, FloatingMenu } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
+import { debounce } from "../utils";
 
 export default {
   props: ["modelValue"],
@@ -465,10 +466,12 @@ export default {
     this.editor.on("focus", () => {
       proxy.focused = true;
     });
-
-    this.editor.on("update", () => {
+    
+    let emitModelEvt = debounce(async () => {
       proxy.$emit("update:modelValue", proxy.editor.getHTML());
-    });
+    },200)
+
+    this.editor.on("update", emitModelEvt);
 
     this.editor.on("blur", () => {
       proxy.focused = false;
