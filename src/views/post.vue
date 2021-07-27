@@ -17,13 +17,13 @@
       class="px-10 py-5 bg-gray-100 w-full h-full rounded-t-6xl shadow-3xl relative"
     >
       <div
-        class="top-0 absolute right-20 flex justify-center items-center space-x-4 transform -translate-y-1/2"
+        class="top-0 absolute right-20 flex justify-center items-center space-x-4 transform -translate-y-1/2 z-50"
       >
         <div class="relative">
           <div class="absolute top-0 z-50 transform -translate-y-1/2 bg-gray-50 left-4 font-semibold text-sm rounded-full px-px">Hosting date</div>
           <datepicker
             class="outline-none shadow-2xl focus:outline-none rounded-2xl font-semibold z-0 bg-gray-50"
-            v-model="hostingDate"
+            v-model="pickedDate"
           />
         </div>
 
@@ -52,6 +52,7 @@
       </div>
 
       <Tiptap
+        class="z-0"
         @update:modelValue="updateContent"
         :modelValue="content"
         :editable="inEditingMode"
@@ -80,13 +81,12 @@ export default {
   data() {
     return {
       content: "",
-      hostingdate: null,
       postOwner: null,
       post: null,
       isEditable: false,
       inEditingMode: false,
       yetToPublish: false,
-      hostingDate: new Date()
+      pickedDate: new Date(),
     };
   },
   computed: {
@@ -99,13 +99,15 @@ export default {
       console.log(newVal);
     },
     async publish() {
+      let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
+
       this.inEditingMode = false;
       this.yetToPublish = false;
       await createPost(
         this.pid,
         this.content,
         this.postOwner,
-        this.hostingdate
+        hostingDate
       );
     },
     update() {
