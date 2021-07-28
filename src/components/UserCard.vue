@@ -57,6 +57,11 @@
 import { getAbbreviation } from "../utils";
 
 export default {
+  name:"UserCard",
+  props: {
+    userInfo: Object,
+    editable: Boolean
+  },
   data() {
     return {
       tags: ["user", "host", "admin"],
@@ -71,10 +76,7 @@ export default {
   methods: {
     getAbbreviation
   },
-  props: {
-    userInfo: Object,
-    editable: Boolean
-  }
+  
 };
 </script>
 

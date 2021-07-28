@@ -51,7 +51,6 @@ const getPost = async (pid) => {
   // this checks if the post is in published and gets it
   await posts.child(pid).once("value", async (ds) => {
     if (ds.exists()) {
-      console.log('post exists');
       post = await ds.val();
     }
   });
@@ -59,7 +58,6 @@ const getPost = async (pid) => {
   if (post == null) {
     await waiting_Room_Posts.child(pid).once("value",async (ds)=>{
       if (ds.exists()) {
-        console.log('post awaiting');
         post = await ds.val();
       }
     })
@@ -78,8 +76,9 @@ const createPost = async (pid, content, owner, hosting_date) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
-  await users.child(owner+"/posts").push(pid);
+  await users.child(owner+"/posts/"+pid).set(true);
   await posts.child(pid).set({
+    pid,
     creation_date: t,
     hosting_date,
     content,
@@ -129,15 +128,17 @@ const denyHost = async (uid) => {
 };
 
 const getUserInfo = async (uid) => {
+  var u = null;
   await users.child(uid).once("value", async (ds) => {
     var data = await ds.val();
-    return {
+    u = {
       uid: ds.key,
       email: data.email,
       img: data.img,
       userName: data.userName,
     };
   });
+  return u;
 };
 
 const getUsersData = async (List) => {

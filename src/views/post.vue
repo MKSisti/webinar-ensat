@@ -1,62 +1,69 @@
 <template>
-  <div class="flex justify-start items-start flex-col space-y-20 w-full h-full">
-    <div class="flex-shrink-0 w-full h-auto relative">
-      <img class="aspect-w-4 aspect-h-1 bg-black flex-shrink-0" src="" alt="" />
-      <div
-        class="absolute transform -translate-y-28 px-10 flex justify-between items-center w-full"
-      >
-        <user-card :userInfo="postOwner" />
-        <div
-          class=" bg-gray-100 h-10 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold"
-        >
-          Hosting date: xx/xx/xxxx at xx:xx
-        </div>
-      </div>
+  <div>
+    <div v-if="loading">
+      Loading Post ...
     </div>
-    <div
-      class="px-10 py-5 bg-gray-100 w-full h-full rounded-t-6xl shadow-3xl relative"
-    >
-      <div
-        class="top-0 absolute right-20 flex justify-center items-center space-x-4 transform -translate-y-1/2 z-50"
-      >
-        <div class="relative">
-          <div class="absolute top-0 z-50 transform -translate-y-1/2 bg-gray-50 left-4 font-semibold text-sm rounded-full px-px">Hosting date</div>
-          <datepicker
-            class="outline-none shadow-2xl focus:outline-none rounded-2xl font-semibold z-0 bg-gray-50"
-            v-model="pickedDate"
-          />
-        </div>
-
-        <!-- //? this button can change its text from edit/update and publish to match the action, edit can toggle edit ... -->
+    <div v-else class="flex justify-start items-start flex-col space-y-20 w-full h-full">
+      <div class="flex-shrink-0 w-full h-auto relative">
+        <img class="aspect-w-4 aspect-h-1 bg-black flex-shrink-0" src="" alt="" />
         <div
-          @click="publish"
-          v-if="inEditingMode && yetToPublish"
-          class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+          class="absolute transform -translate-y-28 px-10 flex justify-between items-center w-full"
         >
-          Publish
-        </div>
-        <div
-          @click="update"
-          v-if="inEditingMode && !yetToPublish"
-          class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
-        >
-          Update
-        </div>
-        <div
-          @click="inEditingMode = true"
-          v-if="!inEditingMode && isEditable"
-          class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
-        >
-          Edit
+          <user-card :userInfo="postOwner" />
+          <div
+            class=" bg-gray-100 h-10 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold"
+          >
+            Hosting date: xx/xx/xxxx at xx:xx
+          </div>
         </div>
       </div>
+      <div class="px-10 py-5 bg-gray-100 w-full h-full rounded-t-6xl shadow-3xl relative">
+        <div
+          class="top-0 absolute right-20 flex justify-center items-center space-x-4 transform -translate-y-1/2 z-50"
+        >
+          <div class="relative">
+            <div
+              class="absolute top-0 z-50 transform -translate-y-1/2 bg-gray-50 left-4 font-semibold text-sm rounded-full px-px"
+            >
+              Hosting date
+            </div>
+            <datepicker
+              class="outline-none shadow-2xl focus:outline-none rounded-2xl font-semibold z-0 bg-gray-50"
+              v-model="pickedDate"
+            />
+          </div>
 
-      <Tiptap
-        class="z-0"
-        @update:modelValue="updateContent"
-        :modelValue="content"
-        :editable="inEditingMode"
-      />
+          <!-- //? this button can change its text from edit/update and publish to match the action, edit can toggle edit ... -->
+          <div
+            @click="publish"
+            v-if="inEditingMode && yetToPublish"
+            class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+          >
+            Publish
+          </div>
+          <div
+            @click="update"
+            v-if="inEditingMode && !yetToPublish"
+            class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+          >
+            Update
+          </div>
+          <div
+            @click="inEditingMode = true"
+            v-if="!inEditingMode && isEditable"
+            class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+          >
+            Edit
+          </div>
+        </div>
+
+        <Tiptap
+          class="z-0"
+          @update:modelValue="updateContent"
+          :modelValue="content"
+          :editable="inEditingMode"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -64,25 +71,26 @@
 <script>
 import UserCard from "../components/UserCard";
 import Tiptap from "../components/TipTap";
-import { getPost, getUserInfo, createPost } from "../js/firebaseActions";
+import { getPost, getUserInfo as getU, createPost } from "../js/firebaseActions";
 import { mapGetters } from "vuex";
 import Datepicker from "vue3-datepicker";
 
 export default {
   name: "Post",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
     UserCard,
     Tiptap,
-    Datepicker
+    Datepicker,
   },
   data() {
     return {
+      loading: true,
       content: "",
-      postOwner: null,
-      post: null,
+      postOwner: {},
+      post: {},
       isEditable: false,
       inEditingMode: false,
       yetToPublish: false,
@@ -90,31 +98,25 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["getUserInfo"])
+    ...mapGetters("user", ["getUserInfo"]),
   },
   methods: {
     updateContent(newVal) {
       // console.log('new content');
       this.content = newVal;
-      console.log(newVal);
     },
     async publish() {
       let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
 
       this.inEditingMode = false;
       this.yetToPublish = false;
-      await createPost(
-        this.pid,
-        this.content,
-        this.postOwner,
-        hostingDate
-      );
+      await createPost(this.pid, this.content, this.postOwner.uid, hostingDate);
     },
     update() {
       this.inEditingMode = false;
-    }
+    },
   },
-  async created() {
+  async mounted() {
     this.post = await getPost(this.pid);
     if (this.post == null) {
       this.postOwner = this.getUserInfo;
@@ -122,13 +124,16 @@ export default {
       this.yetToPublish = true;
       this.isEditable = true;
     } else {
-      this.owner = await getUserInfo(this.post.owner);
+      this.postOwner = await getU(this.post.owner);
       this.content = this.post.content;
+      this.pickedDate = new Date(this.post.hosting_date);
       if (this.post.owner == this.getUserInfo.uid) {
         this.isEditable = true;
       }
     }
-  }
+    this.loading = false;
+    console.log(this.postOwner.img);
+  },
 };
 </script>
 
@@ -174,12 +179,11 @@ select:focus {
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgba(252, 165, 165, 1);
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
-    var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
-    calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
-    var(--tw-shadow, 0 0 #0000);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+    var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
+    var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   border-color: rgba(252, 165, 165, 1);
 }
 </style>

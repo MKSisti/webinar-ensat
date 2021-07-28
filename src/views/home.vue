@@ -7,7 +7,7 @@
       <div
         class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10 pb-8"
       >
-        <post-card :key="p.hosting_date" v-for="p of posts" :post="p" />
+        <post-card :key="p.pid" v-for="p of posts" :post="p"  @click="goToPost(p.pid)"/>
       </div>
       <search
         class="w-full border-b-2 border-gray-200 border-opacity-70 bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky"
@@ -32,7 +32,11 @@ export default {
       posts: [],
     };
   },
-  methods: {},
+  methods: {
+    goToPost(pid){
+      this.$router.push({ name: 'post', params: { pid: pid } });
+    }
+  },
   computed: {},
   async mounted() {
     console.log("mounted");
