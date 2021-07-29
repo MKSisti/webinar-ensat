@@ -21,11 +21,10 @@
         <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0">{{post.uid}}</h1>
       </div>
     </div>
-    <div class="w-full h-full flex flex-col justify-start items-center px-8 sm:px-14">
+    <div class="w-full h-full flex flex-col justify-start items-start px-8 sm:px-14">
       <div class="aspect-w-2 aspect-h-1 sm:aspect-w-4 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0"></div>
-      <p class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg">
-        {{post.content}}
-      </p>
+      <div v-html="post.content" class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg">
+      </div>
     </div>
   </div>
 </template>
