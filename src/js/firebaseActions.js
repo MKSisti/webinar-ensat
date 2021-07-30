@@ -12,17 +12,17 @@ async function getUser(uid) {
 
 const checkUserInwaitingRoom = async (uid) => {
   var e = false;
-  await waiting_Room_Posts.child(uid).once("value",async (ds)=>{
+  await waiting_Room_Posts.child(uid).once("value", async (ds) => {
     e = ds.exists();
-  })
+  });
   return e;
-}
+};
 
-const getInitialPosts = async () => {
+const getInitialPosts = async (n) => {
   var initial = null;
   await posts
     .orderByChild("hosting_date")
-    .limitToFirst(10)
+    .limitToFirst(n)
     .once("value", async (ds) => {
       initial = await ds.val();
     });
@@ -34,12 +34,12 @@ const getInitialPosts = async () => {
  * @param {Unix timestamp} LastDate
  * @returns 10 more posts from db
  */
-const getExtraPosts = async (LastDate) => {
+const getExtraPosts = async (n, LastDate) => {
   var extra = null;
   await posts
     .orderByChild("hosting_date")
     .startAfter(LastDate)
-    .limitToFirst(10)
+    .limitToFirst(n)
     .once("value", async (ds) => {
       extra = await ds.val();
     });
@@ -56,16 +56,15 @@ const getPost = async (pid) => {
   });
   // if post is not in published this checks draft (waiting room for posts)
   if (post == null) {
-    await waiting_Room_Posts.child(pid).once("value",async (ds)=>{
+    await waiting_Room_Posts.child(pid).once("value", async (ds) => {
       if (ds.exists()) {
         post = await ds.val();
       }
-    })
+    });
   }
   // by this time if the post is either found and read or it doesn't exist and it's null
-  return post; 
+  return post;
 };
-
 
 /**
  *
@@ -76,7 +75,7 @@ const createPost = async (pid, content, owner, hosting_date) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
-  await users.child(owner+"/posts/"+pid).set(true);
+  await users.child(owner + "/posts/" + pid).set(true);
   await posts.child(pid).set({
     pid,
     creation_date: t,
@@ -155,6 +154,29 @@ const getPostsAwaitingApproval = async () => {
   });
 };
 
+const makeUsersMap = async (PostList, oldMap) => {
+  let userIds = [];
+  let oldIds = [];
+  let map = oldMap || new Map();
+
+  for (const key of map.keys()) {
+    // no need to test for duplicates cause copying from the map
+    oldIds.push(key);
+  }
+
+  for (const item of PostList) {
+    // getting the userIds from the posts
+    userIds.indexOf(item.owner) < 0 ? userIds.push(item.owner) : null;
+  }
+
+  for (const id of userIds) {
+    // checking if the id from the posts already exists in the map
+    oldIds.indexOf(id) < 0 ? map.set(id, await getUserInfo(id)) : null;
+  }
+
+  return map;
+};
+
 export {
   getUser,
   getPost,
@@ -169,4 +191,5 @@ export {
   getPostsAwaitingApproval,
   getUserInfo,
   checkUserInwaitingRoom,
+  makeUsersMap,
 };

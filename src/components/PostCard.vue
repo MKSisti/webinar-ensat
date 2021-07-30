@@ -18,7 +18,7 @@
           Title of very good post is very long as u can see, damn this boi long
           bruh
         </h1>
-        <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0">{{post.uid}}</h1>
+        <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0">{{userData.uid}}</h1>
       </div>
     </div>
     <div class="w-full h-full flex flex-col justify-start items-start px-8 sm:px-14">
@@ -32,7 +32,7 @@
 <script>
 export default {
   name: "PostCard",
-  props:['post'],
+  props:['post','userData'],
   data() {
     return {};
   },
