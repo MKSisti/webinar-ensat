@@ -4,7 +4,7 @@
       <bubble-menu
         class="flex justify-center select-none items-center px-5 py-2 space-x-5 bg-black text-white bg-opacity-100 rounded-2xl shadow-2xl"
         :editor="editor"
-        v-if="editor"
+        v-if="editor && editable"
       >
         <!-- //!set bold -->
         <button
@@ -51,12 +51,13 @@
     </div>
     <div
       v-if="editor"
-      :class="{ toolbarFocus: focused }"
-      class="toolbar select-none flex flex-wrap justify-start items-center px-5 py-3 bg-black ring-2 ring-black text-white rounded-t-2xl shadow-2xl w-full transition duration-300 space-x-5"
+      :class="{ toolbarFocus: focused, 'transform  pointer-events-none opacity-0': !editable, 'py-3': editable }"
+      :style="{'max-height': editable ? '12rem' : '0rem'}"
+      class="toolbar z-0 select-none flex flex-wrap justify-start items-center px-5 bg-black ring-2 ring-black text-white rounded-t-2xl shadow-2xl w-full h-auto transition-all duration-300 gap-5"
     >
       <!-- font block -->
       <div
-        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-center h-full space-x-2"
+        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-center h-12 space-x-2"
       >
         <!-- //!set bold -->
         <button
@@ -117,7 +118,7 @@
 
       <!-- text size block -->
       <div
-        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-end h-full space-x-2"
+        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-end h-12 space-x-2"
       >
         <!-- //!set h1 -->
         <button
@@ -206,7 +207,7 @@
 
       <!-- insert block -->
       <div
-        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-center h-full space-x-2"
+        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-center h-12 space-x-2"
       >
         <!-- //!insert bullet points -->
         <button
@@ -280,7 +281,7 @@
 
       <!-- edit block -->
       <div
-        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-center h-full space-x-2"
+        class="bg-white px-4 rounded-xl text-black flex flex-nowrap justify-start items-center h-12 space-x-2"
       >
         <!-- //!undo -->
         <button
@@ -310,7 +311,8 @@
     </div>
     <editor-content
       @click="editor.chain().focus()"
-      class="ring-2 ring-black w-full h-full cursor-text px-4 py-4 rounded-b-xl bg-gray-100"
+      :class="{'rounded-xl': !editable, 'ring-2': editable}"
+      class="ring-black w-full h-full cursor-text px-4 py-4 rounded-b-xl z-20 transition-all duration-300"
       :editor="editor"
     />
   </div>
@@ -325,9 +327,8 @@ import {
 import StarterKit from "@tiptap/starter-kit";
 import { debounce } from "../utils";
 
-
 export default {
-  props: ["modelValue"],
+  props: ["modelValue", "editable"],
   emits: ["update:modelValue"],
   components: {
     EditorContent,
@@ -342,6 +343,15 @@ export default {
     };
   },
 
+  watch: {
+    editable: function(val) {
+      console.log("edit mode",val);
+      this.editor.setOptions({
+        editable: val
+      });
+    }
+  },
+
   mounted() {
     let proxy = this;
 
@@ -354,7 +364,8 @@ export default {
             levels: [1, 2, 3, 4, 5, 6]
           }
         })
-      ]
+      ],
+      editable: false,
     });
 
     this.editor.on("focus", () => {
@@ -377,5 +388,3 @@ export default {
   }
 };
 </script>
-
-

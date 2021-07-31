@@ -11,10 +11,10 @@
       class="flex justify-start items-start flex-col space-y-20 w-full h-full overflow-auto"
     >
       <div class="w-full h-auto relative">
-        <div :style="viewingImg ? 'opacity:0!important' : ''" class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black opacity-10 transition duration-300 pointer-events-none"></div>
+        <div :style="viewingImg ? 'opacity:0!important' : ''" :class="{'rounded-b-6xl': !viewingImg}" class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black opacity-10 transition-all duration-300 pointer-events-none"></div>
         <div
-          class="w-full cursor-pointer aspect-w-8 aspect-h-1 transition-all duration-300 z-0"
-          :class="{ viewingImg: viewingImg }"
+          class="w-full cursor-pointer aspect-w-8 aspect-h-1 transition-all duration-300 z-0 overflow-hidden"
+          :class="{ viewingImg: viewingImg, 'rounded-b-6xl': !viewingImg }"
           @click="viewingImg = !viewingImg"
         >
           
@@ -30,8 +30,9 @@
         >
           <router-link :to="'/profile/' + postOwner.uid" tag="user-card">
             <user-card
+              :class="{ 'pointer-events-auto': !viewingImg }"
               :userInfo="postOwner"
-              class="pointer-events-auto cursor-pointer transform hover:-translate-y-2 transition duration-300"
+              class="cursor-pointer transform hover:-translate-y-2 transition duration-300"
           /></router-link>
 
           <div
@@ -47,23 +48,23 @@
         <div
           class="top-0 absolute right-20 flex justify-end items-center space-x-4 transform -translate-y-1/2 z-50 w-full"
         >
-          <div class="relative">
+          <div :class="{'hidden': !inEditingMode}" class="relative">
             <div
               class="absolute top-0 z-50 transform -translate-y-1/2 bg-gray-50 left-4 font-semibold text-sm rounded-full px-px"
             >
               Hosting date
             </div>
             <datepicker
-              class="outline-none shadow-2xl focus:outline-none rounded-2xl font-semibold z-0 bg-gray-50"
+              class="outline-none shadow-2xl focus:outline-none rounded-2xl font-semibold z-0 bg-gray-50 w-48"
               v-model="pickedDate"
             />
           </div>
 
-          <div class="relative">
+          <div :class="{'hidden': !inEditingMode}" class="relative">
             <div
-              class="absolute top-0 z-50 transform -translate-y-1/2 bg-gray-50 left-4 font-semibold text-sm rounded-full px-px"
+              class="absolute top-0 z-50 transform -translate-y-1/2 bg-gray-50 left-3 font-semibold text-sm rounded-full px-px"
             >
-              Hosting date
+              Hosting time
             </div>
             <vue-timepicker
               format="HH:mm"
@@ -245,7 +246,7 @@ select:focus {
 }
 
 .viewingImg {
-  @apply aspect-w-4 aspect-h-1;
+  @apply aspect-w-4 aspect-h-1 rounded-none;
 }
 </style>
 
@@ -254,7 +255,7 @@ select:focus {
   display: inline-block;
   position: relative;
   font-size: 1em;
-  width: 7em;
+  width: 8em;
   vertical-align: middle;
   @apply font-semibold;
 }
@@ -262,7 +263,7 @@ select:focus {
   box-sizing: border-box;
 }
 .vue__time-picker input.vue__time-picker-input {
-  width: 7em;
+  width: 8em;
   height: 2.2em;
   padding: 0.3em 0.5em;
   font-size: 1em;
