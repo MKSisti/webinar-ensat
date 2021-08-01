@@ -1,6 +1,7 @@
 import firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/database"
+import 'firebase/storage'; 
 
 const firebaseConfig = {
     apiKey: "AIzaSyCCS-8knATLSrKtaiAMqbTvdsqMkQCPv_Q",
@@ -16,6 +17,7 @@ const firebaseConfig = {
 
   const db = firebase.database();
   const auth = firebase.auth();
+  const storage = firebase.storage();
   const provider = new firebase.auth.GoogleAuthProvider();
 
   const posts = firebase.database().ref("posts");
@@ -26,4 +28,4 @@ const firebaseConfig = {
   // not a good idea, maybe do not use
   const newPostref = posts.push();
 
-  export {db, auth, provider, posts, newPostref , users, waiting_Room, waiting_Room_Posts}
+  export {db, auth, provider, posts, newPostref , users, waiting_Room, waiting_Room_Posts, storage}

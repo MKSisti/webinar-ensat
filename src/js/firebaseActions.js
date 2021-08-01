@@ -1,4 +1,4 @@
-import { users, posts, waiting_Room, waiting_Room_Posts } from "../firebase";
+import { users, posts, waiting_Room, waiting_Room_Posts, storage } from "../firebase";
 
 async function getUser(uid) {
   var user = null;
@@ -171,6 +171,14 @@ const makeUsersMap = async (PostList, oldMap) => {
   return map;
 };
 
+const uploadCover = async (img, pid) => {
+  await storage.ref("posters/"+pid).put(img);
+}
+
+const getCoverImg = async (pid) => {
+  return await storage.ref("posters/"+pid).getDownloadURL();
+}
+
 export {
   getUser,
   getPost,
@@ -186,4 +194,6 @@ export {
   getUserInfo,
   checkUserInwaitingRoom,
   makeUsersMap,
+  uploadCover,
+  getCoverImg,
 };
