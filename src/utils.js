@@ -40,9 +40,17 @@ function getAbbreviation(text) {
   
 }
 
-
+function formatDate(d){
+  var sda = new Date(d).toJSON();
+  sda = sda.split("T")[0].replaceAll("-", "/") + " " + sda.split("T")[1].split(".")[0];
+  let dateTime = {};
+  dateTime.date = sda.split(" ")[0].split("/")[2] + "/" + sda.split(" ")[0].split("/")[1] + "/" + sda.split(" ")[0].split("/")[0];
+  dateTime.time = sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
+  return dateTime;
+}
 
 export {
   debounce,
   getAbbreviation,
+  formatDate,
 };

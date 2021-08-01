@@ -5,7 +5,7 @@
     <div
       class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
-      {{ createdDate.date + ' ' + createdDate.time }}
+      {{ createdDate.date + " " + createdDate.time }}
     </div>
     <div class="h-32 w-full px-8 flex justify-start items-center">
       <div
@@ -14,14 +14,9 @@
         <img v-if="userData" :src="userData.img" :alt="userData.userName" />
         <div v-else class="w-full h-full bg-gray-300 animate-pulse"></div>
       </div>
-      <div
-        class="flex flex-col justify-center items-start h-full px-3 w-full gap-y-2"
-      >
-        <h1
-          v-if="userData"
-          class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0 "
-        >
-          Title of very good post is very long as u can see, damn this boi long
+      <div class="flex flex-col justify-center items-start h-full px-3 w-full gap-y-2">
+        <h1 v-if="userData" class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0 ">
+          {{post.title}}
         </h1>
         <div v-else class="w-full h-6 bg-gray-300 rounded-lg animate-pulse"></div>
         <router-link :to="'/profile/' + userData?.uid" class="w-full">
@@ -57,52 +52,19 @@
 </template>
 
 <script>
+import { formatDate } from "../utils";
+
 export default {
   name: "PostCard",
   props: ["post", "userData"],
-  data() {
-    return {};
-  },
   computed: {
     createdDate() {
-      var sda = new Date(this.post.creation_date).toJSON();
-      sda =
-        sda.split("T")[0].replaceAll("-", "/") +
-        " " +
-        sda.split("T")[1].split(".")[0];
-
-      let dateTime = {};
-      dateTime.date =
-        sda.split(" ")[0].split("/")[2] +
-        "/" +
-        sda.split(" ")[0].split("/")[1] +
-        "/" +
-        sda.split(" ")[0].split("/")[0];
-      dateTime.time =
-        sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
-      return dateTime;
+      return formatDate(this.post.creation_date);
     },
     hostedDate() {
-      var sda = new Date(this.post.hosting_date).toJSON();
-      sda =
-        sda.split("T")[0].replaceAll("-", "/") +
-        " " +
-        sda.split("T")[1].split(".")[0];
-      let dateTime = {};
-      dateTime.date =
-        sda.split(" ")[0].split("/")[2] +
-        "/" +
-        sda.split(" ")[0].split("/")[1] +
-        "/" +
-        sda.split(" ")[0].split("/")[0];
-      dateTime.time =
-        sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
-      return dateTime;
-    }
+      return formatDate(this.post.hosting_date);
+    },
   },
-  mounted() {
-    console.log(this.post);
-  }
 };
 </script>
 

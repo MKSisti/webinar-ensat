@@ -68,16 +68,12 @@ export default {
     this.loading = false;
     let debScrollBottom = debounce(async () => {
       if (
-        this.$refs.home?.scrollHeight &&
-        this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop ===
-          this.$refs.home?.clientHeight
-      ) {
-        let extra = await getExtraPosts(
-          this.postsToShow,
-          this.posts[this.posts.length - 1].hosting_date
-        );
-        if (extra) await this.posts.push(...extra);
-        this.usersMap = await makeUsersMap(extra, this.usersMap);
+        this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight ) {
+        let extra =  this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date ) : null;
+        if (extra) {
+          await this.posts.push(...extra);
+          this.usersMap = await makeUsersMap(extra, this.usersMap);
+        }
         // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
       }
     }, 200);

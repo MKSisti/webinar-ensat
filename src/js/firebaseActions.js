@@ -4,8 +4,6 @@ async function getUser(uid) {
   var user = null;
   await users.child(uid).once("value", async (ds) => {
     user = await ds.val();
-    console.log(user);
-    console.log(posts);
   });
   return user; // no checks are needed if user is found then it's an 'object' otherwise it's 'null'
 }
@@ -26,14 +24,9 @@ const getInitialPosts = async (n) => {
     .once("value", async (ds) => {
       initial = await ds.val();
     });
-  return initial ? Object.values(initial) : null;
+  return initial ? Object.values(initial) : [];
 };
 
-/**
- *
- * @param {Unix timestamp} LastDate
- * @returns 10 more posts from db
- */
 const getExtraPosts = async (n, LastDate) => {
   var extra = null;
   await posts
@@ -71,7 +64,7 @@ const getPost = async (pid) => {
  * @param {object} newPost
  * assumes the uid is provided
  */
-const createPost = async (pid, content, owner, hosting_date) => {
+const createPost = async (pid, content, owner, hosting_date, title) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
@@ -82,6 +75,7 @@ const createPost = async (pid, content, owner, hosting_date) => {
     hosting_date,
     content,
     owner,
+    title,
   });
 };
 

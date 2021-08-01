@@ -45,7 +45,7 @@
             <div
               class=" bg-gray-100 h-10 transform -translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold"
             >
-              Hosting date: xx/xx/xxxx at xx:xx
+              Hosting date: {{displayedDate ? displayedDate.date+ " at " + displayedDate.time : "xx/xx/xxxx at xx:xx"}}
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@
                 name="Title"
                 :lazy="200"
                 size="0"
-                modelValue="Untitled"
+                :modelValue="title"
                 @update:modelValue="handleTitle"
               />
             </div>
@@ -142,11 +142,8 @@ import VueTimepicker from "vue3-timepicker";
 import BaseInput from "../components/BaseInput";
 import Loader from "../components/Loader";
 
-import {
-  getPost,
-  getUserInfo as getU,
-  createPost
-} from "../js/firebaseActions";
+import { getPost, getUserInfo as getU, createPost } from "../js/firebaseActions";
+import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
 
 export default {
@@ -174,7 +171,8 @@ export default {
       pickedDate: new Date(),
       viewingImg: false,
       pickedTime: null,
-      title: null
+      displayedDate: null,
+      title: "Untitled",
     };
   },
   computed: {
@@ -185,7 +183,6 @@ export default {
       this.title = val;
     },
     updateContent(newVal) {
-      // console.log('new content');
       this.content = newVal;
     },
     async publish() {
@@ -200,10 +197,11 @@ export default {
 
       this.inEditingMode = false;
       this.yetToPublish = false;
-      await createPost(this.pid, this.content, this.postOwner.uid, hostingDate);
+      await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
     },
     update() {
       this.inEditingMode = false;
+      //TODO update logic
     }
   },
   async mounted() {
@@ -216,6 +214,9 @@ export default {
     } else {
       this.postOwner = await getU(this.post.owner);
       this.content = this.post.content;
+      this.title = this.post.title;
+      this.displayedDate = formatDate(this.post.hosting_date);
+      console.log(this.displayedDate);
       this.pickedDate = new Date(this.post.hosting_date);
       if (this.post.owner == this.getUserInfo.uid) {
         this.isEditable = true;
