@@ -11,7 +11,7 @@
       <div
         class="rounded-full bg-yellow-400 h-16 w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center"
       >
-      <img :src="userData.img" :alt="userData.userName">
+      <img :src="userData?.img" :alt="userData?.userName">
       </div>
       <div
         class="flex flex-col justify-center items-start h-full px-3 w-full"
@@ -20,9 +20,9 @@
           Title of very good post is very long as u can see, damn this boi long
           bruh
         </h1>
-        <router-link :to="'/profile/' + userData.uid">
+        <router-link :to="'/profile/' + userData?.uid">
           <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0 hover:underline">
-            {{ userData.userName }}
+            {{ userData?.userName }}
           </h1>
         </router-link>
       </div>
@@ -34,7 +34,7 @@
         class="aspect-w-2 aspect-h-1 sm:aspect-w-4 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0 transform transition duration-300 group-hover:-translate-y-2"
       ></div>
       <div
-        v-html="post.content"
+        v-html="post?.content"
         class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg postCardHtml"
       ></div>
     </div>

@@ -9,14 +9,34 @@
       </router-link>
     </div>
     <div class="flex justify-center items-center gap-5 text-xl font-bold">
-      <!-- <router-link to="/">HOME</router-link> -->
-      <!-- <router-link to="/about" >ABOUT</router-link>
-      <router-link to="/contact" >CONTACT US</router-link> -->
+      <!-- //!Create post button -->
+      <div
+        @click="goToCreate"
+        class="flex justify-center items-center space-x-2 transform transition duration-300"
+      >
+        <div
+          class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-4 py-3 space-x-3 relative flex-shrink-0"
+        >
+          <i
+            class="fa fa-file-o flex-shrink-0 flex items-center justify-center text-2xl font-black transition transform duration-300 mt-px ml-px"
+            aria-hidden="true"
+          ></i>
+          <h1
+            class="text-xl font-semibold flex-shrink-0 transition-all transform group-hover:w-36 w-0 overflow-hidden whitespace-nowrap duration-300 pl-1"
+          >
+            Write a post
+          </h1>
+        </div>
+      </div>
     </div>
     <div>
       <div v-if="getLoggedState">
         <router-link :to="'/profile/' + getUserInfo.uid">
-          <img class="rounded-full ring-0 ring-red-300 w-12 h-12" :src="getUserInfo.img" :alt="getUserInfo.userName">
+          <img
+            class="rounded-full ring-0 ring-red-300 w-12 h-12"
+            :src="getUserInfo.img"
+            :alt="getUserInfo.userName"
+          />
         </router-link>
       </div>
       <div v-else>
@@ -34,7 +54,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { auth, provider } from "../firebase";
+import { auth, provider, posts } from "../firebase";
 
 export default {
   name: "NavBar",
@@ -51,6 +71,9 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    goToCreate() {
+      this.$router.push({ name: "post", params: { pid: posts.push().key } });
     }
   }
 };

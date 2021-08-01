@@ -1,6 +1,5 @@
 <template>
   <div class="h-full">
-    <!-- //TODO make this into a reusable animation -->
     <loader v-if="loading" />
 
     <transition v-else name="fade-y" appear>
@@ -141,7 +140,7 @@ import Tiptap from "../components/TipTap";
 import Datepicker from "vue3-datepicker";
 import VueTimepicker from "vue3-timepicker";
 import BaseInput from "../components/BaseInput";
-import Loader from "../components/Loader" 
+import Loader from "../components/Loader";
 
 import {
   getPost,
@@ -161,7 +160,7 @@ export default {
     Datepicker,
     VueTimepicker,
     BaseInput,
-    Loader,
+    Loader
   },
   data() {
     return {
