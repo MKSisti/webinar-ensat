@@ -2,7 +2,7 @@
   <div
     @mouseenter="stopInterval"
     @mouseleave="startInterval"
-    class="bg-gradient-to-br from-red-300 to-pink-300 xl:rounded-6xl xl:w-4/6 w-full rounded-none overflow-hidden relative select-none aspect-w-2 aspect-h-1 xl:aspect-w-4"
+    class="bg-gradient-to-br from-red-300 to-pink-300 xl:rounded-6xl xl:w-4/6 w-full rounded-none overflow-hidden relative select-none aspect-w-2 aspect-h-1 xl:aspect-w-4 shadow-xl"
   >
     <div
       class="w-full h-full z-40 pointer-events-none flex justify-center items-start absolute space-x-3 px-4 py-4"

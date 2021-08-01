@@ -5,38 +5,53 @@
     <div
       class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
-      {{ d }}
+      {{ createdDate.date + ' ' + createdDate.time }}
     </div>
     <div class="h-32 w-full px-8 flex justify-start items-center">
       <div
-        class="rounded-full bg-yellow-400 h-16 w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center"
+        class="rounded-full h-16 w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center"
       >
-      <img :src="userData?.img" :alt="userData?.userName">
+        <img v-if="userData" :src="userData.img" :alt="userData.userName" />
+        <div v-else class="w-full h-full bg-gray-300 animate-pulse"></div>
       </div>
       <div
-        class="flex flex-col justify-center items-start h-full px-3 w-full"
+        class="flex flex-col justify-center items-start h-full px-3 w-full gap-y-2"
       >
-        <h1 class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0">
+        <h1
+          v-if="userData"
+          class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0 "
+        >
           Title of very good post is very long as u can see, damn this boi long
-          bruh
         </h1>
-        <router-link :to="'/profile/' + userData?.uid">
-          <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0 hover:underline">
+        <div v-else class="w-full h-6 bg-gray-300 rounded-lg animate-pulse"></div>
+        <router-link :to="'/profile/' + userData?.uid" class="w-full">
+          <h1
+            v-if="userData"
+            class="text-xl max-w-full truncate pr-24 flex-shrink-0 hover:underline -mt-2"
+          >
             {{ userData?.userName }}
           </h1>
+          <div v-else class="w-4/12 h-4 bg-gray-300 rounded-md animate-pulse"></div>
         </router-link>
       </div>
     </div>
     <div
-      class="w-full h-full flex flex-col justify-start items-start px-8 sm:px-14"
+      class="w-full h-full flex flex-col justify-start items-start px-8 sm:px-14 transform transition duration-300 group-hover:-translate-y-3"
     >
       <div
-        class="aspect-w-2 aspect-h-1 sm:aspect-w-4 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0 transform transition duration-300 group-hover:-translate-y-2"
+        class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0 shadow-md"
       ></div>
-      <div
+
+      <!-- <div
+        class="w-full bg-gray-100 text-xl mx-auto rounded-b-3xl flex justify-center items-center font-semibold py-1 -mt-20 pt-20"
+      >
+        Hosting {{ hostedDate.date }} at {{ hostedDate.time }}
+      </div> -->
+
+      <!-- <div
         v-html="post?.content"
         class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg postCardHtml"
-      ></div>
+      ></div> -->
     </div>
   </div>
 </template>
@@ -49,14 +64,44 @@ export default {
     return {};
   },
   computed: {
-    d() {
-      var sda = new Date(this.post.hosting_date).toJSON();
-      return (
+    createdDate() {
+      var sda = new Date(this.post.creation_date).toJSON();
+      sda =
         sda.split("T")[0].replaceAll("-", "/") +
         " " +
-        sda.split("T")[1].split(".")[0]
-      );
+        sda.split("T")[1].split(".")[0];
+
+      let dateTime = {};
+      dateTime.date =
+        sda.split(" ")[0].split("/")[2] +
+        "/" +
+        sda.split(" ")[0].split("/")[1] +
+        "/" +
+        sda.split(" ")[0].split("/")[0];
+      dateTime.time =
+        sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
+      return dateTime;
+    },
+    hostedDate() {
+      var sda = new Date(this.post.hosting_date).toJSON();
+      sda =
+        sda.split("T")[0].replaceAll("-", "/") +
+        " " +
+        sda.split("T")[1].split(".")[0];
+      let dateTime = {};
+      dateTime.date =
+        sda.split(" ")[0].split("/")[2] +
+        "/" +
+        sda.split(" ")[0].split("/")[1] +
+        "/" +
+        sda.split(" ")[0].split("/")[0];
+      dateTime.time =
+        sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
+      return dateTime;
     }
+  },
+  mounted() {
+    console.log(this.post);
   }
 };
 </script>
