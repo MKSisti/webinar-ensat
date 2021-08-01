@@ -1,5 +1,5 @@
 <template>
-  <div class="h-36 w-116">
+  <div :class="{'userCardMin': minimal}" class="h-36 w-116">
     <div class="w-full h-full relative shadow-2xl overflow-hidden rounded-3xl">
       <div
         v-if="editable"
@@ -21,7 +21,7 @@
       </div>
 
       <div
-        class="w-full h-28 bg-gray-100 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm"
+        class="mainInfo w-full h-28 bg-gray-100 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm"
       >
         <div class="h-full flex justify-center items-center px-4">
           <img :src="userInfo.img" alt="avatar" class="rounded-full w-full" />
@@ -39,7 +39,7 @@
           <h2 class="text-xl font-semibold">{{ userInfo.email }}</h2>
         </div>
       </div>
-      <div class="w-full h-36 pt-28 bg-gray-200 absolute z-0">
+      <div v-if="!minimal" class="secondaryInfo w-full h-36 pt-28 bg-gray-200 absolute z-0">
         <div class="w-full flex justify-around items-center py-1">
           <h3 class="font-semibold max-w-full truncate flex-shrink-0 text-base">
             {{ getAbbreviation("ecole national des science applique tanger") }}
@@ -60,7 +60,8 @@ export default {
   name:"UserCard",
   props: {
     userInfo: Object,
-    editable: Boolean
+    editable: Boolean,
+    minimal: Boolean
   },
   data() {
     return {
@@ -80,4 +81,26 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+
+.userCardMin{
+  @apply h-16 w-96;
+
+  .mainInfo{
+    @apply h-16;
+
+    img{
+      @apply h-14;
+    }
+
+    h1{
+      @apply text-xl;
+    }
+
+    h2{
+      @apply text-lg;
+    }
+  }
+}
+
+</style>

@@ -354,7 +354,7 @@ export default {
 
   mounted() {
     let proxy = this;
-
+    let e = this.editable;
     this.editor = new Editor({
       content: this.modelValue,
       extensions: [
@@ -365,7 +365,7 @@ export default {
           }
         })
       ],
-      editable: false,
+      editable: e,
     });
 
     this.editor.on("focus", () => {

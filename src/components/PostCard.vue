@@ -1,18 +1,20 @@
 <template>
   <div
-    class="group transform hover:-translate-y-2 transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full pb-6 sm:shadow-2xl flex flex-col justify-start items-center overflow-hidden border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
+    class="group postCard transform hover:-translate-y-2 hover:scale-105 transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full pb-6 sm:shadow-2xl flex flex-col justify-start items-center overflow-hidden border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
   >
     <div
-      class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-30 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
+      class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
       {{ d }}
     </div>
     <div class="h-32 w-full px-8 flex justify-start items-center">
       <div
-        class="rounded-full bg-yellow-400 h-16 w-16 pointer-events-auto transition duration-300 flex-shrink-0"
-      ></div>
+        class="rounded-full bg-yellow-400 h-16 w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center"
+      >
+      <img :src="userData.img" :alt="userData.userName">
+      </div>
       <div
-        class="flex flex-col justify-center items-start h-full px-3 w-full overflow-visible"
+        class="flex flex-col justify-center items-start h-full px-3 w-full"
       >
         <h1 class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0">
           Title of very good post is very long as u can see, damn this boi long
@@ -20,7 +22,7 @@
         </h1>
         <router-link :to="'/profile/' + userData.uid">
           <h1 class="text-xl max-w-full truncate pr-24 flex-shrink-0 hover:underline">
-            {{ userData.uid }}
+            {{ userData.userName }}
           </h1>
         </router-link>
       </div>
@@ -33,7 +35,7 @@
       ></div>
       <div
         v-html="post.content"
-        class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg"
+        class="line-clamp-5 sm:px-8 pt-2 pb-1 font-semibold text-lg postCardHtml"
       ></div>
     </div>
   </div>

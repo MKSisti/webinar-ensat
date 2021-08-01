@@ -3,18 +3,20 @@
     class="px-10 py-4 h-16 w-full bg-gray-100 shadow-md flex items-center justify-between xl:rounded-b-4xl"
   >
     <div>
-      <div>W</div>
-      <div>Webinar Ensat</div>
+      <router-link to="/">
+        <!-- <div>W</div> -->
+        <div class="text-xl font-semibold">Webinar Ensat</div>
+      </router-link>
     </div>
-    <div class="flex">
-      <router-link to="/" >HOME</router-link>
-      <router-link to="/about" >ABOUT</router-link>
-      <router-link to="/contact" >CONTACT US</router-link>
+    <div class="flex justify-center items-center gap-5 text-xl font-bold">
+      <!-- <router-link to="/">HOME</router-link> -->
+      <!-- <router-link to="/about" >ABOUT</router-link>
+      <router-link to="/contact" >CONTACT US</router-link> -->
     </div>
     <div>
       <div v-if="getLoggedState">
         <router-link :to="'/profile/' + getUserInfo.uid">
-          Hello, {{ getUserInfo.userName }}
+          <img class="rounded-full ring-0 ring-red-300 w-12 h-12" :src="getUserInfo.img" :alt="getUserInfo.userName">
         </router-link>
       </div>
       <div v-else>
@@ -39,8 +41,8 @@ export default {
   computed: {
     ...mapGetters("user", [
       "getLoggedState", //usage : this.getLoggedState()
-      "getUserInfo",
-    ]),
+      "getUserInfo"
+    ])
   },
   methods: {
     async logIn() {
@@ -49,7 +51,7 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    },
-  },
+    }
+  }
 };
 </script>

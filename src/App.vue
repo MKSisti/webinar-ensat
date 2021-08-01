@@ -130,83 +130,98 @@ button {
   @apply outline-none;
 }
 
-.ProseMirror {
+.ProseMirror,
+.postCardHtml {
   > * + * {
     margin-top: 0.75em;
   }
-}
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
 
-ul,
-ol {
-  padding: 0 1rem;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  line-height: 1.1;
-}
+  h1 {
+    @apply font-bold text-4xl;
+  }
 
-h1 {
-  @apply font-bold text-4xl;
-}
+  h2 {
+    @apply font-bold text-3xl;
+  }
 
-h2 {
-  @apply font-bold text-3xl;
-}
+  h3 {
+    @apply font-semibold text-2xl;
+  }
 
-h3 {
-  @apply font-semibold text-2xl;
-}
+  h4 {
+    @apply font-semibold text-xl;
+  }
 
-h4 {
-  @apply font-semibold text-xl;
-}
+  h5 {
+    @apply font-medium text-lg;
+  }
 
-h5 {
-  @apply font-medium text-lg;
-}
-
-h6 {
-  @apply font-normal text-base;
-}
-
-code {
-  background-color: rgba(#616161, 0.1);
-  color: #616161;
-}
-
-pre {
-  background: #0d0d0d;
-  color: #fff;
-  font-family: "JetBrainsMono", monospace;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  h6 {
+    @apply font-normal text-base;
+  }
 
   code {
-    color: inherit;
-    padding: 0;
-    background: none;
-    font-size: 0.8rem;
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+  }
+
+  pre {
+    background: #0d0d0d;
+    color: #fff;
+    font-family: "JetBrainsMono", monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 0.8rem;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid rgba(#0d0d0d, 0.1);
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid rgba(#0d0d0d, 0.1);
+    margin: 2rem 0;
   }
 }
+</style>
 
-img {
-  max-width: 100%;
-  height: auto;
+<style>
+::-webkit-scrollbar {
+  @apply w-2 h-2;
 }
-
-blockquote {
-  padding-left: 1rem;
-  border-left: 2px solid rgba(#0d0d0d, 0.1);
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
 }
-
-hr {
-  border: none;
-  border-top: 2px solid rgba(#0d0d0d, 0.1);
-  margin: 2rem 0;
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-red-300;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent rounded-full;
 }
 </style>
