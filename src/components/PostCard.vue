@@ -21,7 +21,7 @@
           v-if="userData"
           class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0 "
         >
-          Title of very good post is very long as u can see, damn this boi long
+          {{post.title}}
         </h1>
         <div v-else class="w-full h-6 bg-gray-300 rounded-lg animate-pulse"></div>
         <router-link :to="'/profile/' + userData?.uid" class="w-full">

@@ -5,7 +5,7 @@
     <transition v-else name="fade-y" appear>
       <!-- post -->
       <div
-        class="flex justify-start items-start flex-col space-y-20 w-full h-full overflow-auto transition duration-300"
+        class="flex justify-start items-start flex-col space-y-20 w-full h-full transition duration-300"
       >
         <!-- post img -->
         <div class="w-full h-auto relative">
@@ -52,7 +52,7 @@
 
         <!-- editor -->
         <div
-          class="px-10 py-5 bg-gray-100 w-full h-full rounded-t-6xl shadow-3xl relative space-y-10 pb-20"
+          class="px-10 py-5 bg-gray-100 w-full rounded-t-6xl shadow-3xl relative pb-20 flex-grow"
         >
           <div
             class="top-0 absolute right-20 flex justify-end items-center transform -translate-y-1/2 gap-x-4 z-50 w-full"
@@ -121,13 +121,31 @@
             </div>
           </div>
 
-          <!-- well it's tiptap, duh -->
-          <Tiptap
-            class="z-0"
-            @update:modelValue="updateContent"
-            :modelValue="content"
-            :editable="inEditingMode || yetToPublish"
-          />
+          <div class="w-full h-full overflow-hidden py-10">
+            <!-- title -->
+            <div
+              :class="{
+                'max-h-0': inEditingMode,
+                'max-h-full pb-5': !inEditingMode
+              }"
+              class="w-8/12 transition-all duration-300 mx-auto overflow-hidden"
+            >
+              <h1
+                class="w-full text-center flex-grow-0 text-6xl font-semibold capitalize"
+              >
+                {{ title }}
+              </h1>
+            </div>
+
+            <!-- well it's tiptap, duh -->
+            <Tiptap
+              :class="{ 'p-0': !inEditingMode, 'pt-0': inEditingMode }"
+              class="z-0 transition-all duration-300 p-1"
+              @update:modelValue="updateContent"
+              :modelValue="content"
+              :editable="inEditingMode || yetToPublish"
+            />
+          </div>
         </div>
       </div>
     </transition>

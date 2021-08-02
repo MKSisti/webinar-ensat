@@ -94,6 +94,16 @@ body,
   opacity: 0;
 }
 
+.height-leave-to,
+.height-enter-from {
+  height: 0px;
+}
+
+.height-enter-active,
+.height-leave-active {
+  overflow: hidden;
+}
+
 .squash-y-leave-to,
 .squash-y-enter-from {
   height: 0px;
