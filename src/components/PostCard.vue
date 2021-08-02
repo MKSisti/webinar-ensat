@@ -5,7 +5,7 @@
     <div
       class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
-      {{ createdDate.date + ' ' + createdDate.time }}
+      {{ createdDate.date + " " + createdDate.time }}
     </div>
     <div class="h-32 w-full px-8 flex justify-start items-center">
       <div
@@ -57,52 +57,19 @@
 </template>
 
 <script>
+import { formatDate } from "../utils";
+
 export default {
   name: "PostCard",
   props: ["post", "userData"],
-  data() {
-    return {};
-  },
   computed: {
     createdDate() {
-      var sda = new Date(this.post.creation_date).toJSON();
-      sda =
-        sda.split("T")[0].replaceAll("-", "/") +
-        " " +
-        sda.split("T")[1].split(".")[0];
-
-      let dateTime = {};
-      dateTime.date =
-        sda.split(" ")[0].split("/")[2] +
-        "/" +
-        sda.split(" ")[0].split("/")[1] +
-        "/" +
-        sda.split(" ")[0].split("/")[0];
-      dateTime.time =
-        sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
-      return dateTime;
+      return formatDate(this.post.creation_date);
     },
     hostedDate() {
-      var sda = new Date(this.post.hosting_date).toJSON();
-      sda =
-        sda.split("T")[0].replaceAll("-", "/") +
-        " " +
-        sda.split("T")[1].split(".")[0];
-      let dateTime = {};
-      dateTime.date =
-        sda.split(" ")[0].split("/")[2] +
-        "/" +
-        sda.split(" ")[0].split("/")[1] +
-        "/" +
-        sda.split(" ")[0].split("/")[0];
-      dateTime.time =
-        sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
-      return dateTime;
-    }
+      return formatDate(this.post.hosting_date);
+    },
   },
-  mounted() {
-    console.log(this.post);
-  }
 };
 </script>
 

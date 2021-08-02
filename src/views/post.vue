@@ -20,9 +20,12 @@
             @click="viewingImg = !viewingImg"
           >
             <img
+             @click="$refs.FileUpload.click()"
               class="w-full object-contain h-auto"
-              src="https://encapstore.com/wp-content/uploads/2019/06/banner-test.jpg"
+              :src="cover"
+              alt="Cover Image"
             />
+            <input ref="FileUpload" type="file" accept="image/*" @change="fileChange($event.target.files); " hidden>
           </div>
 
           <!-- poster and hosting Date -->
@@ -45,7 +48,7 @@
             <div
               class=" bg-gray-100 h-10 transform -translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold"
             >
-              Hosting date: xx/xx/xxxx at xx:xx
+              Hosting date: {{displayedDate ? displayedDate.date+ " at " + displayedDate.time : "xx/xx/xxxx at xx:xx"}}
             </div>
           </div>
         </div>
@@ -66,7 +69,7 @@
                 name="Title"
                 :lazy="200"
                 size="0"
-                modelValue="Untitled"
+                :modelValue="title"
                 @update:modelValue="handleTitle"
               />
             </div>
@@ -160,11 +163,8 @@ import VueTimepicker from "vue3-timepicker";
 import BaseInput from "../components/BaseInput";
 import Loader from "../components/Loader";
 
-import {
-  getPost,
-  getUserInfo as getU,
-  createPost
-} from "../js/firebaseActions";
+import { getPost, getUserInfo as getU, createPost, uploadCover, getCoverImg } from "../js/firebaseActions";
+import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
 
 export default {
@@ -192,7 +192,9 @@ export default {
       pickedDate: new Date(),
       viewingImg: false,
       pickedTime: null,
-      title: null
+      displayedDate: null,
+      title: "Untitled",
+      cover: null,
     };
   },
   computed: {
@@ -203,7 +205,6 @@ export default {
       this.title = val;
     },
     updateContent(newVal) {
-      // console.log('new content');
       this.content = newVal;
     },
     async publish() {
@@ -218,10 +219,24 @@ export default {
 
       this.inEditingMode = false;
       this.yetToPublish = false;
-      await createPost(this.pid, this.content, this.postOwner.uid, hostingDate);
+      await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
     },
     update() {
       this.inEditingMode = false;
+      // update logic will be added later once we figure out all the aspects of actually posting 
+      //TODO update logic
+    },
+    async fileChange(f){
+      // this is here for now but should only upload upon hitting publish
+      await uploadCover(f[0], this.pid);
+      // instead we need this to work so we get the image and display it in the app so the user can see that the cover is there 
+      var reader = new FileReader();
+      // something here not done properly
+          reader.onload = (e) => {
+            this.cover = e.target.result;
+            console.log("done");
+          }
+      // this.cover = await getCoverImg(this.pid);
     }
   },
   async mounted() {
@@ -233,14 +248,17 @@ export default {
       this.isEditable = true;
     } else {
       this.postOwner = await getU(this.post.owner);
+      this.cover = await getCoverImg(this.pid);
       this.content = this.post.content;
+      this.title = this.post.title;
+      this.displayedDate = formatDate(this.post.hosting_date);
+      console.log(this.displayedDate);
       this.pickedDate = new Date(this.post.hosting_date);
       if (this.post.owner == this.getUserInfo.uid) {
         this.isEditable = true;
       }
     }
     this.loading = false;
-    console.log(this.postOwner.img);
   }
 };
 </script>
