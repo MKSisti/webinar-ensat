@@ -224,18 +224,22 @@ export default {
       this.content = newVal;
     },
     async publish() {
-      this.pickedDate.setHours(
-        this.pickedTime.HH != "" ? this.pickedTime.HH * 1 : 0,
-        this.pickedTime.mm != "" ? this.pickedTime.mm * 1 : 0,
-        0
-      );
+      if (this.fileToUpload) {
+        this.pickedDate.setHours(
+          this.pickedTime.HH != "" ? this.pickedTime.HH * 1 : 0,
+          this.pickedTime.mm != "" ? this.pickedTime.mm * 1 : 0,
+          0
+        );
 
-      let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
+        let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
 
-      this.inEditingMode = false;
-      this.yetToPublish = false;
-      await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
-      await uploadCover(this.fileToUpload, this.pid);
+        this.inEditingMode = false;
+        this.yetToPublish = false;
+        await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
+        await uploadCover(this.fileToUpload, this.pid);
+      }else{
+        console.error("COVER MISSING");
+      }
     },
     update() {
       this.inEditingMode = false;
