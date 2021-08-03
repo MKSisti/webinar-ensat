@@ -20,12 +20,18 @@
             @click="viewingImg = !viewingImg"
           >
             <img
-             @click="$refs.FileUpload.click()"
+              @click="$refs.FileUpload.click()"
               class="w-full object-contain h-auto"
               :src="cover"
               alt="Cover Image"
             />
-            <input ref="FileUpload" type="file" accept="image/*" @change="fileChange($event.target.files); " hidden>
+            <input
+              ref="FileUpload"
+              type="file"
+              accept="image/*"
+              @change="fileChange($event.target.files)"
+              hidden
+            />
           </div>
 
           <!-- poster and hosting Date -->
@@ -48,7 +54,12 @@
             <div
               class=" bg-gray-100 h-10 transform -translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold"
             >
-              Hosting date: {{displayedDate ? displayedDate.date+ " at " + displayedDate.time : "xx/xx/xxxx at xx:xx"}}
+              Hosting date:
+              {{
+                displayedDate
+                  ? displayedDate.date + " at " + displayedDate.time
+                  : "xx/xx/xxxx at xx:xx"
+              }}
             </div>
           </div>
         </div>
@@ -129,13 +140,11 @@
             <div
               :class="{
                 'max-h-0': inEditingMode,
-                'max-h-full pb-5': !inEditingMode
+                'max-h-full pb-5': !inEditingMode,
               }"
               class="w-8/12 transition-all duration-300 mx-auto overflow-hidden"
             >
-              <h1
-                class="w-full text-center flex-grow-0 text-6xl font-semibold capitalize"
-              >
+              <h1 class="w-full text-center flex-grow-0 text-6xl font-semibold capitalize">
                 {{ title }}
               </h1>
             </div>
@@ -163,14 +172,20 @@ import VueTimepicker from "vue3-timepicker";
 import BaseInput from "../components/BaseInput";
 import Loader from "../components/Loader";
 
-import { getPost, getUserInfo as getU, createPost, uploadCover, getCoverImg } from "../js/firebaseActions";
+import {
+  getPost,
+  getUserInfo as getU,
+  createPost,
+  uploadCover,
+  getCI2,
+} from "../js/firebaseActions";
 import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
 
 export default {
   name: "Post",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
     UserCard,
@@ -178,7 +193,7 @@ export default {
     Datepicker,
     VueTimepicker,
     BaseInput,
-    Loader
+    Loader,
   },
   data() {
     return {
@@ -195,10 +210,11 @@ export default {
       displayedDate: null,
       title: "Untitled",
       cover: null,
+      fileToUpload: null,
     };
   },
   computed: {
-    ...mapGetters("user", ["getUserInfo"])
+    ...mapGetters("user", ["getUserInfo"]),
   },
   methods: {
     handleTitle(val) {
@@ -214,30 +230,29 @@ export default {
         0
       );
 
-      let hostingDate =
-        this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
+      let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
 
       this.inEditingMode = false;
       this.yetToPublish = false;
       await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
+      await uploadCover(this.fileToUpload, this.pid);
     },
     update() {
       this.inEditingMode = false;
-      // update logic will be added later once we figure out all the aspects of actually posting 
+      // update logic will be added later once we figure out all the aspects of actually posting
       //TODO update logic
     },
-    async fileChange(f){
-      // this is here for now but should only upload upon hitting publish
-      await uploadCover(f[0], this.pid);
-      // instead we need this to work so we get the image and display it in the app so the user can see that the cover is there 
-      var reader = new FileReader();
-      // something here not done properly
-          reader.onload = (e) => {
-            this.cover = e.target.result;
-            console.log("done");
-          }
+    async fileChange(f) {
+      if (f[0] && f[0].type.split("/")[0] == "image") {
+        this.fileToUpload = f[0];
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          this.cover = e.target.result;
+        };
+        reader.readAsDataURL(f[0]);
+      }
       // this.cover = await getCoverImg(this.pid);
-    }
+    },
   },
   async mounted() {
     this.post = await getPost(this.pid);
@@ -248,18 +263,18 @@ export default {
       this.isEditable = true;
     } else {
       this.postOwner = await getU(this.post.owner);
-      this.cover = await getCoverImg(this.pid);
+      // this.cover = await getCoverImg(this.pid);
+      this.cover = await getCI2(this.pid);
       this.content = this.post.content;
       this.title = this.post.title;
       this.displayedDate = formatDate(this.post.hosting_date);
-      console.log(this.displayedDate);
       this.pickedDate = new Date(this.post.hosting_date);
       if (this.post.owner == this.getUserInfo.uid) {
         this.isEditable = true;
       }
     }
     this.loading = false;
-  }
+  },
 };
 </script>
 
@@ -305,12 +320,11 @@ select:focus {
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgba(252, 165, 165, 1);
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
-    var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
-    calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
-    var(--tw-shadow, 0 0 #0000);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+    var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
+    var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   border-color: rgba(252, 165, 165, 1);
 }
 
