@@ -7,25 +7,51 @@
       <div
         class="flex justify-start items-start flex-col space-y-20 w-full h-full transition duration-300"
       >
-        <!-- post img -->
-        <div class="w-full h-auto relative">
+        <div 
+        :class="{'translate-y-5' :viewingImg}"
+          class="w-full h-auto relative transform transition duration-300"
+        > 
+
+          <loader class="absolute" v-if="imgLoading"/>
+          <!-- upload button -->
+          <transition name="fade-y" appear>
+            <div
+              v-if="inEditingMode"
+              class="w-full h-full absolute top-2 z-50 pointer-events-none transform transition duration-300"
+            >
+              <div
+                @click="$refs.FileUpload.click()"
+                class="w-10 h-10 mx-auto bg-gray-200 rounded-xl pointer-events-auto cursor-pointer btnTransform shadow-lg"
+              >
+              <i class="fa fa-arrow-down text-2xl w-full h-full text-center mt-1" aria-hidden="true"></i>
+              </div>
+              <input
+                ref="FileUpload"
+                type="file"
+                accept="image/*"
+                @change="fileChange($event.target.files)"
+                hidden
+              />
+            </div>
+          </transition>
+          <!-- post img -->
           <div
             :style="viewingImg ? 'opacity:0!important' : ''"
             :class="{ 'rounded-b-6xl': !viewingImg }"
             class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black opacity-10 transition-all duration-300 pointer-events-none"
           ></div>
           <div
-            class="w-full cursor-pointer aspect-w-8 aspect-h-1 transition-all duration-300 z-0 overflow-hidden"
+            class="w-full cursor-pointer filter xl:aspect-w-8 aspect-w-4 aspect-h-1 transition-all duration-300 z-0 overflow-hidden"
             :class="{ viewingImg: viewingImg, 'rounded-b-6xl': !viewingImg }"
             @click="viewingImg = !viewingImg"
           >
             <img
-             @click="$refs.FileUpload.click()"
-              class="w-full object-contain h-auto"
+              :class="{'rounded-3xl': viewingImg}"
+              class="object-contain h-auto w-auto"
               :src="cover"
+              @load="imgLoading = false"
               alt="Cover Image"
             />
-            <input ref="FileUpload" type="file" accept="image/*" @change="fileChange($event.target.files); " hidden>
           </div>
 
           <!-- poster and hosting Date -->
@@ -48,7 +74,12 @@
             <div
               class=" bg-gray-100 h-10 transform -translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold"
             >
-              Hosting date: {{displayedDate ? displayedDate.date+ " at " + displayedDate.time : "xx/xx/xxxx at xx:xx"}}
+              Hosting date:
+              {{
+                displayedDate
+                  ? displayedDate.date + " at " + displayedDate.time
+                  : "xx/xx/xxxx at xx:xx"
+              }}
             </div>
           </div>
         </div>
@@ -102,25 +133,22 @@
 
             <!-- //? this button can change its text from edit/update and publish to match the action, edit can toggle edit ... -->
             <div
-              @click="publish"
-              v-if="inEditingMode && yetToPublish"
-              class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+              v-if="inEditingMode || yetToPublish || isEditable"
+              :class="{ 'opacity-0 pointer-events-none': viewingImg }"
+              class="select-none font-bold shadow-2xl px-4 py-2 bg-gray-100 text-3xl border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
             >
-              Publish
-            </div>
-            <div
-              @click="update"
-              v-if="inEditingMode && !yetToPublish"
-              class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
-            >
-              Update
-            </div>
-            <div
-              @click="inEditingMode = true"
-              v-if="!inEditingMode && isEditable"
-              class="bg-gray-100 shadow-2xl px-4 py-2 text-3xl font-bold border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
-            >
-              Edit
+              <div @click="publish" v-if="inEditingMode && yetToPublish">
+                Publish
+              </div>
+              <div @click="update" v-if="inEditingMode && !yetToPublish">
+                Update
+              </div>
+              <div
+                @click="inEditingMode = true"
+                v-if="!inEditingMode && isEditable"
+              >
+                Edit
+              </div>
             </div>
           </div>
 
@@ -163,7 +191,13 @@ import VueTimepicker from "vue3-timepicker";
 import BaseInput from "../components/BaseInput";
 import Loader from "../components/Loader";
 
-import { getPost, getUserInfo as getU, createPost, uploadCover, getCoverImg } from "../js/firebaseActions";
+import {
+  getPost,
+  getUserInfo as getU,
+  createPost,
+  uploadCover,
+  getCoverImg
+} from "../js/firebaseActions";
 import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
 
@@ -195,6 +229,7 @@ export default {
       displayedDate: null,
       title: "Untitled",
       cover: null,
+      imgLoading: true
     };
   },
   computed: {
@@ -219,23 +254,29 @@ export default {
 
       this.inEditingMode = false;
       this.yetToPublish = false;
-      await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
+      await createPost(
+        this.pid,
+        this.content,
+        this.postOwner.uid,
+        hostingDate,
+        this.title
+      );
     },
     update() {
       this.inEditingMode = false;
-      // update logic will be added later once we figure out all the aspects of actually posting 
+      // update logic will be added later once we figure out all the aspects of actually posting
       //TODO update logic
     },
-    async fileChange(f){
+    async fileChange(f) {
       // this is here for now but should only upload upon hitting publish
       await uploadCover(f[0], this.pid);
-      // instead we need this to work so we get the image and display it in the app so the user can see that the cover is there 
+      // instead we need this to work so we get the image and display it in the app so the user can see that the cover is there
       var reader = new FileReader();
       // something here not done properly
-          reader.onload = (e) => {
-            this.cover = e.target.result;
-            console.log("done");
-          }
+      reader.onload = e => {
+        this.cover = e.target.result;
+        console.log("done");
+      };
       // this.cover = await getCoverImg(this.pid);
     }
   },
@@ -315,7 +356,7 @@ select:focus {
 }
 
 .viewingImg {
-  @apply aspect-w-4 aspect-h-1 rounded-none;
+  @apply aspect-w-4 aspect-h-1 rounded-none drop-shadow-2xl;
 }
 </style>
 

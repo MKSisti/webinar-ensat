@@ -24,7 +24,7 @@
           {{post.title}}
         </h1>
         <div v-else class="w-full h-6 bg-gray-300 rounded-lg animate-pulse"></div>
-        <router-link :to="'/profile/' + userData?.uid" class="w-full">
+        <router-link @click.prevent.stop :to="'/profile/' + userData?.uid" class="w-full">
           <h1
             v-if="userData"
             class="text-xl max-w-full truncate pr-24 flex-shrink-0 hover:underline -mt-2"

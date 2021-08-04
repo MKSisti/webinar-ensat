@@ -47,7 +47,8 @@ module.exports = {
       height: ['hover', 'group-hover', 'group-focus'],
       width: ['hover', 'group-hover', 'group-focus'],
       borderRadius: ['hover', 'group-hover', 'group-focus'],
-      maxWidth: ['group-hover','hover']
+      maxWidth: ['group-hover','hover'],
+      padding: ['hover', 'group-hover'],
     },
   },
   plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms'), require('@tailwindcss/line-clamp'), require('@tailwindcss/aspect-ratio')],

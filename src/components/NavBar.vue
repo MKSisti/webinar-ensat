@@ -12,17 +12,17 @@
       <!-- //!Create post button -->
       <div
         @click="goToCreate"
-        class="flex justify-center items-center space-x-2 transform transition duration-300"
+        class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl"
       >
         <div
-          class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-4 py-3 space-x-3 relative flex-shrink-0"
+          class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3.5 py-2 relative flex-shrink-0"
         >
           <i
             class="fa fa-file-o flex-shrink-0 flex items-center justify-center text-2xl font-black transition transform duration-300 mt-px ml-px"
             aria-hidden="true"
           ></i>
           <h1
-            class="text-xl font-semibold flex-shrink-0 transition-all transform group-hover:w-36 w-0 overflow-hidden whitespace-nowrap duration-300 pl-1"
+            class="text-xl font-semibold flex-shrink-0 transition-all transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-4"
           >
             Write a post
           </h1>
