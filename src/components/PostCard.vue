@@ -40,7 +40,9 @@
     >
       <div
         class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0 shadow-md"
-      ></div>
+      >
+      <img :src="cover" alt="yeet">
+      </div>
 
       <!-- <div
         class="w-full bg-gray-100 text-xl mx-auto rounded-b-3xl flex justify-center items-center font-semibold py-1 -mt-20 pt-20"
@@ -58,10 +60,16 @@
 
 <script>
 import { formatDate } from "../utils";
+import { getCI2 } from "../js/firebaseActions"
 
 export default {
   name: "PostCard",
   props: ["post", "userData"],
+  data(){
+    return{
+      cover:null,
+    }
+  },
   computed: {
     createdDate() {
       return formatDate(this.post.creation_date);
@@ -70,6 +78,10 @@ export default {
       return formatDate(this.post.hosting_date);
     },
   },
+  async mounted(){
+    this.cover = await getCI2(this.post.pid);
+    console.log(this.cover);
+  }
 };
 </script>
 

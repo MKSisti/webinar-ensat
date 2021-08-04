@@ -157,13 +157,11 @@
             <div
               :class="{
                 'max-h-0': inEditingMode,
-                'max-h-full pb-5': !inEditingMode
+                'max-h-full pb-5': !inEditingMode,
               }"
               class="w-8/12 transition-all duration-300 mx-auto overflow-hidden"
             >
-              <h1
-                class="w-full text-center flex-grow-0 text-6xl font-semibold capitalize"
-              >
+              <h1 class="w-full text-center flex-grow-0 text-6xl font-semibold capitalize">
                 {{ title }}
               </h1>
             </div>
@@ -196,7 +194,7 @@ import {
   getUserInfo as getU,
   createPost,
   uploadCover,
-  getCoverImg
+  getCI2,
 } from "../js/firebaseActions";
 import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
@@ -204,7 +202,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "Post",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
     UserCard,
@@ -212,7 +210,7 @@ export default {
     Datepicker,
     VueTimepicker,
     BaseInput,
-    Loader
+    Loader,
   },
   data() {
     return {
@@ -229,11 +227,12 @@ export default {
       displayedDate: null,
       title: "Untitled",
       cover: null,
-      imgLoading: true
+      imgLoading: true,
+      fileToUpload: null,
     };
   },
   computed: {
-    ...mapGetters("user", ["getUserInfo"])
+    ...mapGetters("user", ["getUserInfo"]),
   },
   methods: {
     handleTitle(val) {
@@ -243,24 +242,22 @@ export default {
       this.content = newVal;
     },
     async publish() {
-      this.pickedDate.setHours(
-        this.pickedTime.HH != "" ? this.pickedTime.HH * 1 : 0,
-        this.pickedTime.mm != "" ? this.pickedTime.mm * 1 : 0,
-        0
-      );
+      if (this.fileToUpload) {
+        this.pickedDate.setHours(
+          this.pickedTime.HH != "" ? this.pickedTime.HH * 1 : 0,
+          this.pickedTime.mm != "" ? this.pickedTime.mm * 1 : 0,
+          0
+        );
 
-      let hostingDate =
-        this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
+        let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
 
-      this.inEditingMode = false;
-      this.yetToPublish = false;
-      await createPost(
-        this.pid,
-        this.content,
-        this.postOwner.uid,
-        hostingDate,
-        this.title
-      );
+        this.inEditingMode = false;
+        this.yetToPublish = false;
+        await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
+        await uploadCover(this.fileToUpload, this.pid);
+      }else{
+        console.error("COVER MISSING");
+      }
     },
     update() {
       this.inEditingMode = false;
@@ -268,17 +265,16 @@ export default {
       //TODO update logic
     },
     async fileChange(f) {
-      // this is here for now but should only upload upon hitting publish
-      await uploadCover(f[0], this.pid);
-      // instead we need this to work so we get the image and display it in the app so the user can see that the cover is there
-      var reader = new FileReader();
-      // something here not done properly
-      reader.onload = e => {
-        this.cover = e.target.result;
-        console.log("done");
-      };
+      if (f[0] && f[0].type.split("/")[0] == "image") {
+        this.fileToUpload = f[0];
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          this.cover = e.target.result;
+        };
+        reader.readAsDataURL(f[0]);
+      }
       // this.cover = await getCoverImg(this.pid);
-    }
+    },
   },
   async mounted() {
     this.post = await getPost(this.pid);
@@ -289,18 +285,18 @@ export default {
       this.isEditable = true;
     } else {
       this.postOwner = await getU(this.post.owner);
-      this.cover = await getCoverImg(this.pid);
+      // this.cover = await getCoverImg(this.pid);
+      this.cover = await getCI2(this.pid);
       this.content = this.post.content;
       this.title = this.post.title;
       this.displayedDate = formatDate(this.post.hosting_date);
-      console.log(this.displayedDate);
       this.pickedDate = new Date(this.post.hosting_date);
       if (this.post.owner == this.getUserInfo.uid) {
         this.isEditable = true;
       }
     }
     this.loading = false;
-  }
+  },
 };
 </script>
 
@@ -346,12 +342,11 @@ select:focus {
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgba(252, 165, 165, 1);
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
-    var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
-    calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
-    var(--tw-shadow, 0 0 #0000);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+    var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
+    var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   border-color: rgba(252, 165, 165, 1);
 }
 

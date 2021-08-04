@@ -172,11 +172,34 @@ const makeUsersMap = async (PostList, oldMap) => {
 };
 
 const uploadCover = async (img, pid) => {
-  await storage.ref("posters/"+pid).put(img);
-}
+  await storage.ref("posters/" + pid).put(img);
+};
 
+/**
+ * 
+ * @param {*} pid 
+ * @returns actual image downloaded as blob
+ */
 const getCoverImg = async (pid) => {
-  return await storage.ref("posters/"+pid).getDownloadURL();
+  let url = await storage.ref("posters/" + pid).getDownloadURL();
+  return await new Promise((res) => {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.onload = () => {
+      res(xhr.response);
+    };
+    xhr.open("GET", url);
+    xhr.send();
+  });
+};
+
+/**
+ * 
+ * @param {*} pid 
+ * @returns the cover img url
+ */
+const getCI2 = async (pid)=>{
+  return await storage.ref("posters/" + pid).getDownloadURL();
 }
 
 export {
@@ -196,4 +219,5 @@ export {
   makeUsersMap,
   uploadCover,
   getCoverImg,
+  getCI2,
 };
