@@ -7,12 +7,11 @@
       <div
         class="flex justify-start items-start flex-col space-y-20 w-full h-full transition duration-300"
       >
-        <div 
-        :class="{'translate-y-5' :viewingImg}"
+        <div
+          :class="{ 'translate-y-5': viewingImg }"
           class="w-full h-auto relative transform transition duration-300"
-        > 
-
-          <loader class="absolute" v-if="imgLoading"/>
+        >
+          <loader class="absolute" v-if="imgLoading" />
           <!-- upload button -->
           <transition name="fade-y" appear>
             <div
@@ -23,7 +22,10 @@
                 @click="$refs.FileUpload.click()"
                 class="w-10 h-10 mx-auto bg-gray-200 rounded-xl pointer-events-auto cursor-pointer btnTransform shadow-lg"
               >
-              <i class="fa fa-arrow-down text-2xl w-full h-full text-center mt-1" aria-hidden="true"></i>
+                <i
+                  class="fa fa-arrow-down text-2xl w-full h-full text-center mt-1"
+                  aria-hidden="true"
+                ></i>
               </div>
               <input
                 ref="FileUpload"
@@ -46,7 +48,7 @@
             @click="viewingImg = !viewingImg"
           >
             <img
-              :class="{'rounded-3xl': viewingImg}"
+              :class="{ 'rounded-3xl': viewingImg }"
               class="object-contain h-auto w-auto"
               :src="cover"
               @load="imgLoading = false"
@@ -143,10 +145,7 @@
               <div @click="update" v-if="inEditingMode && !yetToPublish">
                 Update
               </div>
-              <div
-                @click="inEditingMode = true"
-                v-if="!inEditingMode && isEditable"
-              >
+              <div @click="inEditingMode = true" v-if="!inEditingMode && isEditable">
                 Edit
               </div>
             </div>
@@ -248,14 +247,18 @@ export default {
           this.pickedTime.mm != "" ? this.pickedTime.mm * 1 : 0,
           0
         );
-
+        let now = new Date();
+        now = now.getTime() + now.getTimezoneOffset() * 60000;
         let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
-
-        this.inEditingMode = false;
-        this.yetToPublish = false;
-        await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
-        await uploadCover(this.fileToUpload, this.pid);
-      }else{
+        if (hostingDate < now) {
+          console.error("invalid date");
+        } else {
+          this.inEditingMode = false;
+          this.yetToPublish = false;
+          await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
+          await uploadCover(this.fileToUpload, this.pid);
+        }
+      } else {
         console.error("COVER MISSING");
       }
     },
