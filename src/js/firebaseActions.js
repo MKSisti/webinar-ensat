@@ -17,26 +17,32 @@ const checkUserInwaitingRoom = async (uid) => {
 };
 
 const getInitialPosts = async (n) => {
-  var initial = null;
+  var initial = [];
   await posts
     .orderByChild("hosting_date")
     .limitToFirst(n)
     .once("value", async (ds) => {
-      initial = await ds.val();
+      // initial = await ds.val();
+      ds.forEach((chds) => {
+        initial.push(chds.val());
+      });
     });
-  return initial ? Object.values(initial) : [];
+  return initial ? initial : [];
 };
 
 const getExtraPosts = async (n, LastDate) => {
-  var extra = null;
+  var extra = [];
   await posts
     .orderByChild("hosting_date")
     .startAfter(LastDate)
     .limitToFirst(n)
     .once("value", async (ds) => {
-      extra = await ds.val();
+      // extra = await ds.val();
+      ds.forEach((chds) => {
+        extra.push(chds.val());
+      });
     });
-  return extra ? Object.values(extra) : null;
+  return extra ? extra : null;
 };
 
 const getPost = async (pid) => {
@@ -78,6 +84,13 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
     title,
   });
 };
+const updatePost = async (pid, content, hosting_date, title)=>{
+  await posts.child(pid).update({
+    content,
+    hosting_date,
+    title,
+  })
+}
 
 const removePost = async (pid) => {
   var ownerId = null;
@@ -175,9 +188,14 @@ const uploadCover = async (img, pid) => {
   await storage.ref("posters/" + pid).put(img);
 };
 
+const updateCover = async (img, pid) => {
+  await storage.ref("posters/" + pid).delete();
+  await uploadCover(img, pid);
+};
+
 /**
- * 
- * @param {*} pid 
+ *
+ * @param {*} pid
  * @returns actual image downloaded as blob
  */
 const getCoverImg = async (pid) => {
@@ -194,13 +212,13 @@ const getCoverImg = async (pid) => {
 };
 
 /**
- * 
- * @param {*} pid 
+ *
+ * @param {*} pid
  * @returns the cover img url
  */
-const getCI2 = async (pid)=>{
+const getCI2 = async (pid) => {
   return await storage.ref("posters/" + pid).getDownloadURL();
-}
+};
 
 export {
   getUser,
@@ -220,4 +238,6 @@ export {
   uploadCover,
   getCoverImg,
   getCI2,
+  updateCover,
+  updatePost,
 };

@@ -5,7 +5,7 @@
     <div
       class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
-      {{ hostedDate.date + " " + hostedDate.time }}<br/>
+      {{ hostedDate.date + " " + hostedDate.time }}<br />
       {{ createdDate.date + " " + createdDate.time }}
     </div>
     <div class="h-32 w-full px-8 flex justify-start items-center">
@@ -15,14 +15,9 @@
         <img v-if="userData" :src="userData.img" :alt="userData.userName" />
         <div v-else class="w-full h-full bg-gray-300 animate-pulse"></div>
       </div>
-      <div
-        class="flex flex-col justify-center items-start h-full px-3 w-full gap-y-2"
-      >
-        <h1
-          v-if="userData"
-          class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0 "
-        >
-          {{post.title}}
+      <div class="flex flex-col justify-center items-start h-full px-3 w-full gap-y-2">
+        <h1 v-if="userData" class="text-2xl font-bold max-w-full truncate pr-36 flex-shrink-0 ">
+          {{ post.title }}
         </h1>
         <div v-else class="w-full h-6 bg-gray-300 rounded-lg animate-pulse"></div>
         <router-link @click.prevent.stop :to="'/profile/' + userData?.uid" class="w-full">
@@ -42,7 +37,7 @@
       <div
         class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0 shadow-md overflow-hidden"
       >
-      <img :src="cover" alt="yeet">
+        <img v-if="!loading" :src="cover" alt="yeet" />
       </div>
 
       <!-- <div
@@ -61,15 +56,16 @@
 
 <script>
 import { formatDate } from "../utils";
-import { getCI2 } from "../js/firebaseActions"
+import { getCI2 } from "../js/firebaseActions";
 
 export default {
   name: "PostCard",
   props: ["post", "userData"],
-  data(){
-    return{
-      cover:null,
-    }
+  data() {
+    return {
+      cover: null,
+      loading: true,
+    };
   },
   computed: {
     createdDate() {
@@ -79,9 +75,10 @@ export default {
       return formatDate(this.post.hosting_date);
     },
   },
-  async mounted(){
+  async mounted() {
     this.cover = await getCI2(this.post.pid);
-  }
+    this.loading = false;
+  },
 };
 </script>
 

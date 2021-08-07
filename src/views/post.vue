@@ -194,6 +194,8 @@ import {
   createPost,
   uploadCover,
   getCI2,
+  updateCover,
+  updatePost,
 } from "../js/firebaseActions";
 import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
@@ -242,14 +244,9 @@ export default {
     },
     async publish() {
       if (this.fileToUpload) {
-        this.pickedDate.setHours(
-          this.pickedTime.HH != "" ? this.pickedTime.HH * 1 : 0,
-          this.pickedTime.mm != "" ? this.pickedTime.mm * 1 : 0,
-          0
-        );
+        let hostingDate = this.getHostingDate()
         let now = new Date();
         now = now.getTime() + now.getTimezoneOffset() * 60000;
-        let hostingDate = this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
         if (hostingDate < now) {
           console.error("invalid date");
         } else {
@@ -262,10 +259,20 @@ export default {
         console.error("COVER MISSING");
       }
     },
-    update() {
+    getHostingDate(){
+        this.pickedDate.setHours(
+          this.pickedTime.HH != "" ? this.pickedTime.HH * 1 : 0,
+          this.pickedTime.mm != "" ? this.pickedTime.mm * 1 : 0,
+          0
+        );
+        return this.pickedDate.getTime() + this.pickedDate.getTimezoneOffset() * 60000;
+    },
+    async update() {
       this.inEditingMode = false;
-      // update logic will be added later once we figure out all the aspects of actually posting
-      //TODO update logic
+      await updatePost(this.pid, this.content, this.getHostingDate(), this.title );
+      if (this.fileToUpload) {
+        await updateCover(this.fileToUpload, this.pid);
+      }
     },
     async fileChange(f) {
       if (f[0] && f[0].type.split("/")[0] == "image") {
@@ -276,7 +283,6 @@ export default {
         };
         reader.readAsDataURL(f[0]);
       }
-      // this.cover = await getCoverImg(this.pid);
     },
   },
   async mounted() {
@@ -288,7 +294,6 @@ export default {
       this.isEditable = true;
     } else {
       this.postOwner = await getU(this.post.owner);
-      // this.cover = await getCoverImg(this.pid);
       this.cover = await getCI2(this.pid);
       this.content = this.post.content;
       this.title = this.post.title;

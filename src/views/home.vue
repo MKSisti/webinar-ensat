@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       loading: true,
-      postsToShow: 5,
+      postsToShow: 3 ,
       posts: [],
       usersMap: null
     };
