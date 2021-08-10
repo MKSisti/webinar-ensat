@@ -30,6 +30,19 @@ const getInitialPosts = async (n) => {
   return initial ? initial : [];
 };
 
+const getUserPosts = async (id) => {
+  var ps = [];
+  await posts
+    .orderByChild("owner")
+    .equalTo(id)
+    .once("value", async (ds) => {
+      ds.forEach((chds) => {
+        ps.push(chds.val());
+      });
+    });
+  return ps ? ps : [];
+};
+
 const getExtraPosts = async (n, LastDate) => {
   var extra = [];
   await posts
@@ -44,6 +57,7 @@ const getExtraPosts = async (n, LastDate) => {
     });
   return extra ? extra : null;
 };
+
 
 const getPost = async (pid) => {
   var post = null;
@@ -240,4 +254,5 @@ export {
   getCI2,
   updateCover,
   updatePost,
+  getUserPosts,
 };
