@@ -11,6 +11,7 @@
     <div class="flex justify-center items-center gap-5 text-xl font-bold">
       <!-- //!Create post button -->
       <div
+        v-if="getPrivLevel >0"
         @click="goToCreate"
         class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl"
       >
@@ -71,7 +72,8 @@ export default {
   computed: {
     ...mapGetters("user", [
       "getLoggedState", //usage : this.getLoggedState()
-      "getUserInfo"
+      "getUserInfo",
+      "getPrivLevel"
     ])
   },
   methods: {

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-// import store from "../store";
+import store from "../store/index";
 import home from '../views/home';
 import profile from '../views/profile';
 import post from '../views/post';
@@ -27,7 +27,17 @@ const router = createRouter({
   ],
 });
 
-// router.beforeEach((to, from, next) => {
-// });
+router.beforeEach((to, from, next) => {
+  if (to.name == "post" ) {
+    if (store.getters['user/getPrivLevel'] > 0) {
+    next();
+    }
+    else{
+      router.push({name:"home"});
+    }
+  }else{
+    next();
+  }
+});
 
 export default router;

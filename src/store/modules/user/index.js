@@ -37,7 +37,7 @@ export default {
       var extraInfo = null;
       await users.child(user.uid).once("value", async (ds) => {
           
-        if (await ds.val()) {
+        if (ds.exists()) {
           //user exists in the db already
           //read privilege level
           // console.log("old user");
@@ -46,8 +46,8 @@ export default {
           if (p > 0) {
             var u = await ds.val();
             extraInfo = {
-              phone: u.phone,
-              uni: u.uni,
+              phone: u.phone || "0611111111",
+              uni: u.uni || "ENSAT",
             };
           }
         }
@@ -57,7 +57,7 @@ export default {
             // console.log("first time");
             var newUser = users.child(user.uid);
             newUser.set({
-                priv: 0,
+                priv: p,
                 email: user.email,
                 userName: user.displayName,
                 img: user.photoURL,

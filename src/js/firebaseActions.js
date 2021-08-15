@@ -30,6 +30,33 @@ const getInitialPosts = async (n) => {
   return initial ? initial : [];
 };
 
+const getInitPosDyn = async (n, orderBy)=>{
+  var initial = [];
+  await posts
+    .orderByChild(orderBy)
+    .limitToFirst(n)
+    .once("value", async (ds) => {
+      ds.forEach((chds) => {
+        initial.push(chds.val());
+      });
+    });
+  return initial ? initial : [];
+};
+
+const getExtPosDyn = async (n, orderBy, bot )=>{
+  var extra = [];
+  await posts
+    .orderByChild(orderBy)
+    .startAfter(bot)
+    .limitToFirst(n)
+    .once("value", async (ds) => {
+      ds.forEach((chds) => {
+        extra.push(chds.val());
+      });
+    });
+  return extra ? extra : null;
+};
+
 const getUserPosts = async (id) => {
   var ps = [];
   await posts
@@ -111,18 +138,19 @@ const removePost = async (pid) => {
   await posts.child(pid).once("value", async (ds) => {
     var val = await ds.val();
     if (val) {
-      ownerId = val.uid;
+      ownerId = val.owner;
     } else {
       console.error("something went wrong reading owner id while deleting post");
       return;
     }
   });
   await users.child(ownerId + "/posts/" + pid).remove((err) => {
-    console.error(err);
+    err? console.error(err):null;
   });
   await posts.child(pid).remove((err) => {
-    console.error(err);
+    err?console.error(err):null;
   });
+  await storage.ref("posters/" + pid).delete();
 };
 
 const requestHost = async (user) => {
@@ -255,4 +283,6 @@ export {
   updateCover,
   updatePost,
   getUserPosts,
+  getInitPosDyn,
+  getExtPosDyn,
 };
