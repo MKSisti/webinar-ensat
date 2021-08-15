@@ -25,6 +25,8 @@
           </transition-group>
         </div>
         <search
+          @apply="search"
+          @searchChange="updateSearchText"
           class="w-full border-b-2 border-gray-200 border-opacity-70 bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky"
         />
       </div>
@@ -38,12 +40,15 @@ import PostCard from "../components/PostCard";
 import Search from "../components/Search";
 import Loader from "../components/Loader";
 
+
+
 import { debounce } from "../utils";
 // import {createPost} from '../js/firebaseActions'
 import {
   getInitialPosts,
   getExtraPosts,
-  makeUsersMap
+  makeUsersMap,
+  getTitles
 } from "../js/firebaseActions";
 
 export default {
@@ -53,12 +58,22 @@ export default {
       loading: true,
       postsToShow: 3 ,
       posts: [],
-      usersMap: null
+      usersMap: null,
+      keyword: null,
+      T: [],
     };
   },
   methods: {
     goToPost(pid) {
       this.$router.push({ name: "post", params: { pid: pid } });
+    },
+    async search(){
+      //TODO: getTitles gets the list of ids 
+      // I will flesh it later when you get the lsit of said ids
+      this.T = await getTitles(this.keyword);
+    },
+    updateSearchText(val){
+      this.keyword = val;
     },
   },
   computed: {},

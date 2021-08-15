@@ -1,5 +1,14 @@
 import { users, posts, waiting_Room, waiting_Room_Posts, storage } from "../firebase";
 
+import { MongoDriver } from './mongoAtlas'
+
+let driver = new MongoDriver();
+//fix stuff here
+async () => {
+    let titles = await driver.init();
+    return titles;
+};
+
 async function getUser(uid) {
   var user = null;
   await users.child(uid).once("value", async (ds) => {
@@ -30,7 +39,7 @@ const getInitialPosts = async (n) => {
   return initial ? initial : [];
 };
 
-const getInitPosDyn = async (n, orderBy)=>{
+const getInitPosDyn = async (n, orderBy) => {
   var initial = [];
   await posts
     .orderByChild(orderBy)
@@ -43,7 +52,7 @@ const getInitPosDyn = async (n, orderBy)=>{
   return initial ? initial : [];
 };
 
-const getExtPosDyn = async (n, orderBy, bot )=>{
+const getExtPosDyn = async (n, orderBy, bot) => {
   var extra = [];
   await posts
     .orderByChild(orderBy)
@@ -56,6 +65,16 @@ const getExtPosDyn = async (n, orderBy, bot )=>{
     });
   return extra ? extra : null;
 };
+
+
+const getPosFromList = async (n, L, offset) => {
+  var extra = [];
+  var i = L.length - offset > 0 ? Math.min(n, L.length - offset) : 0;
+  for (let index = 0; index < i; index++) {
+    extra.push(await getPost(L[index + offset]));
+  }
+  return extra;
+}
 
 const getUserPosts = async (id) => {
   var ps = [];
@@ -125,7 +144,7 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
     title,
   });
 };
-const updatePost = async (pid, content, hosting_date, title)=>{
+const updatePost = async (pid, content, hosting_date, title) => {
   await posts.child(pid).update({
     content,
     hosting_date,
@@ -145,10 +164,10 @@ const removePost = async (pid) => {
     }
   });
   await users.child(ownerId + "/posts/" + pid).remove((err) => {
-    err? console.error(err):null;
+    err ? console.error(err) : null;
   });
   await posts.child(pid).remove((err) => {
-    err?console.error(err):null;
+    err ? console.error(err) : null;
   });
   await storage.ref("posters/" + pid).delete();
 };
@@ -285,4 +304,5 @@ export {
   getUserPosts,
   getInitPosDyn,
   getExtPosDyn,
+  getPosFromList,
 };
