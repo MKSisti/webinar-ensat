@@ -14,7 +14,8 @@
             Posts
           </div>
           <!-- //!Create post button -->
-          <div @click="goToCreate" class="flex justify-center items-center space-x-2">
+          <div v-if="userInfo.priv > 0"
+          @click="goToCreate" class="flex justify-center items-center space-x-2">
             <div
               class="flex-grow-0 flex justify-start items-center bg-gray-100 rounded-2xl shadow-xl overflow-hidden group duration-300 cursor-pointer btnRing px-4 py-3 space-x-3 relative flex-shrink-0"
             >
@@ -53,7 +54,7 @@
                 v-else
                 class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10"
               >
-                <transition-group v-if="userInfo.priv > 0" name="fade-y" appear>
+                <transition-group v-if="userPosts.length > 0" name="fade-y" appear>
                   <post-card
                     class="transform transition duration-300"
                     :key="p.pid"

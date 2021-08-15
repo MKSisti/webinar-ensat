@@ -307,24 +307,26 @@ export default {
     },
   },
   async mounted() {
-    this.post = await getPost(this.pid);
-    if (this.post == null) {
-      this.postOwner = this.getUserInfo;
-      this.inEditingMode = true;
-      this.yetToPublish = true;
-      this.isEditable = true;
-    } else {
-      this.postOwner = await getU(this.post.owner);
-      this.cover = await getCI2(this.pid);
-      this.content = this.post.content;
-      this.title = this.post.title;
-      this.displayedDate = formatDate(this.post.hosting_date);
-      this.pickedDate = new Date(this.post.hosting_date);
-      if (this.post.owner == this.getUserInfo.uid) {
+    this.$nextTick(async () => {
+      this.post = await getPost(this.pid);
+      if (this.post == null) {
+        this.postOwner = this.getUserInfo;
+        this.inEditingMode = true;
+        this.yetToPublish = true;
         this.isEditable = true;
+      } else {
+        this.postOwner = await getU(this.post.owner);
+        this.cover = await getCI2(this.pid);
+        this.content = this.post.content;
+        this.title = this.post.title;
+        this.displayedDate = formatDate(this.post.hosting_date);
+        this.pickedDate = new Date(this.post.hosting_date);
+        if (this.post.owner == this.getUserInfo.uid) {
+          this.isEditable = true;
+        }
       }
-    }
-    this.loading = false;
+      this.loading = false;
+    });
   },
 };
 </script>
