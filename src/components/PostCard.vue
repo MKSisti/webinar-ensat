@@ -5,8 +5,7 @@
     <div
       class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
-      {{ hostedDate.date + " " + hostedDate.time }}<br />
-      {{ createdDate.date + " " + createdDate.time }}
+      {{ hostedDate.date + " " + hostedDate.time }}
     </div>
     <div class="h-32 w-full px-8 flex justify-start items-center">
       <div

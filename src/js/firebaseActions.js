@@ -30,6 +30,33 @@ const getInitialPosts = async (n) => {
   return initial ? initial : [];
 };
 
+const getInitPosDyn = async (n, orderBy)=>{
+  var initial = [];
+  await posts
+    .orderByChild(orderBy)
+    .limitToFirst(n)
+    .once("value", async (ds) => {
+      ds.forEach((chds) => {
+        initial.push(chds.val());
+      });
+    });
+  return initial ? initial : [];
+};
+
+const getExtPosDyn = async (n, orderBy, bot )=>{
+  var extra = [];
+  await posts
+    .orderByChild(orderBy)
+    .startAfter(bot)
+    .limitToFirst(n)
+    .once("value", async (ds) => {
+      ds.forEach((chds) => {
+        extra.push(chds.val());
+      });
+    });
+  return extra ? extra : null;
+};
+
 const getUserPosts = async (id) => {
   var ps = [];
   await posts
@@ -256,4 +283,6 @@ export {
   updateCover,
   updatePost,
   getUserPosts,
+  getInitPosDyn,
+  getExtPosDyn,
 };
