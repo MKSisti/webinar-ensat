@@ -9,12 +9,13 @@
 
 <script>
 import NavBar from "./components/NavBar";
+// import {mongoAtlas} from "./js/mongoAtlas"
 
 export default {
   name: "App",
   components: {
     NavBar
-  }
+  },
 };
 </script>
 
