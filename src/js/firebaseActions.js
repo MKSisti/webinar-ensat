@@ -111,18 +111,19 @@ const removePost = async (pid) => {
   await posts.child(pid).once("value", async (ds) => {
     var val = await ds.val();
     if (val) {
-      ownerId = val.uid;
+      ownerId = val.owner;
     } else {
       console.error("something went wrong reading owner id while deleting post");
       return;
     }
   });
   await users.child(ownerId + "/posts/" + pid).remove((err) => {
-    console.error(err);
+    err? console.error(err):null;
   });
   await posts.child(pid).remove((err) => {
-    console.error(err);
+    err?console.error(err):null;
   });
+  await storage.ref("posters/" + pid).delete();
 };
 
 const requestHost = async (user) => {

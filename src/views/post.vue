@@ -134,6 +134,13 @@
             </div>
 
             <!-- //? this button can change its text from edit/update and publish to match the action, edit can toggle edit ... -->
+            <div v-if="inEditingMode"
+            class="select-none font-bold shadow-2xl px-4 py-2 bg-blue-400 text-3xl border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+             >
+              <div @click="inEditingMode = false" >
+                <h1>Cancel</h1>
+              </div>
+            </div>
             <div
               v-if="inEditingMode || yetToPublish || isEditable"
               :class="{ 'opacity-0 pointer-events-none': viewingImg }"
@@ -148,7 +155,16 @@
               <div @click="inEditingMode = true" v-if="!inEditingMode && isEditable">
                 Edit
               </div>
+              
             </div>
+            <div v-if="inEditingMode"
+            class="select-none font-bold shadow-2xl px-4 py-2 bg-red-400 text-3xl border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+             >
+              <div @click="remove">
+                <h1>Remove</h1>
+              </div>
+            </div>
+            
           </div>
 
           <div class="w-full h-full overflow-hidden py-10">
@@ -196,6 +212,7 @@ import {
   getCI2,
   updateCover,
   updatePost,
+  removePost,
 } from "../js/firebaseActions";
 import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
@@ -258,6 +275,10 @@ export default {
       } else {
         console.error("COVER MISSING");
       }
+    },
+    async remove(){
+      await removePost(this.pid);
+      this.$router.push({ name: "home"});
     },
     getHostingDate(){
         this.pickedDate.setHours(
