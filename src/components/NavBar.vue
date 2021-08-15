@@ -30,14 +30,24 @@
       </div>
     </div>
     <div>
-      <div v-if="getLoggedState">
-        <router-link :to="'/profile/' + getUserInfo.uid">
-          <img
-            class="rounded-full ring-0 ring-red-300 w-12 h-12"
-            :src="getUserInfo.img"
-            :alt="getUserInfo.userName"
-          />
-        </router-link>
+      <div class="relative" v-if="getLoggedState">
+        <img
+          
+          class="rounded-full ring-0 ring-red-300 w-12 h-12 cursor-pointer"
+          :src="getUserInfo.img"
+          :alt="getUserInfo.userName"
+        />
+
+        <div ref="profileMenu" class="absolute overflow-hidden rounded-2xl bg-gray-100 shadow-2xl transition-all duration-300 right-0 top-14">
+          <div class="px-4 py-2 w-full space-y-2">
+          <router-link :to="'/profile/' + getUserInfo.uid">
+            <div class="text-xl bg-gray-200 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center"><h1>profile</h1></div>
+          </router-link>
+
+          <div class="text-xl bg-red-400 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center cursor-pointer"><h1>Disconnect</h1></div>
+          </div>
+
+        </div>
       </div>
       <div v-else>
         <div

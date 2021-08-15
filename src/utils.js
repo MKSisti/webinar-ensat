@@ -44,13 +44,38 @@ function formatDate(d){
   var sda = new Date(d).toJSON();
   sda = sda.split("T")[0].replaceAll("-", "/") + " " + sda.split("T")[1].split(".")[0];
   let dateTime = {};
-  dateTime.date = sda.split(" ")[0].split("/")[2] + "/" + sda.split(" ")[0].split("/")[1] + "/" + sda.split(" ")[0].split("/")[0];
-  dateTime.time = sda.split(" ")[1].split(":")[0] + ":" + sda.split(" ")[1].split(":")[1];
+
+  sda = sda.split(" ");
+  dateTime.date = sda[0].split("/");
+  dateTime.date = dateTime.date[2] + "/" + dateTime.date[1] + "/" + dateTime.date[0];
+
+  dateTime.time = sda[1].split(":");
+  dateTime.time = dateTime.time[0] + ":" + dateTime.time[1];
+
   return dateTime;
 }
+
+// //given an element, set it's height to 0 if element has a height above 0, set it to original height otherwise (height of all children)
+// function toggleExpand(e,dim,state) {
+
+//   if(!e) 
+//     return setTimeout(() => { toggleExpand(e,dim,state) },150);
+
+//   const dimention = dim == 'h' ? e.offsetHeight : e.offsetWidth;
+
+//   if(!e.originalDim || (e.originalDim != dimention && dimention != 0)) e.originalDim = dimention;
+
+//   if (state) { 
+//       e.style.height = e.originalDim + "px";
+//   } else {
+//       e.style.height = '0px';
+//   }
+//   console.log('dim changed')
+// }
 
 export {
   debounce,
   getAbbreviation,
   formatDate,
+  // toggleExpand,
 };

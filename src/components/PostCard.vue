@@ -35,7 +35,8 @@
       class="w-full h-full flex flex-col justify-start items-start px-8 sm:px-14 transform transition duration-300 group-hover:-translate-y-3"
     >
       <div
-        class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full bg-red-300 rounded-3xl flex-shrink-0 shadow-md overflow-hidden"
+        :class="{'bg-red-300 animate-pulse': loading}"
+        class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full  rounded-3xl flex-shrink-0 shadow-md overflow-hidden"
       >
         <img v-if="!loading" :src="cover" alt="yeet" />
       </div>
