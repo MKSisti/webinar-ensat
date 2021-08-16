@@ -68,9 +68,9 @@ const getExtPosDyn = async (n, orderBy, bot) => {
 
 const getPosFromList = async (n, L, offset) => {
   var extra = [];
-  var i = L.length - offset > 0 ? Math.min(n, L.length - offset) : 0;
+  var i = L.length - offset > 0 ? Math.min(n, L.length - offset) : -1;
   for (let index = 0; index < i; index++) {
-    extra.push(await getPost(L[index + offset]));
+    extra.push(await getPost(L[index + offset].pid));
   }
   return extra;
 };
@@ -285,7 +285,7 @@ const getCoverImg = async (pid) => {
  * @returns the cover img url
  */
 const getCI2 = async (pid) => {
-  return await storage.ref('posters/' + pid).getDownloadURL();
+  return await storage.ref('posters/' + pid).getDownloadURL() || await storage.ref('posters/fail.png').getDownloadURL();
 };
 
 export {
