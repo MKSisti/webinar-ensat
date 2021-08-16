@@ -71,6 +71,7 @@ export default {
       //TODO: getTitles gets the list of ids 
       // I will flesh it later when you get the lsit of said ids
       this.T = await getTitles(this.keyword);
+      console.log(this.T);
     },
     updateSearchText(val){
       this.keyword = val;
