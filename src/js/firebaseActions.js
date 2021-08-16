@@ -153,9 +153,9 @@ const updatePost = async (pid, content, hosting_date, title) => {
   await titles.updateOne({pid},{$set:{title}});
 };
 
-const getTitles = async (title) => await titles.find({
+const getTitles = async (title,limit,offset) => await titles.find({
   title: {'$regex': title, '$options': 'i'}
-});
+}).skip(offset ? offset : 0).limit(limit ? limit : 100);
 
 const removePost = async (pid) => {
   var ownerId = null;
