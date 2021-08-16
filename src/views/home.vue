@@ -109,25 +109,24 @@
       this.loading = false;
 
       let debScrollBottom = debounce(async () => {
-        if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
-          if (this.searching) {
-            let extra = await getPosFromList(this.postsToShow, this.T, this.offset);
-            this.offset += this.postsToShow;
-            if (extra.length > 0) {
-              await this.posts.push(...extra);
-              console.log('pushed from new event');
-              this.usersMap = await makeUsersMap(extra, this.usersMap);
-            }
-          } else {
-            let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
-            if (extra) {
-              await this.posts.push(...extra);
-              this.usersMap = await makeUsersMap(extra, this.usersMap);
+        if(!this.loading)
+          if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
+            if (this.searching) {
+              let extra = await getPosFromList(this.postsToShow, this.T, this.offset);
+              this.offset += this.postsToShow;
+              if (extra.length > 0) {
+                await this.posts.push(...extra);
+                console.log('pushed from new event');
+                this.usersMap = await makeUsersMap(extra, this.usersMap);
+              }
+            } else {
+              let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
+              if (extra) {
+                await this.posts.push(...extra);
+                this.usersMap = await makeUsersMap(extra, this.usersMap);
+              }
             }
           }
-
-          // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
-        }
       }, 200);
 
       this.$refs.home.addEventListener('scroll', debScrollBottom, false);
