@@ -1,18 +1,10 @@
 <template>
   <transition name="fade-y" appear>
-    <div
-      ref="home"
-      class="flex flex-col justify-start items-center sm:space-y-10 xl:pt-10 transition duration-300"
-    >
+    <div ref="home" class="flex flex-col justify-start items-center sm:space-y-10 xl:pt-10 transition duration-300">
       <carousel />
-      <div
-        class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10"
-      >
+      <div class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
         <loader v-if="loading" />
-        <div
-          v-else
-          class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10 pb-8"
-        >
+        <div v-else class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10 pb-8">
           <transition-group name="fade-y" appear>
             <post-card
               class="transform transition duration-300"
@@ -35,113 +27,112 @@
 </template>
 
 <script>
-import Carousel from "../components/Carousel";
-import PostCard from "../components/PostCard";
-import Search from "../components/Search";
-import Loader from "../components/Loader";
+  import Carousel from '../components/Carousel';
+  import PostCard from '../components/PostCard';
+  import Search from '../components/Search';
+  import Loader from '../components/Loader';
 
+  import { debounce } from '../utils';
+  // import {createPost} from '../js/firebaseActions'
+  import { getInitialPosts, getExtraPosts, makeUsersMap, getTitles, getPosFromList } from '../js/firebaseActions';
 
-
-import { debounce } from "../utils";
-// import {createPost} from '../js/firebaseActions'
-import {
-  getInitialPosts,
-  getExtraPosts,
-  makeUsersMap,
-  getTitles,
-  getPosFromList
-} from "../js/firebaseActions";
-
-export default {
-  name: "App",
-  components: {
-    Carousel,
-    PostCard,
-    Search,
-    Loader
-  },
-  data() {
-    return {
-      loading: true,
-      postsToShow: 3,
-      posts: [],
-      usersMap: null,
-      keyword: null,
-      T: [],
-      offset: 0,
-      mode: false,
-    };
-  },
-  methods: {
-    goToPost(pid) {
-      this.$router.push({ name: "post", params: { pid: pid } });
+  export default {
+    name: 'App',
+    components: {
+      Carousel,
+      PostCard,
+      Search,
+      Loader,
     },
-    async search(){
-      this.loading = true;
-      this.offset = 0;
-      this.T = await getTitles(this.keyword);
-      console.log(this.T);
-      this.$refs.home.removeEventListener("scroll", this.debScrollBottom ,false);
+    data() {
+      return {
+        loading: true,
+        postsToShow: 3,
+        posts: [],
+        usersMap: null,
+        keyword: null,
+        T: [],
+        offset: 0,
+        mode: false,
+      };
+    },
+    methods: {
+      goToPost(pid) {
+        this.$router.push({
+          name: 'post',
+          params: {
+            pid: pid,
+          },
+        });
+      },
+      async search() {
+        if (this.keyword != '') {
+          this.searching = true;
+          this.loading = true;
+          this.offset = 0;
+          this.T = await getTitles(this.keyword);
+          console.log(this.T);
+          this.$refs.home.removeEventListener('scroll', this.debScrollBottom, false);
 
-      //hack and slash action here
-      this.posts = await getPosFromList(this.postsToShow, this.T, this.offset);
-      this.offset = this.postsToShow;
+          this.posts = await getPosFromList(this.postsToShow, this.T, this.offset);
+          this.offset = this.postsToShow;
+          this.usersMap = await makeUsersMap(this.posts, this.usersMap);
+
+          this.loading = false;
+        } else {
+          this.searching = false;
+          this.loading = true;
+          this.posts = await getInitialPosts(this.postsToShow);
+          this.usersMap = await makeUsersMap(this.posts, this.usersMap);
+          this.loading = false;
+        }
+      },
+      updateSearchText(val) {
+        this.keyword = val;
+      },
+      async debScrollBottom() {
+        if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
+          console.log('old');
+          let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
+          if (extra) {
+            await this.posts.push(...extra);
+            this.usersMap = await makeUsersMap(extra, this.usersMap);
+          }
+          // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
+        }
+      },
+    },
+    computed: {},
+    async mounted() {
+      this.posts = await getInitialPosts(this.postsToShow);
       this.usersMap = await makeUsersMap(this.posts, this.usersMap);
-      
-      if (!this.mode) {
-        
-        let NewdebScrollBottom = debounce(async () => {
-          if ( this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight ) {
-            let extra =  await getPosFromList(this.postsToShow, this.T, this.offset);
+      this.loading = false;
+
+      let debScrollBottom = debounce(async () => {
+        if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
+          if (this.searching) {
+            let extra = await getPosFromList(this.postsToShow, this.T, this.offset);
             this.offset += this.postsToShow;
             if (extra.length > 0) {
               await this.posts.push(...extra);
-              console.log("pushed from new event");
+              console.log('pushed from new event');
               this.usersMap = await makeUsersMap(extra, this.usersMap);
             }
-            // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
+          } else {
+            let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
+            if (extra) {
+              await this.posts.push(...extra);
+              this.usersMap = await makeUsersMap(extra, this.usersMap);
+            }
           }
-        }, 200);
-  
-        this.$refs.home.addEventListener("scroll", NewdebScrollBottom, false);
-        this.mode = true;
-      }
-      this.loading = false;
-    },
-    updateSearchText(val){
-      this.keyword = val;
-    },
-    async debScrollBottom(){
-      if ( this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight ) {
-        console.log("old");
-        let extra =  this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date ) : null;
-        if (extra) {
-          await this.posts.push(...extra);
-          this.usersMap = await makeUsersMap(extra, this.usersMap);
-        }
-        // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
-      }
-    }
-  },
-  computed: {},
-  async mounted() {
-    this.posts = await getInitialPosts(this.postsToShow);
-    this.usersMap = await makeUsersMap(this.posts, this.usersMap);
-    this.loading = false;
-    // let debScrollBottom = debounce(async () => {
-    //   if ( this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight ) {
-    //     let extra =  this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date ) : null;
-    //     if (extra) {
-    //       await this.posts.push(...extra);
-    //       this.usersMap = await makeUsersMap(extra, this.usersMap);
-    //     }
-    //     // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
-    //   }
-    // }, 200);
 
-    this.$refs.home.addEventListener("scroll", this.debScrollBottom , false);
-  },
-};
+          // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
+        }
+      }, 200);
+
+      this.$refs.home.addEventListener('scroll', debScrollBottom, false);
+    },
+  };
 </script>
 
 <style></style>
