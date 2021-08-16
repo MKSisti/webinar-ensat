@@ -3,7 +3,8 @@ import { users, posts, waiting_Room, waiting_Room_Posts, storage } from '../fire
 import { MongoDriver } from './mongoAtlas';
 let titles;
 let driver = new MongoDriver();
-//fix stuff here
+//this is not great, since we can't have some function that uses titles on a component mount, 
+//but for our usecase its fine
 (async () => {
   titles = await driver.init();
 })();
@@ -152,12 +153,9 @@ const updatePost = async (pid, content, hosting_date, title) => {
   await titles.updateOne({pid},{$set:{title}});
 };
 
-const getTitles = async (title) => {
-  let filter = {};
-  filter['title'] = {'$regex': title, '$options': 'i'};
-  let res = titles.find(filter);
-  return res;
-}
+const getTitles = async (title) => await titles.find({
+  title: {'$regex': title, '$options': 'i'}
+});
 
 const removePost = async (pid) => {
   var ownerId = null;
