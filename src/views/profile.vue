@@ -7,8 +7,9 @@
           <user-card :userInfo="userInfo" :editable="true" />
         </div>
 
+        <transition name="fade" appear>
         <div
-          class="w-full h-full bg-gray-100 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-2xl ring-red-300 ring-2 ring-opacity-50 overflow-auto"
+          class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-2xl ring-red-300 ring-2 ring-opacity-50 overflow-auto"
           v-if="userInfo.priv >= 1"
         >
           <div class="text-7xl font-bold px-10">
@@ -50,22 +51,27 @@
           </div>
         </div>
         <div
-          class="w-full h-full bg-gray-100 flex justify-start items-center flex-col rounded-t-6xl shadow-2xl ring-red-300 ring-2 ring-opacity-30 overflow-auto"
+          class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-center flex-col rounded-t-6xl shadow-2xl ring-red-300 ring-2 ring-opacity-30 overflow-auto"
           v-else
         >
           <div class="flex justify-start items-center flex-col h-full p-5 space-y-2">
             <h1 class="text-4xl font-bold">You don't have the necessary privilege to post</h1>
             <h2 class="text-xl font-semibold">please fill the necessary details to complete your account</h2>
             <div class="py-20 space-y-10">
-              <base-input size="4" :modelValue="univ" lazy="200" @update:modelValue="handleUniv" name="University" ></base-input>
+              <base-input size="4" :modelValue="univ" lazy="200" @update:modelValue="handleUniv" name="University"></base-input>
               <div class="flex justify-center items-center gap-x-2">
                 <div class="h-14 w-28 text-2xl font-semibold flex justify-center items-center rounded-2xl bg-gray-200 pb-1">(+212)</div>
-              <base-input size="4" :modelValue="number" lazy="200" @update:modelValue="handleNumber" name="Phone Number" :numeric="true"></base-input>
+                <base-input size="4" :modelValue="number" lazy="200" @update:modelValue="handleNumber" name="Phone Number" :numeric="true"></base-input>
+              </div>
+              <div @click="submit" class="w-5/12 h-12 bg-red-100 rounded-2xl flex justify-center items-center cursor-pointer btnRing mx-auto" tabindex="-1">
+                <h1 class="text-2xl font-bold mb-1 transition duration-300 transform">
+                  Submit
+                </h1>
               </div>
             </div>
-            
           </div>
         </div>
+        </transition>
       </div>
     </div>
   </transition>
@@ -76,7 +82,7 @@
   import UserCard from '../components/UserCard';
   import { posts } from '../firebase';
   import PostCard from '../components/PostCard';
-  import BaseInput from '../components/BaseInput'  
+  import BaseInput from '../components/BaseInput';
 
   export default {
     name: 'profile',
@@ -84,7 +90,7 @@
     components: {
       UserCard,
       PostCard,
-      BaseInput
+      BaseInput,
     },
     data() {
       return {
@@ -92,8 +98,8 @@
         userPosts: [],
         becomingHost: false,
         editingProfile: false,
-        univ:'',
-        number:''
+        univ: '',
+        number: '',
       };
     },
     methods: {
@@ -103,11 +109,14 @@
       goToPost(pid) {
         this.$router.push({ name: 'post', params: { pid: pid } });
       },
-      handleUniv(val){
+      handleUniv(val) {
         console.log(val);
       },
-      handleNumber(val){
+      handleNumber(val) {
         console.log(val);
+      },
+      submit(){
+
       }
     },
     async created() {
