@@ -55,27 +55,21 @@ function formatDate(d){
   return dateTime;
 }
 
-// //given an element, set it's height to 0 if element has a height above 0, set it to original height otherwise (height of all children)
-// function toggleExpand(e,dim,state) {
+const validate = {
+  isEmail:function(str) {
+      var pattern =/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      return pattern.test(str);  // returns a boolean
+  },
+  isNum:function(str) {
+      var pattern = /^[-+]?[\d]*$/;
+      return pattern.test(str);  // returns a boolean
+  },
+};  
 
-//   if(!e) 
-//     return setTimeout(() => { toggleExpand(e,dim,state) },150);
-
-//   const dimention = dim == 'h' ? e.offsetHeight : e.offsetWidth;
-
-//   if(!e.originalDim || (e.originalDim != dimention && dimention != 0)) e.originalDim = dimention;
-
-//   if (state) { 
-//       e.style.height = e.originalDim + "px";
-//   } else {
-//       e.style.height = '0px';
-//   }
-//   console.log('dim changed')
-// }
 
 export {
   debounce,
   getAbbreviation,
   formatDate,
-  // toggleExpand,
+  validate
 };

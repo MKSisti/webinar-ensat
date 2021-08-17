@@ -11,7 +11,7 @@
     <div class="flex justify-center items-center gap-5 text-xl font-bold">
       <!-- //!Create post button -->
       <div
-        v-if="getPrivLevel >0"
+        v-if="getPrivLevel > 0"
         @click="goToCreate"
         class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl"
       >
@@ -33,22 +33,23 @@
     <div>
       <div class="relative" v-if="getLoggedState">
         <img
-          
+          @click="profileMenu =!profileMenu"
           class="rounded-full ring-0 ring-red-300 w-12 h-12 cursor-pointer"
           :src="getUserInfo.img"
           :alt="getUserInfo.userName"
         />
 
-        <div ref="profileMenu" class="absolute overflow-hidden rounded-2xl bg-gray-100 shadow-2xl transition-all duration-300 right-0 top-14">
-          <div class="px-4 py-2 w-full space-y-2">
-          <router-link :to="'/profile/' + getUserInfo.uid">
-            <div class="text-xl bg-gray-200 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center"><h1>profile</h1></div>
+
+        <div :class="{'h-0 opacity-20': !profileMenu,'h-24 opacity-100': profileMenu}" ref="profileMenu" class="absolute overflow-hidden rounded-2xl bg-gray-100 shadow-2xl transition-all duration-300 right-0 top-14 flex justify-center items-start">
+          <div class="px-4 py-2 space-y-2">
+          <router-link @click="profileMenu = false" :to="'/profile/' + getUserInfo.uid">
+            <div class="text-xl bg-gray-200 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center"><h1>Profile</h1></div>
           </router-link>
 
-          <div class="text-xl bg-red-400 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center cursor-pointer"><h1>Disconnect</h1></div>
+          <div @click="profileMenu = false" class="text-xl bg-red-400 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center cursor-pointer"><h1>Disconnect</h1></div>
           </div>
-
         </div>
+
       </div>
       <div v-else>
         <div
@@ -75,6 +76,11 @@ export default {
       "getUserInfo",
       "getPrivLevel"
     ])
+  },
+  data(){
+    return{
+      profileMenu: false, 
+    }
   },
   methods: {
     async logIn() {
