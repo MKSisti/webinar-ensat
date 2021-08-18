@@ -25,6 +25,14 @@ const checkUserInwaitingRoom = async (uid) => {
   return e;
 };
 
+const getUserFromWR = async (uid) => {
+  var user = null;
+  await waiting_Room.child(uid).once('value', async (ds) => {
+    user = await ds.val();
+  });
+  return user;
+}
+
 const getInitialPosts = async (n) => {
   var initial = [];
   await posts
@@ -179,19 +187,28 @@ const removePost = async (pid) => {
   await titles.deleteOne({pid});
 };
 
-const requestHost = async (user) => {
-  await waiting_Room.child(user.uid).set({
+const requestHost = async (uid, uni, number) => {
+  let user = await getUser(uid);
+  await waiting_Room.child(uid).set({
     request_date: Date.now(),
+    uni,
+    number,
     ...user,
   });
 };
 
-const confirmHost = async (user) => {
-  await users.child(user.uid + '/priv').set(1);
-  await users.child(user.uid + '/phone').set(user.phone);
-  await users.child(user.uid + '/uni').set(user.uni);
-  await waiting_Room.child(user.uid).remove((err) => {
-    console.error(err);
+const confirmHost = async (uid) => {
+  // await users.child(uid + '/priv').set(1);
+  // await users.child(uid + '/phone').set(number);
+  // await users.child(uid + '/uni').set(uni);
+  let user = await getUserFromWR(uid);
+  await users.child(uid).update({
+    "priv": 1,
+    "number": user.number,
+    "uni": user.uni,
+  })
+  await waiting_Room.child(uid).remove((err) => {
+    err ? console.error(err) : null;
   });
 };
 

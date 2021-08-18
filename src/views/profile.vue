@@ -78,7 +78,7 @@
 </template>
 
 <script>
-  import { getUser, getUserPosts } from '../js/firebaseActions.js';
+  import { getUser, getUserPosts, requestHost } from '../js/firebaseActions.js';
   import UserCard from '../components/UserCard';
   import { posts } from '../firebase';
   import PostCard from '../components/PostCard';
@@ -113,13 +113,13 @@
         this.$router.push({ name: 'post', params: { pid: pid } });
       },
       handleUniv(val) {
-        console.log(val);
+        this.univ = val;
       },
       handleNumber(val) {
-        console.log(val);
+        this.number = val;
       },
       submit(){
-
+        requestHost(this.uid, this.univ, this.number);
       },
       ...mapActions("user",[
       "updateToken",
