@@ -4,7 +4,7 @@
       <div class="w-full h-full flex justify-start items-start flex-col space-y-10">
         <!-- //TODO user card needs to be a component-->
         <div class="flex justify-center items-center m-10 mb-0">
-          <user-card :userInfo="userInfo" :editable="true" />
+          <user-card :userInfo="userInfo" :editable="true"/>
         </div>
 
         <transition name="fade" appear>
@@ -54,7 +54,7 @@
           class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-center flex-col rounded-t-6xl shadow-2xl ring-red-300 ring-2 ring-opacity-30 overflow-auto"
           v-else
         >
-          <div class="flex justify-start items-center flex-col h-full p-5 space-y-2">
+          <div v-if="!awaitingApproval" class="flex justify-start items-center flex-col h-full p-5 space-y-3">
             <h1 class="text-4xl font-bold">You don't have the necessary privilege to post</h1>
             <h2 class="text-xl font-semibold">please fill the necessary details to complete your account</h2>
             <div class="py-20 space-y-10">
@@ -70,6 +70,9 @@
               </div>
             </div>
           </div>
+          <div class="flex justify-center items-center flex-col h-full p-5 space-y-3" v-else>
+            <h1 class="text-4xl font-bold">We are currently processing your profile, please come back at a later date</h1>
+          </div>
         </div>
         </transition>
       </div>
@@ -78,7 +81,7 @@
 </template>
 
 <script>
-  import { getUser, getUserPosts } from '../js/firebaseActions.js';
+  import { getUser, getUserPosts, checkUserInwaitingRoom } from '../js/firebaseActions.js';
   import UserCard from '../components/UserCard';
   import { posts } from '../firebase';
   import PostCard from '../components/PostCard';
@@ -100,6 +103,7 @@
         editingProfile: false,
         univ: '',
         number: '',
+        awaitingApproval:false,
       };
     },
     methods: {
@@ -125,9 +129,12 @@
       });
     },
     async mounted() {
-      this.$nextTick(async () => {
-        this.userPosts = await getUserPosts(this.uid);
-      });
+      if(this.userInfo.priv >= 1)
+        this.$nextTick(async () => {
+          this.userPosts = await getUserPosts(this.uid);
+        });
+      
+      this.awaitingApproval = await checkUserInwaitingRoom(this.userInfo);
     },
   };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-center items-start w-full relative">
-    <div @click="clear" class="absolute right-0 px-4 cursor-pointer">
+    <div @click="clear" class="absolute right-0 px-4 cursor-pointer -mt-0.5">
       <i
         :class="{
           'text-xl': size == 0,
