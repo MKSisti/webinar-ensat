@@ -5,7 +5,7 @@
     <div class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl">
       {{ hostedDate.date + ' ' + hostedDate.time }}
     </div>
-    <div class="w-full h-full transform hover:-translate-y-2 hover:scale-105 sm:group-hover:-translate-y-0 sm:group-hover:scale-100 transition duration-300">
+    <div class="w-full transform hover:-translate-y-2 hover:scale-105 sm:group-hover:-translate-y-0 sm:group-hover:scale-100 transition duration-300 flex-shrink-0">
       <div class="h-32 w-full px-8 flex justify-start items-center">
         <div
           class="rounded-full h-16 w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center"

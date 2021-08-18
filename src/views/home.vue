@@ -1,22 +1,23 @@
 <template>
   <transition name="fade-y" appear>
     <div ref="home" class="flex flex-col justify-start items-center sm:space-y-10 xl:pt-10 transition duration-300">
-      <carousel />
+      <carousel :posters="carPosters" :posts="carPosts" :users="usersMap"/>
       <div class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
-        <loader v-if="loading" />
-        <div v-else class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10">
+        
+        <div class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10">
           <transition-group name="fade-y" appear>
+            <loader v-if="loading" />
             <post-card
-              class="transform transition duration-300"
+              class="transform transition duration-300 flex-shrink-0"
               :key="p.pid"
               v-for="p of posts"
               :post="p"
-              :userData="usersMap.get(p.owner)"
+              :userData="usersMap?.get(p.owner)"
               @click="goToPost(p.pid)"
             />
           </transition-group>
-          <loader class="pb-8" v-if="extraPosts" />
-          <div v-else class="h-20"><i  class="fa fa-angle-up transform transition duration-300 text-4xl" aria-hidden="true"></i></div>
+          <loader class="pb-4 pt-4" v-if="!loading && extraPosts" />
+          <div v-else class="h-20 pt-4"><i  class="fa fa-angle-up transform transition duration-300 text-4xl" aria-hidden="true"></i></div>
         </div>
         <search
           @apply="search"
@@ -36,7 +37,7 @@
 
   import { debounce } from '../utils';
   // import {createPost} from '../js/firebaseActions'
-  import { getInitialPosts, getExtraPosts, makeUsersMap, getTitles, getPosFromList } from '../js/firebaseActions';
+  import { getInitialPosts, getExtraPosts, makeUsersMap, getTitles, getPosFromList, getCI2 } from '../js/firebaseActions';
 
   export default {
     name: 'App',
@@ -57,6 +58,9 @@
         offset: 0,
         mode: false,
         extraPosts: true,
+        searching:false,
+        carPosts:[],
+        carPosters:{},
       };
     },
     methods: {
@@ -106,10 +110,19 @@
         }
       },
     },
-    computed: {},
+    computed: {
+    },
     async mounted() {
       this.posts = await getInitialPosts(this.postsToShow);
       this.usersMap = await makeUsersMap(this.posts, this.usersMap);
+
+      this.carPosts = this.posts.slice(0,3);
+      
+      this.carPosts.forEach(async (p) => {
+        const cover = await getCI2(p.pid);
+        this.carPosters[p.pid] = cover;
+      });
+
       this.loading = false;
 
       let debScrollBottom = debounce(async () => {
