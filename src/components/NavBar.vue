@@ -46,7 +46,7 @@
             <div class="text-xl bg-gray-200 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center"><h1>Profile</h1></div>
           </router-link>
 
-          <div @click="profileMenu = false" class="text-xl bg-red-400 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center cursor-pointer"><h1>Disconnect</h1></div>
+          <div @click="logOut" class="text-xl bg-red-400 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center cursor-pointer"><h1>Disconnect</h1></div>
           </div>
         </div>
 
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions} from "vuex";
 import { auth, provider, posts } from "../firebase";
 
 export default {
@@ -90,9 +90,24 @@ export default {
         console.error(error);
       }
     },
+    async logOut(){
+      try {
+        await auth.signOut();
+      } catch (error) {
+        console.error(error);
+      } finally{
+        this.profileMenu = false;
+        this.$router.push({name: "home"});
+      }
+    },
     goToCreate() {
-      this.$router.push({ name: "post", params: { pid: posts.push().key } });
-    }
+      let token = posts.push().key;
+      this.updateToken(token);
+      this.$router.push({ name: "post", params: { pid: token }});
+    },
+    ...mapActions("user",[
+      "updateToken",
+    ])
   }
 };
 </script>

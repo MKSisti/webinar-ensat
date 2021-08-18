@@ -250,7 +250,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["getUserInfo"]),
+    ...mapGetters("user", ["getUserInfo", "getPrivLevel","getToken"]),
   },
   methods: {
     handleTitle(val) {
@@ -310,10 +310,20 @@ export default {
     this.$nextTick(async () => {
       this.post = await getPost(this.pid);
       if (this.post == null) {
-        this.postOwner = this.getUserInfo;
-        this.inEditingMode = true;
-        this.yetToPublish = true;
-        this.isEditable = true;
+        if (this.getPrivLevel > 0) {
+          if (this.getToken && this.getToken == this.pid) {
+            this.postOwner = this.getUserInfo;
+            this.inEditingMode = true;
+            this.yetToPublish = true;
+            this.isEditable = true;
+          }
+          else{
+            console.log("it is not valid");
+            this.$router.push({ name: 'home' });
+          }
+        }else{
+          this.$router.push({ name: 'home' });
+        }
       } else {
         this.postOwner = await getU(this.post.owner);
         this.cover = await getCI2(this.pid);

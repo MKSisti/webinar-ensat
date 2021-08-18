@@ -83,6 +83,7 @@
   import { posts } from '../firebase';
   import PostCard from '../components/PostCard';
   import BaseInput from '../components/BaseInput';
+  import { mapActions} from "vuex";
 
   export default {
     name: 'profile',
@@ -104,7 +105,9 @@
     },
     methods: {
       goToCreate() {
-        this.$router.push({ name: 'post', params: { pid: posts.push().key } });
+      let token = posts.push().key;
+      this.updateToken(token);
+        this.$router.push({ name: 'post', params: { pid: token} });
       },
       goToPost(pid) {
         this.$router.push({ name: 'post', params: { pid: pid } });
@@ -117,7 +120,10 @@
       },
       submit(){
 
-      }
+      },
+      ...mapActions("user",[
+      "updateToken",
+    ])
     },
     async created() {
       this.$nextTick(async () => {

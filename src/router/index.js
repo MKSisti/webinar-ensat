@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import store from "../store/index";
+// import store from "../store/index";
 import home from '../views/home';
 import profile from '../views/profile';
 import post from '../views/post';
@@ -24,20 +24,27 @@ const router = createRouter({
       component: post,
       props: true,
     },
+    //TODO: 404 view
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      redirect: {name: 'home'}
+    }
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.name == "post" ) {
-    if (store.getters['user/getPrivLevel'] > 0) {
-    next();
-    }
-    else{
-      router.push({name:"home"});
-    }
-  }else{
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   // if (to.name == "post" ) {
+//   //   if (store.getters['user/getPrivLevel'] > 0) {
+//   //   next();
+//   //   }
+//   //   else{
+//   //     router.push({name:"home"});
+//   //   }
+//   // }else{
+//   //   next();
+//   // }
+//   next();
+// });
 
 export default router;
