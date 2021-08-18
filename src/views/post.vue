@@ -43,8 +43,8 @@
             class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black opacity-10 transition-all duration-300 pointer-events-none"
           ></div>
           <div
-            class="w-full cursor-pointer filter xl:aspect-w-8 aspect-w-4 aspect-h-1 transition-all duration-300 z-0 overflow-hidden"
-            :class="{ viewingImg: viewingImg, 'rounded-b-6xl': !viewingImg }"
+            class="w-full cursor-pointer filter aspect-h-1 transition-all duration-300 z-0 overflow-hidden"
+            :class="{ viewingImg: viewingImg, 'xl:aspect-w-5 aspect-w-3': !inEditingMode,'xl:aspect-w-8 aspect-w-4': inEditingMode, 'rounded-b-6xl': !viewingImg }"
             @click="viewingImg = !viewingImg"
           >
             <img
@@ -392,8 +392,9 @@ select:focus {
 }
 
 .viewingImg {
-  @apply aspect-w-4 aspect-h-1 rounded-none drop-shadow-2xl;
+  @apply aspect-w-3 xl:aspect-w-4 aspect-h-1 rounded-none drop-shadow-2xl;
 }
+
 </style>
 
 <style>
