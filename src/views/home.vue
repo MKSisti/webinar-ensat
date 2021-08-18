@@ -58,6 +58,7 @@
     },
     methods: {
       goToPost(pid) {
+        console.log("trying to show post");
         this.$router.push({
           name: 'post',
           params: {

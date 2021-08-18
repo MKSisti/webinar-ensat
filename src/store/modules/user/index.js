@@ -10,6 +10,7 @@ export default {
       extraInfo: {},
       isLoggedIn: false,
       privLevel: -99,
+      token: null,
     };
   },
   mutations: {
@@ -30,8 +31,17 @@ export default {
       state.isLoggedIn = false;
       state.privLevel = -99;
     },
+    setToken(state, payload){
+      state.token = payload.token;
+    }
   },
   actions: {
+    updateToken({commit}, token){
+      commit({
+        type: "setToken",
+        token,
+      });
+    },
     async logIn({ commit }, user) {
       var p = 0;
       var extraInfo = null;
@@ -87,5 +97,8 @@ export default {
     getPrivLevel(state) {
       return state.privLevel;
     },
+    getToken(state){
+      return state.token;
+    }
   },
 };
