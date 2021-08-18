@@ -14,7 +14,7 @@
 
       <div class="mainInfo w-full h-28 bg-gray-100 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
         <div class="h-full flex justify-center items-center px-4">
-          <img :src="userInfo.img" alt="avatar" class="rounded-full w-full" />
+          <img :class="{'animate-pulse bg-red-200': loadingImg}" @load="loadingImg = false" :src="userInfo.img" alt="avatar" class="rounded-full w-full" />
         </div>
         <div class="flex justify-center items-start flex-col">
           <h1 class="text-3xl font-bold flex justify-start items-start">
@@ -54,6 +54,7 @@
       return {
         tags: ['User', 'Host', 'Admin'],
         colors: ['yellow', 'red', 'green'],
+        loadingImg:true,
       };
     },
     computed: {
@@ -66,7 +67,7 @@
     },
     methods: {
       getAbbreviation,
-    },
+    }
   };
 </script>
 

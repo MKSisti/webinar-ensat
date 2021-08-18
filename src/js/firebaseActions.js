@@ -19,7 +19,7 @@ async function getUser(uid) {
 
 const checkUserInwaitingRoom = async (uid) => {
   var e = false;
-  await waiting_Room_Posts.child(uid).once('value', async (ds) => {
+  await waiting_Room.child(uid).once('value', async (ds) => {
     e = ds.exists();
   });
   return e;

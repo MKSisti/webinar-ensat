@@ -4,7 +4,7 @@
       <carousel />
       <div class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
         <loader v-if="loading" />
-        <div v-else class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10 pb-8">
+        <div v-else class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10">
           <transition-group name="fade-y" appear>
             <post-card
               class="transform transition duration-300"
@@ -15,11 +15,13 @@
               @click="goToPost(p.pid)"
             />
           </transition-group>
+          <loader class="pb-8" v-if="extraPosts" />
+          <div v-else class="h-20"><i  class="fa fa-angle-up transform transition duration-300 text-4xl" aria-hidden="true"></i></div>
         </div>
         <search
           @apply="search"
           @searchChange="updateSearchText"
-          class="w-full border-b-2 border-gray-200 border-opacity-70 bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky"
+          class="w-full bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky"
         />
       </div>
     </div>
@@ -54,11 +56,12 @@
         T: [],
         offset: 0,
         mode: false,
+        extraPosts: true,
       };
     },
     methods: {
       goToPost(pid) {
-        console.log("trying to show post");
+        console.log('trying to show post');
         this.$router.push({
           name: 'post',
           params: {
@@ -110,8 +113,9 @@
       this.loading = false;
 
       let debScrollBottom = debounce(async () => {
-        if(!this.loading)
+        if (!this.loading)
           if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
+            this.extraPosts = true;
             if (this.searching) {
               let extra = await getPosFromList(this.postsToShow, this.T, this.offset);
               this.offset += this.postsToShow;
@@ -119,12 +123,16 @@
                 await this.posts.push(...extra);
                 console.log('pushed from new event');
                 this.usersMap = await makeUsersMap(extra, this.usersMap);
+              } else {
+                setTimeout(() => (this.extraPosts = false), 1000);
               }
             } else {
               let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
-              if (extra) {
+              if (extra.length > 0) {
                 await this.posts.push(...extra);
                 this.usersMap = await makeUsersMap(extra, this.usersMap);
+              } else {
+                setTimeout(() => (this.extraPosts = false), 1000);
               }
             }
           }

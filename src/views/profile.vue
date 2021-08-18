@@ -9,7 +9,7 @@
 
         <transition name="fade" appear>
         <div
-          class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-2xl ring-red-300 ring-2 ring-opacity-50 overflow-auto"
+          class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
           v-if="userInfo.priv >= 1"
         >
           <div class="text-7xl font-bold px-10">
@@ -51,7 +51,7 @@
           </div>
         </div>
         <div
-          class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-center flex-col rounded-t-6xl shadow-2xl ring-red-300 ring-2 ring-opacity-30 overflow-auto"
+          class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto"
           v-else
         >
           <div v-if="!awaitingApproval" class="flex justify-start items-center flex-col h-full p-5 space-y-3">
@@ -70,8 +70,9 @@
               </div>
             </div>
           </div>
-          <div class="flex justify-center items-center flex-col h-full p-5 space-y-3" v-else>
-            <h1 class="text-4xl font-bold">We are currently processing your profile, please come back at a later date</h1>
+          <div v-else class="flex justify-center items-center flex-col h-full p-20 space-y-3">
+            <h1 class="text-4xl font-bold text-center">We are currently processing your profile</h1>
+            <h2 class="text-xl font-semibold">Please come back at a later date</h2>
           </div>
         </div>
         </transition>
@@ -124,6 +125,7 @@
       },
       submit(){
         requestHost(this.uid, this.univ, this.number);
+        this.awaitingApproval = true;
       },
       ...mapActions("user",[
       "updateToken",
@@ -140,7 +142,8 @@
           this.userPosts = await getUserPosts(this.uid);
         });
       
-      this.awaitingApproval = await checkUserInwaitingRoom(this.userInfo);
+      this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
+      console.log(this.awaitingApproval);
     },
   };
 </script>
