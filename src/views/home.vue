@@ -38,7 +38,7 @@
 
   import { debounce } from '../utils';
   // import {createPost} from '../js/firebaseActions'
-  import { getInitPosDyn,getExtPosDyn, makeUsersMap, getTitles, getPosFromList, getCI2 } from '../js/firebaseActions';
+  import { getInitPosDyn,getExtPosDyn, makeUsersMap, getTitles, getPosFromList, getCI2 } from '../js/dbActions';
 
   export default {
     name: 'App',
@@ -80,7 +80,7 @@
           this.searching = true;
           this.loading = true;
           this.offset = 0;
-          this.T = await getTitles(this.keyword);
+          this.T = await getTitles();
 
           this.posts = await getPosFromList(this.postsToShow, this.T, this.offset);
           this.offset = this.postsToShow;

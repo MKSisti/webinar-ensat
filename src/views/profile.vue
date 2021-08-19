@@ -82,7 +82,7 @@
 </template>
 
 <script>
-  import { getUser, getUserPosts, requestHost, checkUserInwaitingRoom } from '../js/firebaseActions.js';
+  import { getUser, getUserPosts, requestHost, checkUserInwaitingRoom } from '../js/dbActions.js';
   import UserCard from '../components/UserCard';
   import PostCard from '../components/PostCard';
   import BaseInput from '../components/BaseInput';

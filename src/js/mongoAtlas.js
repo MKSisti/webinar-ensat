@@ -1,10 +1,14 @@
 import * as Realm from 'realm-web';
 const realmApp = new Realm.App({ id: 'webensat-tzkat' });
-const assert = require('assert');
 
+const assert = require('assert');
+var EventEmitter = require('events');
 class MongoDriver {
   constructor() {
     this.connected = false;
+    this._collections = {};
+    this._watchers = {};
+    this._events = new EventEmitter();
   }
 
   async connect() {
@@ -12,22 +16,123 @@ class MongoDriver {
     try {
       const user = await realmApp.logIn(credentials);
       assert(user.id === realmApp.currentUser.id);
-      this.client = realmApp.currentUser.mongoClient("mongodb-atlas");
+      this.client = realmApp.currentUser.mongoClient('mongodb-atlas');
       this.connected = true;
-    } 
-    catch (e) {
+    } catch (e) {
       console.error('Failed to log in', e);
       this.connected = false;
     }
   }
 
-  async init() {
-    if(!this.connected) {
-        await this.connect();
-        this.titleIndexes = this.client.db('WebEnsat1').collection('titles');
+  async init(col) {
+    if (!this.connected) await this.connect();
+    if (!this._collections[col]) this._collections[col] = this.client.db('WebEnsat1').collection(col);
+    return this._collections[col];
+  }
+
+  /**
+   *
+   * @param {string} col - collection to query
+   * @param {Object} filter - (optional) filter object example: {pid: x, title: y}
+   * @param {string} sort - (optional) sort object example: {pid: 1} to sort pid asc or {pid: -1} for desc, can also be multiple keys
+   * @param {integer} limit  - (optional) number of elements to get
+   * @param {integer} offset - (optional) number of elements to skip
+   * @returns array of elements that match query
+   */
+  async get(col, filter, sort, limit, offset) {
+    if (!this._collections[col]) this.init(col);
+
+    if (filter)
+      for (let f in Object.keys(filter)) {
+        filter[f] = { $regex: filter[f], $options: 'i' };
+      }
+
+    let res = await this._collections[col].find(filter, {
+      sort,
+    });
+
+    if (limit && offset) return res.splice(offset, Math.min(limit + offset, res.length));
+    return res;
+  }
+
+  /**
+   *
+   * @param {string} col - collection to insert one item into
+   * @param {Object} data - data to insert
+   * @returns null
+   */
+  async insert(col, data) {
+    if (!this._collections[col]) this.init(col);
+    await this._collections[col].insertOne(data);
+  }
+
+  /**
+   *
+   * @param {string} col - collection to update one item in
+   * @param {Object} filter - filter object example: {pid: x, title: y}
+   * @param {Object} data - data to update
+   * @returns null
+   */
+  async update(col, filter, data) {
+    if (!this._collections[col]) this.init(col);
+    await this._collections[col].updateOne(filter, { $set: data });
+  }
+
+  /**
+   *
+   * @param {string} col - collection to delete one item from
+   * @param {Object} filter - filter object example: {pid: x, title: y}
+   * @returns null
+   */
+  async delete(col, filter) {
+    if (!this._collections[col]) this.init(col);
+    await this._collections[col].deleteOne(filter);
+  }
+
+  /**
+   *
+   * @param {string} col - collection to start watching
+   * @returns null
+   */
+  async _watch(col) {
+    if (!this._collections[col]) this.init(col);
+
+    this._watchers[col] = Date.now();
+    for await (const change of col._watch()) {
+      this._events.emit(col, change.operationType, change);
     }
-    return this.titleIndexes;
-  } 
+  }
+
+  /**
+   *
+   * @param {string} col - collection to watch
+   * @param {Object} fn - callback function to run on event
+   * @returns null
+   */
+  on(col, fn) {
+    if (!this._watchers[col]) this._watch(col);
+    this._events.on(col, fn);
+  }
+
+  /**
+   *
+   * @param {string} col - collection to watch once
+   * @param {Object} fn - callback function to run on event once
+   * @returns null
+   */
+  once(col, fn) {
+    if (!this._watchers[col]) this._watch(col);
+    this._events.once(col, fn);
+  }
+
+  /**
+   *
+   * @param {string} col - collection to remove watchers from
+   * @returns null
+   */
+  off(col) {
+    this._events.removeListener(col);
+  }
 }
 
 export { MongoDriver };

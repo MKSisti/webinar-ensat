@@ -51,7 +51,7 @@
 
 <script>
   import { formatDate } from '../utils';
-  import { getCI2 } from '../js/firebaseActions';
+  import { getCI2 } from '../js/dbActions';
 
   export default {
     name: 'PostCard',

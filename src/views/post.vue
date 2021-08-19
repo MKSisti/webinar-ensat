@@ -213,7 +213,7 @@ import {
   updateCover,
   updatePost,
   removePost,
-} from "../js/firebaseActions";
+} from "../js/dbActions";
 import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
 
