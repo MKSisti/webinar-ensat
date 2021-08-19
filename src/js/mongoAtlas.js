@@ -18,6 +18,7 @@ class MongoDriver {
       assert(user.id === realmApp.currentUser.id);
       this.client = realmApp.currentUser.mongoClient('mongodb-atlas');
       this.connected = true;
+      console.log('connected to db');
     } catch (e) {
       console.error('Failed to log in', e);
       this.connected = false;
@@ -27,6 +28,7 @@ class MongoDriver {
   async init(col) {
     if (!this.connected) await this.connect();
     if (!this._collections[col]) this._collections[col] = this.client.db('WebEnsat1').collection(col);
+    console.log(col,'connected');
     return this._collections[col];
   }
 
@@ -43,15 +45,16 @@ class MongoDriver {
     if (!this._collections[col]) this.init(col);
 
     if (filter)
-      for (let f in Object.keys(filter)) {
+      for (let f of Object.keys(filter)) {
         filter[f] = { $regex: filter[f], $options: 'i' };
       }
 
     let res = await this._collections[col].find(filter, {
       sort,
+      limit:500
     });
 
-    if (limit && offset) return res.splice(offset, Math.min(limit + offset, res.length));
+    if (limit != null && offset != null) return res.splice(offset,limit);
     return res;
   }
 
@@ -98,7 +101,7 @@ class MongoDriver {
     if (!this._collections[col]) this.init(col);
 
     this._watchers[col] = Date.now();
-    for await (const change of col._watch()) {
+    for await (const change of this._collections[col].watch()) {
       this._events.emit(col, change.operationType, change);
     }
   }
@@ -109,7 +112,7 @@ class MongoDriver {
    * @param {Object} fn - callback function to run on event
    * @returns null
    */
-  on(col, fn) {
+  async on(col, fn) {
     if (!this._watchers[col]) this._watch(col);
     this._events.on(col, fn);
   }
@@ -120,7 +123,7 @@ class MongoDriver {
    * @param {Object} fn - callback function to run on event once
    * @returns null
    */
-  once(col, fn) {
+  async once(col, fn) {
     if (!this._watchers[col]) this._watch(col);
     this._events.once(col, fn);
   }

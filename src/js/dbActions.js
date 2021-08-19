@@ -7,6 +7,19 @@ let driver = new MongoDriver();
 //but for our usecase its fine
 (async () => {
   titles = await driver.init('titles');
+  driver.on('titles',(op,change) => console.log(op,change));
+  let postss = await driver.get('titles');
+  console.log('test ',postss);
+
+  // await driver.insert('titles',{
+  //   poopoo:'peepee'
+  // });
+
+  // driver.delete('titles',{
+  //   title: 'webinar'
+  // });
+
+  
 })();
 
 async function getUser(uid) {
