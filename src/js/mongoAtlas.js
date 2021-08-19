@@ -43,7 +43,7 @@ class MongoDriver {
    * @returns array of elements that match query
    */
   async get(col, filter, sort, limit, last) {
-    if (!this._collections[col]) this.init(col);
+    if (!this._collections[col]) await this.init(col);
     if (filter)
       for (let f of Object.keys(filter)) {
         filter[f] = { $regex: filter[f], $options: 'i' };
@@ -76,7 +76,7 @@ class MongoDriver {
    * @returns null
    */
   async insert(col, data) {
-    if (!this._collections[col]) this.init(col);
+    if (!this._collections[col]) await this.init(col);
     await this._collections[col].insertOne(data);
   }
 
@@ -88,7 +88,7 @@ class MongoDriver {
    * @returns null
    */
   async update(col, filter, data) {
-    if (!this._collections[col]) this.init(col);
+    if (!this._collections[col]) await this.init(col);
     await this._collections[col].updateOne(filter, { $set: data });
   }
 
@@ -99,7 +99,7 @@ class MongoDriver {
    * @returns null
    */
   async delete(col, filter) {
-    if (!this._collections[col]) this.init(col);
+    if (!this._collections[col]) await this.init(col);
     await this._collections[col].deleteOne(filter);
   }
 
@@ -109,7 +109,7 @@ class MongoDriver {
    * @returns null
    */
   async _watch(col) {
-    if (!this._collections[col]) this.init(col);
+    if (!this._collections[col]) await this.init(col);
 
     this._watchers[col] = Date.now();
     for await (const change of this._collections[col].watch()) {
