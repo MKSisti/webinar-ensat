@@ -22,6 +22,7 @@
         <search
           @apply="search"
           @searchChange="updateSearchText"
+          @dropChange="updateDropVal"
           class="w-full bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky"
         />
       </div>
@@ -37,7 +38,7 @@
 
   import { debounce } from '../utils';
   // import {createPost} from '../js/firebaseActions'
-  import { getInitialPosts, getExtraPosts, makeUsersMap, getTitles, getPosFromList, getCI2 } from '../js/firebaseActions';
+  import { getInitPosDyn,getExtPosDyn, makeUsersMap, getTitles, getPosFromList, getCI2 } from '../js/firebaseActions';
 
   export default {
     name: 'App',
@@ -54,6 +55,7 @@
         posts: [],
         usersMap: null,
         keyword: null,
+        dropVal: 0,
         T: [],
         offset: 0,
         mode: false,
@@ -61,11 +63,11 @@
         searching:false,
         carPosts:[],
         carPosters:{},
+        orderBy: ["hosting_date", "creation_date", "title"],
       };
     },
     methods: {
       goToPost(pid) {
-        console.log('trying to show post');
         this.$router.push({
           name: 'post',
           params: {
@@ -79,8 +81,6 @@
           this.loading = true;
           this.offset = 0;
           this.T = await getTitles(this.keyword);
-          console.log(this.T);
-          this.$refs.home.removeEventListener('scroll', this.debScrollBottom, false);
 
           this.posts = await getPosFromList(this.postsToShow, this.T, this.offset);
           this.offset = this.postsToShow;
@@ -90,7 +90,7 @@
         } else {
           this.searching = false;
           this.loading = true;
-          this.posts = await getInitialPosts(this.postsToShow);
+          this.posts = await getInitPosDyn(this.postsToShow, this.orderBy[this.dropVal]);
           this.usersMap = await makeUsersMap(this.posts, this.usersMap);
           this.loading = false;
         }
@@ -98,22 +98,17 @@
       updateSearchText(val) {
         this.keyword = val;
       },
-      async debScrollBottom() {
-        if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
-          console.log('old');
-          let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
-          if (extra) {
-            await this.posts.push(...extra);
-            this.usersMap = await makeUsersMap(extra, this.usersMap);
-          }
-          // console.log(timeConverter(this.posts[this.posts.length -1].hosting_date));
-        }
-      },
+      updateDropVal(val){
+        this.dropVal = val;
+        console.log(this.dropVal);
+      }
     },
     computed: {
     },
     async mounted() {
-      this.posts = await getInitialPosts(this.postsToShow);
+      // this.posts = await getInitialPosts(this.postsToShow);
+      this.posts = await getInitPosDyn(this.postsToShow, this.orderBy[this.dropVal]);
+
       this.usersMap = await makeUsersMap(this.posts, this.usersMap);
 
       this.carPosts = this.posts.slice(0,3);
@@ -134,13 +129,14 @@
               this.offset += this.postsToShow;
               if (extra.length > 0) {
                 await this.posts.push(...extra);
-                console.log('pushed from new event');
                 this.usersMap = await makeUsersMap(extra, this.usersMap);
               } else {
                 setTimeout(() => (this.extraPosts = false), 1000);
               }
             } else {
-              let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
+              // let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
+              let extra = this.posts.length > 0 ? await getExtPosDyn(this.postsToShow, this.orderBy[this.dropVal] , this.posts[this.posts.length - 1][this.orderBy[this.dropVal]]) : null;
+              console.log(this.posts[this.posts.length - 1][this.orderBy[this.dropVal]]);
               if (extra.length > 0) {
                 await this.posts.push(...extra);
                 this.usersMap = await makeUsersMap(extra, this.usersMap);

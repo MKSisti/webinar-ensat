@@ -84,10 +84,10 @@
 <script>
   import { getUser, getUserPosts, requestHost, checkUserInwaitingRoom } from '../js/firebaseActions.js';
   import UserCard from '../components/UserCard';
-  import { posts } from '../firebase';
   import PostCard from '../components/PostCard';
   import BaseInput from '../components/BaseInput';
   import { mapActions } from 'vuex';
+import { BSON } from 'realm-web';
 
   export default {
     name: 'profile',
@@ -110,7 +110,8 @@
     },
     methods: {
       goToCreate() {
-        let token = posts.push().key;
+        // let token = posts.push().key;
+        let token = BSON.ObjectID();
         this.updateToken(token);
         this.$router.push({ name: 'post', params: { pid: token } });
       },

@@ -65,8 +65,9 @@
 </template>
 
 <script>
+import { BSON } from 'realm-web';
 import { mapGetters, mapActions} from "vuex";
-import { auth, provider, posts } from "../firebase";
+import { auth, provider } from "../firebase";
 
 export default {
   name: "NavBar",
@@ -101,7 +102,7 @@ export default {
       }
     },
     goToCreate() {
-      let token = posts.push().key;
+      let token = BSON.ObjectID();
       this.updateToken(token);
       this.$router.push({ name: "post", params: { pid: token }});
     },

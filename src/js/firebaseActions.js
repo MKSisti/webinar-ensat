@@ -141,24 +141,22 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
   await users.child(owner + '/posts/' + pid).set(true);
-  await posts.child(pid).set({
+  await titles.insertOne({
     pid,
     creation_date: t,
     hosting_date,
     content,
     owner,
     title,
+    approved:false,
   });
-
-  await titles.insertOne({title,pid});
 };
 const updatePost = async (pid, content, hosting_date, title) => {
-  await posts.child(pid).update({
+  await titles.updateOne({pid},{$set:{
     content,
     hosting_date,
     title,
-  });
-  await titles.updateOne({pid},{$set:{title}});
+  }});
 };
 
 const getTitles = async (title) => await titles.find({
@@ -179,12 +177,10 @@ const removePost = async (pid) => {
   await users.child(ownerId + '/posts/' + pid).remove((err) => {
     err ? console.error(err) : null;
   });
-  await posts.child(pid).remove((err) => {
-    err ? console.error(err) : null;
-  });
+  await titles.deleteOne({pid});
+
   await storage.ref('posters/' + pid).delete();
 
-  await titles.deleteOne({pid});
 };
 
 const requestHost = async (uid, uni, number) => {
@@ -198,9 +194,6 @@ const requestHost = async (uid, uni, number) => {
 };
 
 const confirmHost = async (uid) => {
-  // await users.child(uid + '/priv').set(1);
-  // await users.child(uid + '/phone').set(number);
-  // await users.child(uid + '/uni').set(uni);
   let user = await getUserFromWR(uid);
   await users.child(uid).update({
     "priv": 1,

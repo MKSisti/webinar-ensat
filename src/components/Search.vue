@@ -7,10 +7,10 @@
     </div>
     <div class="flex justify-between items-center w-11/12 space-x-8">
       <div class="flex flex-col justify-center items-start w-7/12 relative">
-        <base-input name="Order By" modelValue="1" @update:modelValue="handleDropdown" size="1" dropDown="true">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
+        <base-input name="Order By" modelValue="0" @update:modelValue="handleDropdown" size="1" dropDown="true">
+          <option value="0">Hosting Date</option>
+          <option value="1">Creation Date</option>
+          <option value="2">Title</option>
         </base-input>
       </div>
       
@@ -37,10 +37,10 @@ export default {
       this.$emit("searchChange",val)
     },
     handleDropdown(val){
-      console.log(val);
+      this.$emit("dropChange",val)
     },
     apply(){
-      this.$emit("apply");
+      this.$emit("apply")
     }
   },
   components: {
