@@ -32,9 +32,11 @@ const getUserFromWR = async (uid) => {
 }
 
 const getPosts = async ( filter, sort, limit, last ) => {
-  var ps = [];
-  ps = await driver.get("posts",filter, sort, limit, last);
-  return ps;
+  return await driver.get("posts",filter, sort, limit, last) || null;
+}
+const getPost = async ( pid ) => {
+  let l = await driver.get("posts",{pid: pid}, null, 1);
+  return  l[0] || null;
 }
 
 
@@ -235,6 +237,7 @@ const getCI2 = async (pid) => {
 export {
   getUser,
   getPosts,
+  getPost,
   createPost,
   removePost,
   requestHost,

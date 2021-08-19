@@ -212,6 +212,7 @@ import {
   updateCover,
   updatePost,
   removePost,
+  getPost,
 } from "../js/dbActions";
 import { formatDate } from "../utils";
 import { mapGetters } from "vuex";
@@ -307,7 +308,8 @@ export default {
   },
   async mounted() {
     this.$nextTick(async () => {
-      this.post = null;
+      this.post = await getPost(this.pid);
+      console.log(this.post);
       if (this.post == null) {
         if (this.getPrivLevel > 0) {
           if (this.getToken && this.getToken == this.pid) {
