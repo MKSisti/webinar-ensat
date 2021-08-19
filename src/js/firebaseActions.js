@@ -32,21 +32,26 @@ const getUserFromWR = async (uid) => {
   });
   return user;
 }
+//------------------------------ old gets here -----------------------------------------------
+//dep
+// const getInitialPosts = async (n) => {
+//   var initial = [];
+//   await posts
+//     .orderByChild('hosting_date')
+//     .limitToFirst(n)
+//     .once('value', async (ds) => {
+//       // initial = await ds.val();
+//       ds.forEach((chds) => {
+//         initial.push(chds.val());
+//       });
+//     });
+//   return initial ? initial : [];
+// };
 
-const getInitialPosts = async (n) => {
-  var initial = [];
-  await posts
-    .orderByChild('hosting_date')
-    .limitToFirst(n)
-    .once('value', async (ds) => {
-      // initial = await ds.val();
-      ds.forEach((chds) => {
-        initial.push(chds.val());
-      });
-    });
-  return initial ? initial : [];
-};
-
+//the getter used right now takes the number to get and by what to order, since we are gonna use mongo it can take 
+//      the direction asc or desc and maybe the search term too if supplied 
+//      afrer we add the admin logic we will need to check if the posts are approved 
+//      I already added a new field for that to make it easy to check called "approved" will be a simple boolean 
 const getInitPosDyn = async (n, orderBy) => {
   var initial = [];
   await posts
@@ -59,7 +64,6 @@ const getInitPosDyn = async (n, orderBy) => {
     });
   return initial ? initial : [];
 };
-
 const getExtPosDyn = async (n, orderBy, bot) => {
   var extra = [];
   await posts
@@ -73,16 +77,7 @@ const getExtPosDyn = async (n, orderBy, bot) => {
     });
   return extra ? extra : null;
 };
-
-const getPosFromList = async (n, L, offset) => {
-  var extra = [];
-  var i = L.length - offset > 0 ? Math.min(n, L.length - offset) : -1;
-  for (let index = 0; index < i; index++) {
-    extra.push(await getPost(L[index + offset].pid));
-  }
-  return extra;
-};
-
+// if you make the search very general you can add the uid as a variable passed too and if it's upplied narrow the search by user too
 const getUserPosts = async (id) => {
   var ps = [];
   await posts
@@ -95,22 +90,34 @@ const getUserPosts = async (id) => {
     });
   return ps ? ps : [];
 };
+// dep
+// const getExtraPosts = async (n, LastDate) => {
+//   var extra = [];
+//   await posts
+//     .orderByChild('hosting_date')
+//     .startAfter(LastDate)
+//     .limitToFirst(n)
+//     .once('value', async (ds) => {
+//       // extra = await ds.val();
+//       ds.forEach((chds) => {
+//         extra.push(chds.val());
+//       });
+//     });
+//   return extra ? extra : null;
+// };
 
-const getExtraPosts = async (n, LastDate) => {
+// this is the method that loads the posts from firebase when provided a list
+// after making the new getPosts methods this will be rendered useless too
+const getPosFromList = async (n, L, offset) => {
   var extra = [];
-  await posts
-    .orderByChild('hosting_date')
-    .startAfter(LastDate)
-    .limitToFirst(n)
-    .once('value', async (ds) => {
-      // extra = await ds.val();
-      ds.forEach((chds) => {
-        extra.push(chds.val());
-      });
-    });
-  return extra ? extra : null;
+  var i = L.length - offset > 0 ? Math.min(n, L.length - offset) : -1;
+  for (let index = 0; index < i; index++) {
+    extra.push(await getPost(L[index + offset].pid));
+  }
+  return extra;
 };
 
+// this is the old method that gets the post from firebase will be rendered useless after making the new getPosts mehods
 const getPost = async (pid) => {
   var post = null;
   // this checks if the post is in published and gets it
@@ -131,11 +138,10 @@ const getPost = async (pid) => {
   return post;
 };
 
-/**
- *
- * @param {object} newPost
- * assumes the uid is provided
- */
+
+//------------------------------------------------------------------------------------------------------
+
+// already updated to put the posts in mongo still saves the necessary data to the user in firebase
 const createPost = async (pid, content, owner, hosting_date, title) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
@@ -151,6 +157,7 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
     approved:false,
   });
 };
+// updated as well
 const updatePost = async (pid, content, hosting_date, title) => {
   await titles.updateOne({pid},{$set:{
     content,
@@ -158,11 +165,11 @@ const updatePost = async (pid, content, hosting_date, title) => {
     title,
   }});
 };
-
+// your fancy get titles
 const getTitles = async (title) => await titles.find({
   title: {'$regex': title, '$options': 'i'}
 },{limit:100});
-
+// updated tp remove from mongo still has logic to change what needs to be changed in firebase for the user
 const removePost = async (pid) => {
   var ownerId = null;
   await posts.child(pid).once('value', async (ds) => {
@@ -183,6 +190,7 @@ const removePost = async (pid) => {
 
 };
 
+// this is the user request host priv method makes an entry in waiting_room 
 const requestHost = async (uid, uni, number) => {
   let user = await getUser(uid);
   await waiting_Room.child(uid).set({
@@ -193,6 +201,7 @@ const requestHost = async (uid, uni, number) => {
   });
 };
 
+// confirms the request for host priv
 const confirmHost = async (uid) => {
   let user = await getUserFromWR(uid);
   await users.child(uid).update({
@@ -205,11 +214,14 @@ const confirmHost = async (uid) => {
   });
 };
 
+// denies the host priv request to a user and removes the request 
+// might add a new data to the user called denied to prevent users from requesting multiple times 
 const denyHost = async (uid) => {
   await waiting_Room.child(uid).remove((err) => {
     console.error(err);
   });
 };
+
 
 const getUserInfo = async (uid) => {
   var u = null;
@@ -301,8 +313,6 @@ const getCI2 = async (pid) => {
 export {
   getUser,
   getPost,
-  getInitialPosts,
-  getExtraPosts,
   createPost,
   removePost,
   requestHost,
