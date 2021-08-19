@@ -64,7 +64,7 @@
             <router-link
               :to="'/profile/' + postOwner.uid"
               tag="div"
-              class="transform -translate-y-2/3"
+              class="transform -translate-y-2/3 w-full sm:w-10/12 sm:max-w-md"
             >
               <user-card
                 :class="{ 'pointer-events-auto': !viewingImg }"
