@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ userCardMin: minimal || userInfo.priv < 1 }" class="h-36 w-116">
+  <div :class="{ userCardMin: minimal || userInfo.priv < 1 }" class="h-36 w-full">
     <div class="w-full h-full relative shadow-2xl overflow-hidden rounded-3xl">
       <div v-if="editable" class="absolute top-0 right-0 z-50 group cursor-pointer">
         <div
@@ -73,7 +73,7 @@
 
 <style lang="scss" scoped>
   .userCardMin {
-    @apply h-16 w-96;
+    @apply h-16;
 
     .mainInfo {
       @apply h-16;

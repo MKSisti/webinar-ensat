@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import home from '../views/home';
 import profile from '../views/profile';
 import post from '../views/post';
+import adminUsers from '../views/adminUsers';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,6 +24,11 @@ const router = createRouter({
       name: 'post',
       component: post,
       props: true,
+    },
+    {
+      path: '/adminUsers',
+      name: 'adminUsers',
+      component: adminUsers
     },
     //TODO: 404 view
     {
