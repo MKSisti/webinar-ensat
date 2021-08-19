@@ -8,9 +8,12 @@
     <div class="flex justify-between items-center w-11/12 space-x-8">
       <div class="flex flex-col justify-center items-start w-7/12 relative">
         <base-input name="Order By" modelValue="0" @update:modelValue="handleDropdown" size="1" dropDown="true">
-          <option value="0">Hosting Date</option>
-          <option value="1">Creation Date</option>
-          <option value="2">Title</option>
+          <option value="0">Hosting Date asc</option>
+          <option value="1">Hosting Date desc</option>
+          <option value="2">Creation Date asc</option>
+          <option value="3">Creation Date desc</option>
+          <option value="4">Title asc</option>
+          <option value="5">Title desc</option>
         </base-input>
       </div>
       

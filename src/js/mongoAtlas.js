@@ -39,22 +39,33 @@ class MongoDriver {
    * @param {string} sort - (optional) sort object example: {pid: 1} to sort pid asc or {pid: -1} for desc, can also be multiple keys
    * @param {integer} limit  - (optional) number of elements to get
    * @param {integer} offset - (optional) number of elements to skip
+   * @param {object} last - (optional) the last object to start after, a post in our case
    * @returns array of elements that match query
    */
-  async get(col, filter, sort, limit, offset) {
+  async get(col, filter, sort, limit, last) {
     if (!this._collections[col]) this.init(col);
-
     if (filter)
       for (let f of Object.keys(filter)) {
         filter[f] = { $regex: filter[f], $options: 'i' };
       }
 
+    if (last) {
+      if (sort) {
+        for (const key of Object.keys(sort)) {
+          sort[key] == 1 ?
+            filter[key] =  { $gt : last[key] }  :
+            filter[key] =  { $lt : last[key] }
+        }
+      }else{
+        filter["_id"] =  { $gt : last["_id"] };
+      }
+    }
+    console.log(filter);
     let res = await this._collections[col].find(filter, {
       sort,
-      limit:500
+      limit: limit || 100,
     });
 
-    if (limit != null && offset != null) return res.splice(offset,limit);
     return res;
   }
 

@@ -205,7 +205,6 @@ import BaseInput from "../components/BaseInput";
 import Loader from "../components/Loader";
 
 import {
-  getPost,
   getUserInfo as getU,
   createPost,
   uploadCover,
@@ -308,7 +307,7 @@ export default {
   },
   async mounted() {
     this.$nextTick(async () => {
-      this.post = await getPost(this.pid);
+      this.post = null;
       if (this.post == null) {
         if (this.getPrivLevel > 0) {
           if (this.getToken && this.getToken == this.pid) {

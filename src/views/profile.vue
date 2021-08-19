@@ -82,12 +82,12 @@
 </template>
 
 <script>
-  import { getUser, getUserPosts, requestHost, checkUserInwaitingRoom } from '../js/dbActions.js';
+  import { getUser, requestHost, checkUserInwaitingRoom, getPosts } from '../js/dbActions.js';
   import UserCard from '../components/UserCard';
   import PostCard from '../components/PostCard';
   import BaseInput from '../components/BaseInput';
   import { mapActions } from 'vuex';
-import { BSON } from 'realm-web';
+  import { BSON } from 'realm-web';
 
   export default {
     name: 'profile',
@@ -110,7 +110,6 @@ import { BSON } from 'realm-web';
     },
     methods: {
       goToCreate() {
-        // let token = posts.push().key;
         let token = BSON.ObjectID();
         this.updateToken(token);
         this.$router.push({ name: 'post', params: { pid: token } });
@@ -135,7 +134,7 @@ import { BSON } from 'realm-web';
         this.userInfo = await getUser(this.uid);
         if (this.userInfo.priv >= 1)
           this.$nextTick(async () => {
-            this.userPosts = await getUserPosts(this.uid);
+            this.userPosts = await getPosts({owner:this.uid});
           });
         this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
       });

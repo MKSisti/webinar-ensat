@@ -38,7 +38,7 @@
 
   import { debounce } from '../utils';
   // import {createPost} from '../js/firebaseActions'
-  import { getInitPosDyn,getExtPosDyn, makeUsersMap, getTitles, getPosFromList, getCI2 } from '../js/dbActions';
+  import {  makeUsersMap ,getCI2, getPosts } from '../js/dbActions';
 
   export default {
     name: 'App',
@@ -51,10 +51,10 @@
     data() {
       return {
         loading: true,
-        postsToShow: 3,
+        postsToShow: 2,
         posts: [],
         usersMap: null,
-        keyword: null,
+        keyword: '',
         dropVal: 0,
         T: [],
         offset: 0,
@@ -63,7 +63,7 @@
         searching:false,
         carPosts:[],
         carPosters:{},
-        orderBy: ["hosting_date", "creation_date", "title"],
+        orderBy: [{"hosting_date":1},{"hosting_date":-1}, {"creation_date":1},{"creation_date":-1}, {"title":1},{"title":-1}],
       };
     },
     methods: {
@@ -79,18 +79,16 @@
         if (this.keyword != '') {
           this.searching = true;
           this.loading = true;
-          this.offset = 0;
-          this.T = await getTitles();
 
-          this.posts = await getPosFromList(this.postsToShow, this.T, this.offset);
-          this.offset = this.postsToShow;
+          this.posts = await getPosts({title:this.keyword},this.orderBy[this.dropVal], this.postsToShow);
           this.usersMap = await makeUsersMap(this.posts, this.usersMap);
 
           this.loading = false;
         } else {
           this.searching = false;
           this.loading = true;
-          this.posts = await getInitPosDyn(this.postsToShow, this.orderBy[this.dropVal]);
+          console.log('here');
+          this.posts = await getPosts( {} , this.orderBy[this.dropVal],this.postsToShow, null);
           this.usersMap = await makeUsersMap(this.posts, this.usersMap);
           this.loading = false;
         }
@@ -107,47 +105,67 @@
     },
     async mounted() {
       // this.posts = await getInitialPosts(this.postsToShow);
-      this.posts = await getInitPosDyn(this.postsToShow, this.orderBy[this.dropVal]);
-
-      this.usersMap = await makeUsersMap(this.posts, this.usersMap);
-
-      this.carPosts = this.posts.slice(0,3);
-      
-      this.carPosts.forEach(async (p) => {
-        const cover = await getCI2(p.pid);
-        this.carPosters[p.pid] = cover;
-      });
-
-      this.loading = false;
-
-      let debScrollBottom = debounce(async () => {
-        if (!this.loading)
-          if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
-            this.extraPosts = true;
-            if (this.searching) {
-              let extra = await getPosFromList(this.postsToShow, this.T, this.offset);
-              this.offset += this.postsToShow;
-              if (extra.length > 0) {
-                await this.posts.push(...extra);
-                this.usersMap = await makeUsersMap(extra, this.usersMap);
-              } else {
-                setTimeout(() => (this.extraPosts = false), 1000);
+      // this.posts = await getInitPosDyn(this.postsToShow, this.orderBy[this.dropVal]);
+      this.$nextTick(async () => {
+        this.posts = await getPosts({}, this.orderBy[this.dropVal],this.postsToShow, null);
+        this.usersMap = await makeUsersMap(this.posts, this.usersMap);
+  
+        this.carPosts = this.posts.slice(0,3);
+        
+        this.carPosts.forEach(async (p) => {
+          const cover = await getCI2(p.pid);
+          this.carPosters[p.pid] = cover;
+        });
+  
+        this.loading = false;
+  
+        let debScrollBottom = debounce(async () => {
+          if (!this.loading)
+            if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
+              this.extraPosts = true;
+              if (!this.searching) {
+                let extra = await getPosts({}, this.orderBy[this.dropVal],this.postsToShow, this.posts[this.posts.length - 1]);
+                if (extra.length > 0) {
+                  this.posts.push(...extra);
+                  this.usersMap = await makeUsersMap(extra, this.usersMap);
+                }else {
+                  setTimeout(() => (this.extraPosts = false), 1000);
+                }
+              }else{
+                let extra = await getPosts(this.keyword ? {title: this.keyword}:{}, this.orderBy[this.dropVal],this.postsToShow, this.posts[this.posts.length - 1]);
+                if (extra.length > 0) {
+                  this.posts.push(...extra);
+                  this.usersMap = await makeUsersMap(extra, this.usersMap);
+                }else {
+                  setTimeout(() => (this.extraPosts = false), 1000);
+                }
               }
-            } else {
-              // let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
-              let extra = this.posts.length > 0 ? await getExtPosDyn(this.postsToShow, this.orderBy[this.dropVal] , this.posts[this.posts.length - 1][this.orderBy[this.dropVal]]) : null;
-              console.log(this.posts[this.posts.length - 1][this.orderBy[this.dropVal]]);
-              if (extra.length > 0) {
-                await this.posts.push(...extra);
-                this.usersMap = await makeUsersMap(extra, this.usersMap);
-              } else {
-                setTimeout(() => (this.extraPosts = false), 1000);
-              }
+              // if (this.searching) {
+              //   let extra = await getPosFromList(this.postsToShow, this.T, this.offset);
+                
+              //   this.offset += this.postsToShow;
+              //   if (extra.length > 0) {
+              //     await this.posts.push(...extra);
+              //     this.usersMap = await makeUsersMap(extra, this.usersMap);
+              //   } else {
+              //     setTimeout(() => (this.extraPosts = false), 1000);
+              //   }
+              // } else {
+              //   // let extra = this.posts.length > 0 ? await getExtraPosts(this.postsToShow, this.posts[this.posts.length - 1].hosting_date) : null;
+              //   let extra = this.posts.length > 0 ? await getExtPosDyn(this.postsToShow, this.orderBy[this.dropVal] , this.posts[this.posts.length - 1][this.orderBy[this.dropVal]]) : null;
+              //   console.log(this.posts[this.posts.length - 1][this.orderBy[this.dropVal]]);
+              //   if (extra.length > 0) {
+              //     await this.posts.push(...extra);
+              //     this.usersMap = await makeUsersMap(extra, this.usersMap);
+              //   } else {
+              //     setTimeout(() => (this.extraPosts = false), 1000);
+              //   }
+              // }
             }
-          }
-      }, 200);
-
-      this.$refs.home.addEventListener('scroll', debScrollBottom, false);
+        }, 200);
+  
+        this.$refs.home.addEventListener('scroll', debScrollBottom, false);
+      });
     },
   };
 </script>

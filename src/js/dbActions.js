@@ -5,22 +5,7 @@ let titles;
 let driver = new MongoDriver();
 //this is not great, since we can't have some function that uses titles on a component mount, 
 //but for our usecase its fine
-(async () => {
-  titles = await driver.init('titles');
-  driver.on('titles',(op,change) => console.log(op,change));
-  let postss = await driver.get('titles');
-  console.log('test ',postss);
 
-  // await driver.insert('titles',{
-  //   poopoo:'peepee'
-  // });
-
-  // driver.delete('titles',{
-  //   title: 'webinar'
-  // });
-
-  
-})();
 
 async function getUser(uid) {
   var user = null;
@@ -45,122 +30,28 @@ const getUserFromWR = async (uid) => {
   });
   return user;
 }
-//------------------------------ old gets here -----------------------------------------------
-//dep
-// const getInitialPosts = async (n) => {
-//   var initial = [];
-//   await posts
-//     .orderByChild('hosting_date')
-//     .limitToFirst(n)
-//     .once('value', async (ds) => {
-//       // initial = await ds.val();
-//       ds.forEach((chds) => {
-//         initial.push(chds.val());
-//       });
-//     });
-//   return initial ? initial : [];
-// };
 
-//the getter used right now takes the number to get and by what to order, since we are gonna use mongo it can take 
-//      the direction asc or desc and maybe the search term too if supplied 
-//      afrer we add the admin logic we will need to check if the posts are approved 
-//      I already added a new field for that to make it easy to check called "approved" will be a simple boolean 
-const getInitPosDyn = async (n, orderBy) => {
-  var initial = [];
-  await posts
-    .orderByChild(orderBy)
-    .limitToFirst(n)
-    .once('value', async (ds) => {
-      ds.forEach((chds) => {
-        initial.push(chds.val());
-      });
-    });
-  return initial ? initial : [];
-};
-const getExtPosDyn = async (n, orderBy, bot) => {
-  var extra = [];
-  await posts
-    .orderByChild(orderBy)
-    .startAfter(bot)
-    .limitToFirst(n)
-    .once('value', async (ds) => {
-      ds.forEach((chds) => {
-        extra.push(chds.val());
-      });
-    });
-  return extra ? extra : null;
-};
-// if you make the search very general you can add the uid as a variable passed too and if it's upplied narrow the search by user too
-const getUserPosts = async (id) => {
+const getPosts = async ( filter, sort, limit, last ) => {
   var ps = [];
-  await posts
-    .orderByChild('owner')
-    .equalTo(id)
-    .once('value', async (ds) => {
-      ds.forEach((chds) => {
-        ps.push(chds.val());
-      });
-    });
-  return ps ? ps : [];
-};
-// dep
-// const getExtraPosts = async (n, LastDate) => {
-//   var extra = [];
-//   await posts
-//     .orderByChild('hosting_date')
-//     .startAfter(LastDate)
-//     .limitToFirst(n)
-//     .once('value', async (ds) => {
-//       // extra = await ds.val();
-//       ds.forEach((chds) => {
-//         extra.push(chds.val());
-//       });
-//     });
-//   return extra ? extra : null;
+  ps = await driver.get("posts",filter, sort, limit, last);
+  return ps;
+}
+
+
+// const getUserPosts = async (id) => {
+//   var ps = [];
+//   await driver.get("")
+//   return ps ? ps : [];
 // };
-
-// this is the method that loads the posts from firebase when provided a list
-// after making the new getPosts methods this will be rendered useless too
-const getPosFromList = async (n, L, offset) => {
-  var extra = [];
-  var i = L.length - offset > 0 ? Math.min(n, L.length - offset) : -1;
-  for (let index = 0; index < i; index++) {
-    extra.push(await getPost(L[index + offset].pid));
-  }
-  return extra;
-};
-
-// this is the old method that gets the post from firebase will be rendered useless after making the new getPosts mehods
-const getPost = async (pid) => {
-  var post = null;
-  // this checks if the post is in published and gets it
-  await posts.child(pid).once('value', async (ds) => {
-    if (ds.exists()) {
-      post = await ds.val();
-    }
-  });
-  // if post is not in published this checks draft (waiting room for posts)
-  if (post == null) {
-    await waiting_Room_Posts.child(pid).once('value', async (ds) => {
-      if (ds.exists()) {
-        post = await ds.val();
-      }
-    });
-  }
-  // by this time if the post is either found and read or it doesn't exist and it's null
-  return post;
-};
-
 
 //------------------------------------------------------------------------------------------------------
-
 // already updated to put the posts in mongo still saves the necessary data to the user in firebase
 const createPost = async (pid, content, owner, hosting_date, title) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
   await users.child(owner + '/posts/' + pid).set(true);
-  await titles.insertOne({
+  await driver.insert("posts",{
     pid,
     creation_date: t,
     hosting_date,
@@ -172,12 +63,13 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
 };
 // updated as well
 const updatePost = async (pid, content, hosting_date, title) => {
-  await titles.updateOne({pid},{$set:{
+  await driver.update("posts",{pid},{
     content,
     hosting_date,
     title,
-  }});
+  });
 };
+
 // your fancy get titles
 const getTitles = async (title, owner, sortKey, dir, limit) => {
   let filter = {};
@@ -214,7 +106,7 @@ const removePost = async (pid) => {
   await users.child(ownerId + '/posts/' + pid).remove((err) => {
     err ? console.error(err) : null;
   });
-  await titles.deleteOne({pid});
+  await driver.delete("posts",{pid});
 
   await storage.ref('posters/' + pid).delete();
 
@@ -342,7 +234,7 @@ const getCI2 = async (pid) => {
 
 export {
   getUser,
-  getPost,
+  getPosts,
   createPost,
   removePost,
   requestHost,
@@ -358,9 +250,5 @@ export {
   getCI2,
   updateCover,
   updatePost,
-  getUserPosts,
-  getInitPosDyn,
-  getExtPosDyn,
-  getPosFromList,
   getTitles
 };
