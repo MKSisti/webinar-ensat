@@ -14,3 +14,4 @@ app.mount("#app");
 
 import "./auth";
 
+import "./js/emailClient"

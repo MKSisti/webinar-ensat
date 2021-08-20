@@ -45,7 +45,7 @@
     data() {
       return {
         loading: true,
-        postsToShow: 2,
+        postsToShow: 5,
         posts: [],
         usersMap: null,
         keyword: '',
