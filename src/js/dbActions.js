@@ -1,5 +1,7 @@
 import { users, posts, waiting_Room, waiting_Room_Posts, storage } from '../firebase';
 
+import {sendMail} from "./emailClient"
+
 import { MongoDriver } from './mongoAtlas';
 let titles;
 let driver = new MongoDriver();
@@ -14,6 +16,16 @@ async function getUser(uid) {
   });
   return user; // no checks are needed if user is found then it's an 'object' otherwise it's 'null'
 }
+
+const getAdminEmails = async () => {
+  var l = [];
+  await users.orderByChild("priv").equalTo(2).once("value",async (ds)=>{
+    ds.forEach((chds)=>{
+      l.push(chds.val().email);
+    })
+  })
+  return l;
+};
 
 const checkUserInwaitingRoom = async (uid) => {
   var e = false;
@@ -38,13 +50,6 @@ const getPost = async ( pid ) => {
   let l = await driver.get("posts",{pid: pid}, null, 1);
   return  l[0] || null;
 }
-
-
-// const getUserPosts = async (id) => {
-//   var ps = [];
-//   await driver.get("")
-//   return ps ? ps : [];
-// };
 
 //------------------------------------------------------------------------------------------------------
 // already updated to put the posts in mongo still saves the necessary data to the user in firebase
@@ -123,6 +128,8 @@ const requestHost = async (uid, uni, number) => {
     number,
     ...user,
   });
+  let to = await getAdminEmails();
+  await sendMail(to,"request Host from:"+ user.userName ,"<h1> please let me in :> <h1>");
 };
 
 // confirms the request for host priv
@@ -253,5 +260,6 @@ export {
   getCI2,
   updateCover,
   updatePost,
-  getTitles
+  getTitles,
+  getAdminEmails,
 };

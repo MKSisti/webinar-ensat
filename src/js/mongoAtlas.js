@@ -60,7 +60,6 @@ class MongoDriver {
         filter["_id"] =  { $gt : last["_id"] };
       }
     }
-    console.log(filter);
     let res = await this._collections[col].find(filter, {
       sort,
       limit: limit || 100,
