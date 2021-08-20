@@ -17,7 +17,7 @@
     "@tiptap/extension-typography": "^2.0.0-beta.12",
     "@tiptap/starter-kit": "^2.0.0-beta.82",
     "@tiptap/vue-3": "^2.0.0-beta.45",
-    "axios": "^0.21.1",
+    "colorthief": "^2.3.2",
     "core-js": "^3.6.5",
     "events": "^3.3.0",
     "firebase": "^8.6.8",

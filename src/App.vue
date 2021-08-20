@@ -3,7 +3,7 @@
     class="flex flex-col justify-start items-center relative h-screen w-screen overflow-hidden "
   >
     <nav-bar class="z-50"></nav-bar>
-    <router-view class="w-full max-h-full overflow-auto z-20" />
+    <router-view class="w-full max-h-full z-20" />
   </div>
 </template>
 
