@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+// import { Email } from './smtp';
 
 // var data = JSON.stringify({
 //   Messages: [
@@ -35,6 +36,19 @@ async function sendMail(data) {
   return res;
 
 }
+
+// (async () => {
+//   let res = await Email.send({
+//     Host : "smtp.gmail.com",
+//     Username : "gharbaoui94@gmail.com",
+//     Password : "23-IRON-kid",
+//     To : 'gharbaoui94@gmail.com',
+//     From : "gharbaoui94@gmail.com",
+//     Subject : "test",
+//     Body : "body test"
+//   });
+//   console.log(res);
+// })();
 
 export {
   sendMail
