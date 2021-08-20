@@ -2,7 +2,7 @@
   <transition name="fade-y" appear>
     <div ref="home" class="flex flex-col justify-start items-center sm:space-y-10 xl:pt-10 transition duration-300">
       <carousel :posters="carPosters" :posts="carPosts" :users="usersMap" />
-      <div class="w-full xl:w-7/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
+      <div class="w-full xl:w-10/12 2xl:w-8/12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
         <div class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10">
           <transition-group name="fade-y" appear>
             <loader v-if="loading" />
@@ -16,9 +16,9 @@
             />
           </transition-group>
           <loader class="pb-4 pt-4" v-if="!loading && extraPosts" />
-          <div v-else class="h-20 pt-4"><i class="fa fa-angle-up transform transition duration-300 text-4xl" aria-hidden="true"></i></div>
+          <div v-else-if="!loading && !extraPosts" class="h-20 pt-4"><i class="fa fa-angle-up transform transition duration-300 text-4xl" aria-hidden="true"></i></div>
         </div>
-        <search @apply="search" class="w-full bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky" />
+        <search @apply="search" class="w-full bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0" />
       </div>
     </div>
   </transition>
