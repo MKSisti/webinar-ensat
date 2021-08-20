@@ -1,56 +1,33 @@
-const axios = require('axios').default;
-// import { Email } from './smtp';
+import { Email } from './smtp';
 
-// var data = JSON.stringify({
-//   Messages: [
-//     {
-//       From: {
-//         Email: 'gharbaoui94@gmail.com', //only one available for now, i can add a domain address when we get a domain
-//         Name: 'maxx', //sender's name duh
-//       },
-//       To: [
-//         {
-//           Email: 'gharbaoui94@gmail.com', // array of ppl to send to
-//           Name: 'maxx',
-//         },
-//       ],
-//       Subject: 'My first Mailjet email', //email subject
-//       TextPart: 'Greetings from Mailjet.', //email title
-//       HTMLPart: '<h3>Dear passenger 1, welcome to <a href=https://www.mailjet.com/>Mailjet</a>!</h3><br />May the delivery force be with you!', //email body
-//       CustomID: 'AppGettingStartedTest', //email id
-//     },
-//   ],
-// });
+/**
+ *
+ * @param {string} to - who to send to
+ * @param {string} subject - subject of the email
+ * @param {string} body - body of the email
+ * @returns email request success/failure
+ */
+const sendMail = async (to, subject, body) => {
+  if(!(to && subject && body)) throw new Error('incomplete params to, subject and body are required');
+  
+  const req = {
+    Host: 'smtp.gmail.com',
+    Username: process.env.VUE_APP_SMTP_USERNAME,
+    Password: process.env.VUE_APP_SMTP_PASSWORD,
+    To: to,
+    From: process.env.VUE_APP_SMTP_FROM,
+    Subject: subject,
+    Body: body,
+  };
 
-async function sendMail(data) {
+  try{
+    let res = await Email.send(req);
+    return res;
+  }
+  catch(e){
+    throw new Error(e);
+  }
+  
+};
 
-  let res = await axios({
-    method: 'post',
-    url: 'https://api.mailjet.com/v3.1/send',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Basic NDQxYTk4NjJmOGIwMTczMTQ2ZjAwZGYwOTQyNjQ3Yzg6NDRlODUzZWNjMzFiOWM1YjJjOWQ4YWNmYzQyNmM2ZjU=',
-    },
-    data: JSON.stringify(data),
-  });
-  return res;
-
-}
-
-// (async () => {
-//   let res = await Email.send({
-//     Host : "smtp.gmail.com",
-//     Username : "gharbaoui94@gmail.com",
-//     Password : "23-IRON-kid",
-//     To : 'gharbaoui94@gmail.com',
-//     From : "gharbaoui94@gmail.com",
-//     Subject : "test",
-//     Body : "body test"
-//   });
-//   console.log(res);
-// })();
-
-export {
-  sendMail
-}
-
+export { sendMail };
