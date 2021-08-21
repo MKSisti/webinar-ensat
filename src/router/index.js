@@ -30,12 +30,12 @@ const router = createRouter({
       name: 'adminUsers',
       component: adminUsers
     },
-    //TODO: 404 view
-    {
-      path: '/:pathMatch(.*)*',
-      name: '404',
-      redirect: {name: 'home'}
-    }
+    // //TODO: 404 view
+    // {
+    //   path: '/:pathMatch(.*)*',
+    //   name: '404',
+    //   redirect: {name: 'home'}
+    // }
   ],
 });
 
