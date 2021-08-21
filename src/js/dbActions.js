@@ -197,6 +197,8 @@ const confirmHost = async (uid) => {
     `
   );
 };
+
+
 const blockUser = async (uid)=>{
   await users.child(uid).update({
     priv:-1
@@ -207,6 +209,36 @@ const blockUser = async (uid)=>{
     `HI ${userInfo.userName},`,
     `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
       We are sorry to inform you that your account is blocked, you can still browse the website but you can no longer post.
+      Contact an admin for more information.
+    </p>
+    `
+  );
+}
+const unblockUser = async (uid)=>{
+  await users.child(uid).update({
+    priv:1
+  });
+  let userInfo = await getUserInfo(uid);
+  await sendMail(
+    userInfo.email,
+    `HI ${userInfo.userName},`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      We are happy to inform you that your account is unlocked again, you can start posting right away.
+      Contact an admin for more information.
+    </p>
+    `
+  );
+}
+const makeAdmin = async (uid)=>{
+  await users.child(uid).update({
+    priv:2
+  });
+  let userInfo = await getUserInfo(uid);
+  await sendMail(
+    userInfo.email,
+    `HI ${userInfo.userName},`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      We are happy to inform you that your account is upgraded to admin status, you have all the admin privileges now.
       Contact an admin for more information.
     </p>
     `
@@ -325,7 +357,9 @@ export {
   removePost,
   requestHost,
   blockUser,
+  unblockUser,
   confirmHost,
+  makeAdmin,
   denyHost,
   getUsersData,
   getPostsAwaitingApproval,
