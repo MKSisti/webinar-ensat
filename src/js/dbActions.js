@@ -187,11 +187,30 @@ const confirmHost = async (uid) => {
   await waiting_Room.child(uid).remove((err) => {
     err ? console.error(err) : null;
   });
+
+  await sendMail(
+    user.email,
+    `HOST REQUEST APPROVER FOR ${user.userName}`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      Your request to become a host has been approved, you can start posting right away. Please be respectful or you will be blocked.
+    </p>
+    `
+  );
 };
 const blockUser = async (uid)=>{
   await users.child(uid).update({
     priv:-1
   });
+  let userInfo = await getUserInfo(uid);
+  await sendMail(
+    userInfo.email,
+    `HI ${userInfo.userName},`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      We are sorry to inform you that your account is blocked, you can still browse the website but you can no longer post.
+      Contact an admin for more information.
+    </p>
+    `
+  );
 }
 
 // denies the host priv request to a user and removes the request
@@ -200,6 +219,15 @@ const denyHost = async (uid) => {
   await waiting_Room.child(uid).remove((err) => {
     console.error(err);
   });
+  let userInfo = await getUserInfo(uid);
+  await sendMail(
+    userInfo.email,
+    `HOST REQUEST DENIED FOR ${userInfo.userName}`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      we are sorry to inform you that your request to become a host has been denied.
+    </p>
+    `
+  );
 };
 
 const getUserInfo = async (uid) => {
