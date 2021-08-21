@@ -148,6 +148,33 @@ const requestHost = async (uid, uni, number) => {
     `
   );
 };
+const getUsersInWaitingRoom = async ()=>{
+  let l = [];
+  await waiting_Room.once('value', async (ds)=>{
+    ds.forEach((dsch)=>{
+      l.push({
+        uid:dsch.key,
+        ...dsch.val(),
+      })
+    })
+  })
+  return l;
+}
+
+const getUsersFromSearch = async (text) =>{
+  let l = [];
+  console.log(text.toUpperCase());
+  await users.orderByChild("userName").startAt(text.toUpperCase()).endAt(text.toLowerCase()+"\uf8ff").once("value", async (ds) =>{
+    ds.forEach((dsch)=>{
+      l.push({
+        uid:dsch.key,
+        ...dsch.val(),
+      })
+    })
+  })
+  return l;
+}
+
 
 // confirms the request for host priv
 const confirmHost = async (uid) => {
@@ -161,6 +188,11 @@ const confirmHost = async (uid) => {
     err ? console.error(err) : null;
   });
 };
+const blockUser = async (uid)=>{
+  await users.child(uid).update({
+    priv:-1
+  });
+}
 
 // denies the host priv request to a user and removes the request
 // might add a new data to the user called denied to prevent users from requesting multiple times
@@ -264,6 +296,7 @@ export {
   createPost,
   removePost,
   requestHost,
+  blockUser,
   confirmHost,
   denyHost,
   getUsersData,
@@ -278,4 +311,6 @@ export {
   updatePost,
   getTitles,
   getAdminEmails,
+  getUsersInWaitingRoom,
+  getUsersFromSearch,
 };
