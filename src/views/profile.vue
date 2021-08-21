@@ -54,7 +54,7 @@
             class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto"
             v-else
           >
-            <div v-if="!awaitingApproval" class="flex justify-start items-center flex-col h-full p-5 space-y-3">
+            <div v-if="!awaitingApproval && userInfo.priv == 0" class="flex justify-start items-center flex-col h-full p-5 space-y-3">
               <h1 class="text-4xl font-bold">You don't have the necessary privilege to post</h1>
               <h2 class="text-xl font-semibold">please fill the necessary details to complete your account</h2>
               <div class="py-20 space-y-10">
@@ -70,9 +70,12 @@
                 </div>
               </div>
             </div>
-            <div v-else class="flex justify-center items-center flex-col h-full p-20 space-y-3">
+            <div v-else-if="awaitingApproval && userInfo.priv == 0" class="flex justify-center items-center flex-col h-full p-20 space-y-3">
               <h1 class="text-4xl font-bold text-center">We are currently processing your profile</h1>
               <h2 class="text-xl font-semibold">Please come back at a later date</h2>
+            </div>
+            <div v-if="userInfo.priv < 0" class="flex justify-center items-center flex-col h-full p-20 space-y-3">
+              <h1 class="text-4xl font-bold text-center">You can no longer Post here. Contact an admin to learn more</h1>
             </div>
           </div>
         </transition>

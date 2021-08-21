@@ -6,6 +6,13 @@
           <div class="text-xl font-semibold">Webinar Ensat</div>
         </router-link>
       </div>
+      <div v-if="getPrivLevel>1">
+        <router-link to="/adminUsers">
+          <!-- <div>W</div> -->
+          <div class="text-xl font-semibold">users Dash</div>
+        </router-link>
+      </div>
+      
       <div class="flex justify-center items-center gap-5 text-xl font-bold">
         <!-- //!Create post button -->
         <div
