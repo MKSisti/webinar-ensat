@@ -1,13 +1,12 @@
 import { users, posts, waiting_Room, waiting_Room_Posts, storage } from '../firebase';
 
-import {sendMail} from "./emailClient"
+import { sendMail } from './emailClient';
 
 import { MongoDriver } from './mongoAtlas';
 let titles;
 let driver = new MongoDriver();
-//this is not great, since we can't have some function that uses titles on a component mount, 
+//this is not great, since we can't have some function that uses titles on a component mount,
 //but for our usecase its fine
-
 
 async function getUser(uid) {
   var user = null;
@@ -19,11 +18,14 @@ async function getUser(uid) {
 
 const getAdminEmails = async () => {
   var l = [];
-  await users.orderByChild("priv").equalTo(2).once("value",async (ds)=>{
-    ds.forEach((chds)=>{
-      l.push(chds.val().email);
-    })
-  })
+  await users
+    .orderByChild('priv')
+    .equalTo(2)
+    .once('value', async (ds) => {
+      ds.forEach((chds) => {
+        l.push(chds.val().email);
+      });
+    });
   return l;
 };
 
@@ -41,15 +43,15 @@ const getUserFromWR = async (uid) => {
     user = await ds.val();
   });
   return user;
-}
+};
 
-const getPosts = async ( filter, sort, limit, last ) => {
-  return await driver.get("posts",filter, sort, limit, last) || null;
-}
-const getPost = async ( pid ) => {
-  let l = await driver.get("posts",{pid: pid}, null, 1);
-  return  l[0] || null;
-}
+const getPosts = async (filter, sort, limit, last) => {
+  return (await driver.get('posts', filter, sort, limit, last)) || null;
+};
+const getPost = async (pid) => {
+  let l = await driver.get('posts', { pid: pid }, null, 1);
+  return l[0] || null;
+};
 
 //------------------------------------------------------------------------------------------------------
 // already updated to put the posts in mongo still saves the necessary data to the user in firebase
@@ -58,45 +60,48 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
   await users.child(owner + '/posts/' + pid).set(true);
-  await driver.insert("posts",{
+  await driver.insert('posts', {
     pid,
     creation_date: t,
     hosting_date,
     content,
     owner,
     title,
-    approved:false,
+    approved: false,
   });
 };
 // updated as well
 const updatePost = async (pid, content, hosting_date, title) => {
-  await driver.update("posts",{pid},{
-    content,
-    hosting_date,
-    title,
-  });
+  await driver.update(
+    'posts',
+    { pid },
+    {
+      content,
+      hosting_date,
+      title,
+    }
+  );
 };
 
 // your fancy get titles
 const getTitles = async (title, owner, sortKey, dir, limit) => {
   let filter = {};
 
-  if(owner) filter.owner = {'$regex': owner, '$options': 'i'};
-  if(title) filter.title = {'$regex': title, '$options': 'i'};
-  if(Object.keys(filter) < 1) filter = null;
+  if (owner) filter.owner = { $regex: owner, $options: 'i' };
+  if (title) filter.title = { $regex: title, $options: 'i' };
+  if (Object.keys(filter) < 1) filter = null;
 
   let sort = {};
-  if(sort) sort[sortKey] = dir;
+  if (sort) sort[sortKey] = dir;
   else sort = null;
 
-  let posts = await titles.find(filter,{
+  let posts = await titles.find(filter, {
     limit: limit ? limit : 100,
-    sort
+    sort,
   });
 
   console.log(posts);
   return posts;
-
 };
 // updated tp remove from mongo still has logic to change what needs to be changed in firebase for the user
 const removePost = async (pid) => {
@@ -113,13 +118,12 @@ const removePost = async (pid) => {
   await users.child(ownerId + '/posts/' + pid).remove((err) => {
     err ? console.error(err) : null;
   });
-  await driver.delete("posts",{pid});
+  await driver.delete('posts', { pid });
 
   await storage.ref('posters/' + pid).delete();
-
 };
 
-// this is the user request host priv method makes an entry in waiting_room 
+// this is the user request host priv method makes an entry in waiting_room
 const requestHost = async (uid, uni, number) => {
   let user = await getUser(uid);
   await waiting_Room.child(uid).set({
@@ -129,30 +133,42 @@ const requestHost = async (uid, uni, number) => {
     ...user,
   });
   let to = await getAdminEmails();
-  await sendMail(to,"request Host from:"+ user.userName ,"<h1> please let me in :> <h1>");
+  await sendMail(
+    to,
+    `NEW USER REQUESTING HOST ${user.userName}`,
+    `
+      <h1 style="text-align:center; font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName} requesting hosting privileges <h1>
+      <ul style="list-style-type: none; margin: 0; padding: 0;font-size: 20px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <li><strong>Username:</strong> ${user.userName}</li>
+      <li><strong>Email:</strong> ${user.email}</li>
+      <li><strong>Phone:</strong> (+212) - ${number}</li>
+      <li><strong>University:</strong> ${uni}</li>
+      </ul>
+      <h1 style="text-align:center; font-size: 26px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action <h1>
+    `
+  );
 };
 
 // confirms the request for host priv
 const confirmHost = async (uid) => {
   let user = await getUserFromWR(uid);
   await users.child(uid).update({
-    "priv": 1,
-    "number": user.number,
-    "uni": user.uni,
-  })
+    priv: 1,
+    number: user.number,
+    uni: user.uni,
+  });
   await waiting_Room.child(uid).remove((err) => {
     err ? console.error(err) : null;
   });
 };
 
-// denies the host priv request to a user and removes the request 
-// might add a new data to the user called denied to prevent users from requesting multiple times 
+// denies the host priv request to a user and removes the request
+// might add a new data to the user called denied to prevent users from requesting multiple times
 const denyHost = async (uid) => {
   await waiting_Room.child(uid).remove((err) => {
     console.error(err);
   });
 };
-
 
 const getUserInfo = async (uid) => {
   var u = null;
@@ -238,7 +254,7 @@ const getCoverImg = async (pid) => {
  * @returns the cover img url
  */
 const getCI2 = async (pid) => {
-  return await storage.ref('posters/' + pid).getDownloadURL() || await storage.ref('posters/fail.png').getDownloadURL();
+  return (await storage.ref('posters/' + pid).getDownloadURL()) || (await storage.ref('posters/fail.png').getDownloadURL());
 };
 
 export {

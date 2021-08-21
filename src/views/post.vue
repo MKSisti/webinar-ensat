@@ -38,7 +38,7 @@
               :src="cover"
               @load="imgLoaded"
               ref="postImg"
-              alt="Cover Image"
+              alt=""
               crossorigin="anonymous"
             />
           </div>
@@ -254,10 +254,14 @@
       },
       async imgLoaded() {
         this.imgLoading = false;
-        this.color = await this.palette.getColor(this.$refs.postImg);
-        this.color = `rgba(${this.color[0]},${this.color[1]},${this.color[2]},1)`;
-        document.documentElement.style.setProperty('--cs', this.color);
-        console.log(this.color);
+        try{
+          this.color = await this.palette.getColor(this.$refs.postImg);
+          this.color = `rgba(${this.color[0]},${this.color[1]},${this.color[2]},1)`;
+          document.documentElement.style.setProperty('--cs', this.color);
+        }
+        catch(e){
+          console.warn(e);
+        }
       },
     },
     async mounted() {
@@ -281,6 +285,7 @@
         } else {
           this.postOwner = await getU(this.post.owner);
           this.cover = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(await getCI2(this.pid));
+          // this.cover = await getCI2(this.pid)
           this.content = this.post.content;
           this.title = this.post.title;
           this.displayedDate = formatDate(this.post.hosting_date);
