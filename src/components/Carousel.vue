@@ -44,7 +44,7 @@
         <div class="h-16 md:h-20 left-0 bottom-0 absolute w-full group hover:h-20 md:hover:h-28 transition-all duration-300">
           <!-- bottom fade to white -->
           <div
-            :class="{ 'animate-pulse': !loading }"
+            :class="{ 'animate-pulse': loading }"
             class="absolute left-0 bottom-0 w-full h-full bg-gray-50 opacity-40 group-hover:opacity-90 transition duration-300"
           ></div>
 
