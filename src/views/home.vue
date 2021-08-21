@@ -1,7 +1,7 @@
 <template>
   <transition name="fade-y" appear>
     <div ref="home" class="overflow-auto flex flex-col justify-start items-center sm:space-y-10 xl:pt-10 transition duration-300">
-      <carousel :posters="carPosters" :posts="carPosts" :users="usersMap" />
+      <carousel :loading="carLoading" :posters="carPosters" :posts="carPosts" :users="usersMap" />
       <div
         class="w-full xl:w-10/12 2xl:w-8/12 2xl:px-12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10"
       >
@@ -66,6 +66,7 @@
         searching: false,
         carPosts: [],
         carPosters: {},
+        carLoading:true,
         orderBy: [{ hosting_date: 1 }, { hosting_date: -1 }, { creation_date: 1 }, { creation_date: -1 }, { title: 1 }, { title: -1 }],
       };
     },
@@ -110,8 +111,8 @@
     watch:{
       '$route': async function(){
         if (this.$route.name == "home"){
-          this.keyword = this.$route.query.keyword;
-          this.dropVal = this.$route.query.order;
+          this.keyword = this.$route.query.keyword || "";
+          this.dropVal = this.$route.query.order || 0;
           await this.doSearch();
         }
       }
@@ -128,13 +129,14 @@
         }
         this.posts = await getPosts(op, this.orderBy[this.dropVal], this.postsToShow, null);
         this.usersMap = await makeUsersMap(this.posts, this.usersMap);
-
+        
         this.carPosts = await getPosts({}, { hosting_date: 1 } , 3 , null);
 
         this.carPosts.forEach(async (p) => {
           const cover = await getCI2(p.pid);
           this.carPosters[p.pid] = cover;
         });
+        this.carLoading = false;
 
         this.loading = false;
 

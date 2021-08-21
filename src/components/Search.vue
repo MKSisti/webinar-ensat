@@ -54,9 +54,6 @@
         this.$emit('apply',this.search, this.dropDown);
       },
     },
-    mounted(){
-      console.log(this.text);
-    }
     
   };
 </script>
