@@ -24,6 +24,8 @@
         </div>
         <search
           @apply="search"
+          :text="$route.query.keyword ||''"
+          :drop="$route.query.order || 0"
           class="w-full bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
         />
       </div>
@@ -76,10 +78,7 @@
           },
         });
       },
-      async search(searchVal, dropDownVal) {
-        this.keyword = searchVal;
-        this.dropVal = dropDownVal;
-
+      async doSearch(){
         if (this.keyword != '') {
           this.searching = true;
           this.loading = true;
@@ -97,16 +96,40 @@
           this.loading = false;
         }
       },
+      async search(searchVal, dropDownVal) {
+        this.$router.push({
+          name:'home',
+          query:{
+            keyword:searchVal,
+            order:dropDownVal
+          }
+        })
+      },
     },
     computed: {},
+    watch:{
+      '$route': async function(){
+        if (this.$route.name == "home"){
+          this.keyword = this.$route.query.keyword;
+          this.dropVal = this.$route.query.order;
+          await this.doSearch();
+        }
+      }
+    },
     async mounted() {
-      // this.posts = await getInitialPosts(this.postsToShow);
-      // this.posts = await getInitPosDyn(this.postsToShow, this.orderBy[this.dropVal]);
       this.$nextTick(async () => {
-        this.posts = await getPosts({}, this.orderBy[this.dropVal], this.postsToShow, null);
+        let op = {};
+        if (this.$route.query?.keyword) {
+          this.keyword = this.$route.query.keyword;
+          op['title']=this.keyword;
+        }
+        if (this.$route.query?.order) {
+          this.dropVal = this.$route.query.order;
+        }
+        this.posts = await getPosts(op, this.orderBy[this.dropVal], this.postsToShow, null);
         this.usersMap = await makeUsersMap(this.posts, this.usersMap);
 
-        this.carPosts = this.posts.slice(0, 3);
+        this.carPosts = await getPosts({}, { hosting_date: 1 } , 3 , null);
 
         this.carPosts.forEach(async (p) => {
           const cover = await getCI2(p.pid);

@@ -1,11 +1,11 @@
 <template>
   <div class="sm:shadow-2xl sm:rounded-3xl pt-8 pb-8 px-4 flex flex-col justify-start items-center space-y-10">
     <div class="flex flex-col justify-center items-start w-11/12 relative">
-      <base-input name="Search" modelValue="" @update:modelValue="handleSearch" size="2" lazy="250" />
+      <base-input name="Search" :modelValue="search" @update:modelValue="handleSearch" size="2" lazy="250" />
     </div>
     <div class="flex justify-between items-center w-11/12 space-x-8">
       <div class="flex flex-col justify-center items-start w-7/12 relative">
-        <base-input name="Order By" modelValue="0" @update:modelValue="handleDropdown" size="1" dropDown="true">
+        <base-input name="Order By" :modelValue="dropDown" @update:modelValue="handleDropdown" size="1" dropDown="true">
           <option value="0">Hosting Date asc</option>
           <option value="1">Hosting Date desc</option>
           <option value="2">Creation Date asc</option>
@@ -30,10 +30,14 @@
 
   export default {
     name: 'Search',
+    props:['text','drop'],
+    components: {
+      BaseInput,
+    },
     data() {
       return {
-        search: '',
-        dropDown: 0,
+        search: this.text || '',
+        dropDown: this.drop || 0,
       };
     },
     methods: {
@@ -50,9 +54,10 @@
         this.$emit('apply',this.search, this.dropDown);
       },
     },
-    components: {
-      BaseInput,
-    },
+    mounted(){
+      console.log(this.text);
+    }
+    
   };
 </script>
 
