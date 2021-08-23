@@ -1,4 +1,4 @@
-import { users, posts, waiting_Room, waiting_Room_Posts, storage } from '../firebase';
+import { users, waiting_Room, storage } from '../firebase';
 
 import { sendMail } from './emailClient';
 
@@ -79,20 +79,22 @@ const updatePost = async (pid, content, hosting_date, title) => {
     }
   );
 };
+const confirmPost = async (pid) => {
+  await driver.update(
+    'posts',
+    { pid },
+    {
+      approved : true,
+    }
+  );
+};
+const denyPost = async (pid, uid) => {
+  await removePost(pid, uid);
+};
 
 // updated tp remove from mongo still has logic to change what needs to be changed in firebase for the user
-const removePost = async (pid) => {
-  var ownerId = null;
-  await posts.child(pid).once('value', async (ds) => {
-    var val = await ds.val();
-    if (val) {
-      ownerId = val.owner;
-    } else {
-      console.error('something went wrong reading owner id while deleting post');
-      return;
-    }
-  });
-  await users.child(ownerId + '/posts/' + pid).remove((err) => {
+const removePost = async (pid, uid) => {
+  await users.child(uid + '/posts/' + pid).remove((err) => {
     err ? console.error(err) : null;
   });
   await driver.delete('posts', { pid });
@@ -222,6 +224,64 @@ const makeAdmin = async (uid)=>{
   );
 }
 
+const makeHost = async (uid)=>{
+  await users.child(uid).update({
+    priv:1
+  });
+  let userInfo = await getUserInfo(uid);
+  await sendMail(
+    userInfo.email,
+    `HI ${userInfo.userName},`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      We are happy to inform you that your account is upgraded to host status.
+      Contact an admin for more information.
+    </p>
+    `
+  );
+}
+
+const makeRegular = async (uid)=>{
+  await users.child(uid).update({
+    priv:0
+  });
+  let userInfo = await getUserInfo(uid);
+  await sendMail(
+    userInfo.email,
+    `HI ${userInfo.userName},`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      Your account has been turned into a regular account.
+      Contact an admin for more information.
+    </p>
+    `
+  );
+}
+
+const updatePriv = async (uid, val)=>{
+  //these force a value should only used by admins
+  switch (val) {
+    case -1:
+      await blockUser(uid);
+      break;
+  
+    case 0:
+      await makeRegular(uid);
+      break;
+  
+    case 1:
+      //this forces an account into being a host 
+      await makeHost(uid);
+      break;
+  
+    case 2:
+      await makeAdmin(uid);
+      break;
+  
+    default:
+      console.error("unsopported action");
+      break;
+  }
+}
+
 // denies the host priv request to a user and removes the request
 // might add a new data to the user called denied to prevent users from requesting multiple times
 const denyHost = async (uid) => {
@@ -261,11 +321,6 @@ const getUsersData = async (List) => {
   return l;
 };
 
-const getPostsAwaitingApproval = async () => {
-  await waiting_Room_Posts.once('value', async (ds) => {
-    return await ds.val();
-  });
-};
 
 const makeUsersMap = async (PostList, oldMap) => {
   let userIds = [];
@@ -339,7 +394,6 @@ export {
   makeAdmin,
   denyHost,
   getUsersData,
-  getPostsAwaitingApproval,
   getUserInfo,
   checkUserInwaitingRoom,
   makeUsersMap,
@@ -351,4 +405,7 @@ export {
   getAdminEmails,
   getUsersInWaitingRoom,
   getUsersFromSearch,
+  confirmPost,
+  denyPost,
+  updatePriv,
 };

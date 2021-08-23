@@ -147,7 +147,7 @@
               this.extraPosts = true;
 
               let extra = await getPosts(
-                this.keyword ? {approved: false, title: this.keyword } : { approved: false },
+                this.keyword ? {approved: true, title: this.keyword } : { approved: true },
                 this.orderBy[this.dropVal],
                 this.postsToShow,
                 this.posts[this.posts.length - 1]

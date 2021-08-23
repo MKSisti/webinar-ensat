@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex justify-start items-start flex-col">
+  <div class="w-full h-full flex justify-start items-start flex-col overflow-auto">
     <h1 class="text-6xl font-bold px-10 py-5">Block Users</h1>
     <search
           @apply="searchForUsers"
@@ -10,7 +10,8 @@
       <div class="overflow-auto flex justify-start items-start flex-wrap px-10 py-20 gap-5">
         <div :key="u.uid" v-for="u in usersList" class="w-full relative flex-none">
           <div class="right-0 top-0 bottom-0 absolute flex justify-end items-center z-50 gap-2 pr-2">
-            <div @click="block(u.uid)" @click.prevent.stop class="btnTransform cursor-pointer w-10 h-10 bg-red-400 rounded-xl"></div>
+            <div>a drop down here ples :> </div>
+            <div @click="update(u.uid,'dropdown value passed')" @click.prevent.stop class="btnTransform cursor-pointer w-36 h-10 bg-blue-400 rounded-xl">update Priv</div>
           </div>
           <user-card class="z-30" :minimal="true" :userInfo="u" />
         </div>
@@ -22,7 +23,7 @@
 <script>
   import UserCard from '../components/UserCard';
   import Search from '../components/Search';
-  import { getUsersFromSearch, blockUser} from '../js/dbActions'
+  import { getUsersFromSearch, updatePriv} from '../js/dbActions'
 
   export default {
     name:"usersDash",
@@ -41,8 +42,8 @@
         this.text = t;
         this.usersList = await getUsersFromSearch(t);
       },
-      async block(uid){
-        blockUser(uid)
+      async update(uid,dropVal){
+        await updatePriv(uid,dropVal);
       },
     },
   };

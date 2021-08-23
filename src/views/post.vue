@@ -228,7 +228,7 @@
         }
       },
       async remove() {
-        await removePost(this.pid);
+        await removePost(this.pid,this.owner);
         this.$router.push({ name: 'home' });
       },
       getHostingDate() {
