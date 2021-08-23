@@ -4,6 +4,9 @@ import home from '../views/home';
 import profile from '../views/profile';
 import post from '../views/post';
 import adminUsers from '../views/adminUsers';
+import changePriv from '../views/changePriv';
+import postsDash from '../views/postsDash';
+import dashHome from '../views/dashHome';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,7 +31,13 @@ const router = createRouter({
     {
       path: '/adminUsers',
       name: 'adminUsers',
-      component: adminUsers
+      component: dashHome,
+      children: [
+        { path: '', component: adminUsers },
+        { path: 'postsDash', component: postsDash },
+        { path: 'changePriv', component: changePriv },
+  
+      ],
     },
     // //TODO: 404 view
     // {

@@ -46,7 +46,8 @@ class MongoDriver {
     if (!this._collections[col]) await this.init(col);
     if (filter)
       for (let f of Object.keys(filter)) {
-        filter[f] = { $regex: filter[f], $options: 'i' };
+        if (typeof(filter[f]) == 'string') 
+          filter[f] = { $regex: filter[f], $options: 'i' };
       }
 
     if (last) {

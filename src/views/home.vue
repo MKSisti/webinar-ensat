@@ -84,7 +84,7 @@
           this.searching = true;
           this.loading = true;
 
-          this.posts = await getPosts({ title: this.keyword }, this.orderBy[this.dropVal], this.postsToShow);
+          this.posts = await getPosts({ approved: true , title: this.keyword }, this.orderBy[this.dropVal], this.postsToShow);
           this.usersMap = await makeUsersMap(this.posts, this.usersMap);
 
           this.loading = false;
@@ -92,7 +92,7 @@
           this.searching = false;
           this.loading = true;
           console.log('here');
-          this.posts = await getPosts({}, this.orderBy[this.dropVal], this.postsToShow, null);
+          this.posts = await getPosts({ approved: true }, this.orderBy[this.dropVal], this.postsToShow, null);
           this.usersMap = await makeUsersMap(this.posts, this.usersMap);
           this.loading = false;
         }
@@ -119,7 +119,7 @@
     },
     async mounted() {
       this.$nextTick(async () => {
-        let op = {};
+        let op = { approved: true };
         if (this.$route.query?.keyword) {
           this.keyword = this.$route.query.keyword;
           op['title']=this.keyword;
@@ -128,9 +128,10 @@
           this.dropVal = this.$route.query.order;
         }
         this.posts = await getPosts(op, this.orderBy[this.dropVal], this.postsToShow, null);
-        this.usersMap = await makeUsersMap(this.posts, this.usersMap);
+        this.posts.length > 0 ?
+        this.usersMap = await makeUsersMap(this.posts, this.usersMap):null;
         
-        this.carPosts = await getPosts({}, { hosting_date: 1 } , 3 , null);
+        this.carPosts = await getPosts({ approved: true }, { hosting_date: 1 } , 3 , null);
 
         this.carPosts.forEach(async (p) => {
           const cover = await getCI2(p.pid);
@@ -146,7 +147,7 @@
               this.extraPosts = true;
 
               let extra = await getPosts(
-                this.keyword ? { title: this.keyword } : {},
+                this.keyword ? {approved: false, title: this.keyword } : { approved: false },
                 this.orderBy[this.dropVal],
                 this.postsToShow,
                 this.posts[this.posts.length - 1]
