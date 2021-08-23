@@ -14,7 +14,11 @@ app.config.globalProperties.$lf = localforage;
 
 app.mount('#app');
 
+
+
 import './auth';
+
+
 
 //service worker registration
 import register from './service-worker/register-service-worker';
@@ -24,5 +28,21 @@ if (process.env.NODE_ENV === 'development') {
   console.log(`Node Env: ${process.env.NODE_ENV}`); // eslint-disable-line no-console
 }
 else{
-    register();
+   register();
 }
+
+//failed test :c [exceeds max wake up time of worker]
+// (async ()=>{
+//     let { wb } = await register();
+
+//     wb.messageSW({
+//         type: 'NOTIFICATION',
+//         data: {
+//             title: '1 hour notification test',
+//             options: {
+//                 body: '1 hour notification body'
+//             },
+//             delay: 1 * 60 * 60 * 1000 // 1 hour test
+//         }
+//     });
+// })();
