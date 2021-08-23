@@ -3,10 +3,7 @@ import { users, posts, waiting_Room, waiting_Room_Posts, storage } from '../fire
 import { sendMail } from './emailClient';
 
 import { MongoDriver } from './mongoAtlas';
-let titles;
 let driver = new MongoDriver();
-//this is not great, since we can't have some function that uses titles on a component mount,
-//but for our usecase its fine
 
 async function getUser(uid) {
   var user = null;
@@ -83,26 +80,6 @@ const updatePost = async (pid, content, hosting_date, title) => {
   );
 };
 
-// your fancy get titles
-const getTitles = async (title, owner, sortKey, dir, limit) => {
-  let filter = {};
-
-  if (owner) filter.owner = { $regex: owner, $options: 'i' };
-  if (title) filter.title = { $regex: title, $options: 'i' };
-  if (Object.keys(filter) < 1) filter = null;
-
-  let sort = {};
-  if (sort) sort[sortKey] = dir;
-  else sort = null;
-
-  let posts = await titles.find(filter, {
-    limit: limit ? limit : 100,
-    sort,
-  });
-
-  console.log(posts);
-  return posts;
-};
 // updated tp remove from mongo still has logic to change what needs to be changed in firebase for the user
 const removePost = async (pid) => {
   var ownerId = null;
@@ -371,7 +348,6 @@ export {
   getCI2,
   updateCover,
   updatePost,
-  getTitles,
   getAdminEmails,
   getUsersInWaitingRoom,
   getUsersFromSearch,

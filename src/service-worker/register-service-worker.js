@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import { Workbox } from 'workbox-window';
+import localforage from 'localforage';
 
 // Checks for updates every hour. When an update is found, the app-auto-update component and use-service-worker composable
 // handles the actual updating.
@@ -67,20 +68,40 @@ const register = async () => {
       console.log('sw: controlling event listener hit.');
     });
 
+    Notification.requestPermission(function(result) {
+      if (result === 'granted') {
+        wb.messageSW({
+          type: 'NOTIFICATION_GRANTED',
+        });
+      }
+    });
+
+    //for actions that need service worker registration to be installed, get wether the app
+    //is setting up for the first time, if so refreshe app to get the up to date registration
+    let firstTime = await localforage.getItem('firstTime');
+    
+    if(firstTime === 1) await localforage.setItem('firstTime', 2);
+
+    if (firstTime === null) {
+      await localforage.setItem('firstTime', 1);
+      window.location.reload();
+    }
+
+    //get permission to run periodic background sync
     try {
       const status = await navigator.permissions.query({
         name: 'periodic-background-sync',
       });
-      if(status.state === 'granted'){
+      if (status.state === 'granted') {
         await registration.periodicSync.register('sync', {
           minInterval: 24 * 60 * 60 * 1000,
         });
         console.log('period background sync active');
       }
-    } catch(e) {
-      console.warn('Periodic Sync could not be registered!',e);
-      window.location.reload();
-    }    
+    } catch (e) {
+      console.warn('Periodic Sync could not be registered!', e);
+    }
+    return { registration, wb };
   }
 };
 

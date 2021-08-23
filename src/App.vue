@@ -1,8 +1,12 @@
 <template>
-  <div class="flex flex-col justify-start items-center relative h-screen w-screen overflow-hidden ">
+  <div class="flex flex-col justify-start items-center relative h-screen w-screen overflow-hidden">
     <nav-bar class="z-50"></nav-bar>
-    <loader v-if="firstTimeInit" />
-    <router-view v-show="!firstTimeInit" class="w-full max-h-full" />
+    <loader class="absolute" v-if="firstTimeInit <= 1" />
+    <router-view v-else class="w-full max-h-full" v-slot="{ Component }">
+      <transition name="fade-y" appear>
+        <component class="w-full max-h-full transition duration-300" :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
@@ -14,7 +18,7 @@
     name: 'App',
     data() {
       return {
-        firstTimeInit: true,
+        firstTimeInit: 2,
       };
     },
     components: {
@@ -22,12 +26,16 @@
       Loader,
     },
     async mounted() {
-      this.firstTimeInit = await this.$lf.getItem('firstTime');
-      if (this.firstTimeInit === null) {
-        this.firstTimeInit = false;
-        await this.$lf.setItem('firstTime', false);
-      }
-      console.log(this.firstTimeInit);
+
+      //pwa init stage
+      // this.firstTimeInit = await this.$lf.getItem('firstTime');
+
+      // let recheck;
+      // if (this.firstTimeInit <= 1)
+      //   recheck = setInterval(async () => {
+      //     this.firstTimeInit = await this.$lf.getItem('firstTime');
+      //     if (this.firstTimeInit >= 2) clearInterval(recheck);
+      //   }, 500);
     },
   };
 </script>

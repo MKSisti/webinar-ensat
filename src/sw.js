@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 
@@ -75,12 +76,19 @@ registerRoute(
   })
 );
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', async (event) => {
   console.log('sw root: message event listener hit.');
   switch (event.data && event.data.type) {
     case 'SKIP_WAITING':
       self.skipWaiting();
       console.log('sw root: message SKIP_WAITING called.');
+      break;
+    case 'NOTIFICATION_GRANTED':
+      console.log('sw root: notification permission granted');
+      break;
+    case 'NOTIFICATION':
+      console.log('sw root: dispatching notification');
+      event.waitUntil(dispatchNotification(event.data.data.title, event.data.data.options, event.data.data.delay));
       break;
   }
 });
@@ -94,3 +102,23 @@ self.addEventListener('periodicsync', (event) => {
     event.waitUntil(() => {});
   }
 });
+
+//sw utils
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function dispatchNotification(title, options, delay) {
+  const timestamp = new Date().getTime() + delay;
+  if ('showTrigger' in Notification.prototype) {
+    options.tag = timestamp;
+    options.showTrigger = new TimestampTrigger(timestamp);
+    self.registration.showNotification(title, options);
+    return true;
+  } else {
+    console.log('dispatching notification in:', delay + 'ms');
+    await wait(delay);
+    await self.registration.showNotification(title, options);
+    return true;
+  }
+}
