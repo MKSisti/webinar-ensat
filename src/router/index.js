@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-// import store from "../store/index";
+import store from "../store/index";
 import home from '../views/home';
 import profile from '../views/profile';
 import post from '../views/post';
@@ -33,9 +33,9 @@ const router = createRouter({
       name: 'adminUsers',
       component: dashHome,
       children: [
-        { path: '', component: adminUsers },
-        { path: 'postsDash', component: postsDash },
-        { path: 'changePriv', component: changePriv },
+        { path: '', meta: { requiresAuth: true }, component: adminUsers },
+        { path: 'postsDash', meta: { requiresAuth: true }, component: postsDash },
+        { path: 'changePriv', meta: { requiresAuth: true }, component: changePriv },
   
       ],
     },
@@ -48,18 +48,23 @@ const router = createRouter({
   ],
 });
 
-// router.beforeEach((to, from, next) => {
-//   // if (to.name == "post" ) {
-//   //   if (store.getters['user/getPrivLevel'] > 0) {
-//   //   next();
-//   //   }
-//   //   else{
-//   //     router.push({name:"home"});
-//   //   }
-//   // }else{
-//   //   next();
-//   // }
-//   next();
-// });
+router.beforeEach((to, from, next) => {
+    // if ( to.meta?.requiresAuth && store.getters['user/getPrivLevel'] > 1) {
+    //   next();
+    // }
+    // else{
+    //   router.push({name:"home"});
+    // }
+    if (to.meta?.requiresAuth) {
+      if (store.getters['user/getPrivLevel'] > 1) {
+        next();
+      }else{
+        next({name:"home"})
+      }
+    }
+    else{
+      next();
+    }
+});
 
 export default router;
