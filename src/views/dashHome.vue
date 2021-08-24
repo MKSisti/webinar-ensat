@@ -12,7 +12,7 @@
                 aria-hidden="true"
               ></i>
               <h1
-                class="text-lg font-semibold flex-shrink-0 transition-all transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100"
+                class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100"
               >
                 Host Requests
               </h1>
@@ -30,7 +30,7 @@
                 aria-hidden="true"
               ></i>
               <h1
-                class="text-lg font-semibold flex-shrink-0 transition-all transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100"
+                class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100"
               >
                 Post Requests
               </h1>
@@ -47,7 +47,7 @@
                 aria-hidden="true"
               ></i>
               <h1
-                class="text-lg font-semibold flex-shrink-0 transition-all transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2 opacity-0 group-hover:opacity-100"
+                class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2 opacity-0 group-hover:opacity-100"
               >
                 User privileges
               </h1>

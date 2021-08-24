@@ -21,7 +21,7 @@
                 aria-hidden="true"
               ></i>
               <h1
-                class="text-lg font-semibold flex-shrink-0 transition-all transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100"
+                class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100"
               >
                 Admin dash
               </h1>
@@ -39,7 +39,7 @@
               aria-hidden="true"
             ></i>
             <h1
-              class="text-lg font-semibold flex-shrink-0 transition-all transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2.5 opacity-0 group-hover:opacity-100"
+              class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2.5 opacity-0 group-hover:opacity-100"
             >
               Write a post
             </h1>
@@ -57,7 +57,7 @@
               aria-hidden="true"
             ></i>
             <h1
-              class="text-lg font-semibold flex-shrink-0 transition-all transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2.5 opacity-0 group-hover:opacity-100"
+              class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2.5 opacity-0 group-hover:opacity-100"
             >
               Write a post
             </h1>

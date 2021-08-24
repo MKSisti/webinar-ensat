@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex justify-start items-start flex-col overflow-auto gap-5">
     <h1 class="text-6xl font-bold px-10 py-5">User privileges</h1>
-    <search @apply="searchForUsers" :text="text || ''" :noOrder="true" class="bg-gray-50 md:bg-gray-100 m-auto" />
+    <search @apply="searchForUsers" :text="text || ''" searchName="Search by name" :noOrder="true" class="bg-gray-50 md:bg-gray-100 m-auto" />
     <div class="w-full h-full bg-gray-100 rounded-t-6xl shadow-3xl overflow-auto">
       <loader v-if="loading" />
       <div v-else class="overflow-auto flex justify-start items-start flex-wrap px-10 py-20 gap-5">

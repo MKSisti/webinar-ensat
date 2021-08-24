@@ -2,7 +2,7 @@
   <div class="sm:shadow-2xl sm:rounded-3xl py-8 px-6">
     <div :class="{ 'flex-col': !noOrder }" class="w-full flex justify-start items-center gap-8">
       <div :class="{ 'w-full': !noOrder }" class="flex flex-col justify-center items-start relative">
-        <base-input name="Search" :modelValue="search" @update:modelValue="handleSearch" size="2" lazy="250" />
+        <base-input :name="searchName || 'Search'" :modelValue="search" @update:modelValue="handleSearch" size="2" lazy="250" />
       </div>
       <div :class="{ 'w-full': !noOrder }" class="flex justify-between items-center gap-x-4">
         <div v-if="!noOrder" class="flex flex-col justify-center items-start relative">
@@ -32,7 +32,7 @@
 
   export default {
     name: 'Search',
-    props: ['text', 'drop', 'noOrder'],
+    props: ['text', 'drop', 'noOrder','searchName'],
     components: {
       BaseInput,
     },

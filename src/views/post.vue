@@ -1,5 +1,5 @@
 <template>
-  <div :key="pid" class="h-full">
+  <div :key="pid" class="h-full overflow-auto">
     <loader v-if="loading" />
 
     <transition v-else name="fade-y" appear>
