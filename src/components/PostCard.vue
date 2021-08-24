@@ -1,11 +1,12 @@
 <template>
   <div
-    class="group postCard transform sm:hover:-translate-y-2 sm:hover:scale-105 transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full pb-6 sm:shadow-2xl flex flex-col justify-start items-center overflow-hidden border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
+    :class="{'group sm:hover:-translate-y-2 sm:hover:scale-105': !noHover,'pb-6': !noPoster,'max-h-20 justify-center': noPoster}"
+    class="postCard transform transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full sm:shadow-2xl flex flex-col items-center overflow-hidden border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
   >
-    <div class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl">
+    <div v-if="!noDates" class="absolute text-black font-semibold top-0 right-0 px-5 py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl">
       {{ hostedDate.date + ' ' + hostedDate.time }}
     </div>
-    <div class="w-full transform hover:-translate-y-2 hover:scale-105 sm:group-hover:-translate-y-0 sm:group-hover:scale-100 transition duration-300 flex-shrink-0">
+    <div class="w-full transform group-hover:-translate-y-2 group-hover:scale-105 sm:group-hover:-translate-y-0 sm:group-hover:scale-100 transition duration-300 flex-shrink-0">
       <div class="h-32 w-full px-8 flex justify-start items-center">
         <div
           class="rounded-full h-16 w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center"
@@ -19,14 +20,14 @@
           </h1>
           <div v-else class="w-full h-6 bg-gray-300 rounded-lg animate-pulse"></div>
           <router-link @click.prevent.stop :to="'/profile/' + userData?.uid" class="w-full">
-            <h1 v-if="userData" class="text-xl max-w-full truncate pr-24 flex-shrink-0 hover:underline -mt-2">
+            <h1 v-if="userData" class="text-xl max-w-full truncate pr-36 flex-shrink-0 hover:underline -mt-2">
               {{ userData?.userName }}
             </h1>
             <div v-else class="w-4/12 h-4 bg-gray-300 rounded-md animate-pulse"></div>
           </router-link>
         </div>
       </div>
-      <div class="w-full h-full flex flex-col justify-start items-start px-8 sm:px-14 transform transition duration-300 group-hover:-translate-y-3">
+      <div v-if="!noPoster" class="w-full h-full flex flex-col justify-start items-start px-8 sm:px-14 transform transition duration-300 group-hover:-translate-y-3">
         <div
           :class="{ 'bg-red-300 animate-pulse': loading }"
           class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full  rounded-3xl flex-shrink-0 shadow-md overflow-hidden"
@@ -55,7 +56,7 @@
 
   export default {
     name: 'PostCard',
-    props: ['post', 'userData'],
+    props: ['post', 'userData','noPoster','noHover','noDates'],
     data() {
       return {
         cover: null,

@@ -1,12 +1,14 @@
 <template>
   <div class="flex flex-col justify-start items-center relative h-screen w-screen overflow-hidden">
     <nav-bar class="z-50"></nav-bar>
-    <loader class="absolute" v-if="firstTimeInit <= 1" />
-    <router-view v-else class="w-full max-h-full" v-slot="{ Component }">
-      <transition name="fade-y" appear>
-        <component class="w-full max-h-full transition duration-300" :is="Component" />
-      </transition>
-    </router-view>
+    <div class="w-full h-full relative max-h-full">
+      <loader class="absolute" v-if="firstTimeInit <= 1" />
+      <router-view v-else class="w-full max-h-full absolute" v-slot="{ Component }">
+        <transition name="fade-y" appear mode="out-in">
+          <component class="w-full max-h-full transition duration-300" :is="Component" />
+        </transition>
+      </router-view>
+    </div>
   </div>
 </template>
 
@@ -18,7 +20,7 @@
     name: 'App',
     data() {
       return {
-        firstTimeInit: 2,
+        firstTimeInit: process.env.NODE_ENV === 'production' ? 0 : 2,
       };
     },
     components: {
@@ -26,16 +28,17 @@
       Loader,
     },
     async mounted() {
-
       //pwa init stage
-      // this.firstTimeInit = await this.$lf.getItem('firstTime');
+      if (process.env.NODE_ENV === 'production') {
+        this.firstTimeInit = await this.$lf.getItem('firstTime');
 
-      // let recheck;
-      // if (this.firstTimeInit <= 1)
-      //   recheck = setInterval(async () => {
-      //     this.firstTimeInit = await this.$lf.getItem('firstTime');
-      //     if (this.firstTimeInit >= 2) clearInterval(recheck);
-      //   }, 500);
+        let recheck;
+        if (this.firstTimeInit <= 1)
+          recheck = setInterval(async () => {
+            this.firstTimeInit = await this.$lf.getItem('firstTime');
+            if (this.firstTimeInit >= 2) clearInterval(recheck);
+          }, 500);
+      }
     },
   };
 </script>

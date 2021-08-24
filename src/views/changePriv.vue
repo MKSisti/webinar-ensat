@@ -1,17 +1,24 @@
 <template>
-  <div class="w-full h-full flex justify-start items-start flex-col overflow-auto">
-    <h1 class="text-6xl font-bold px-10 py-5">Block Users</h1>
-    <search
-          @apply="searchForUsers"
-          :text="text||''"
-          class="w-full bg-gray-50 md:bg-gray-100 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
-        />
-    <div class="w-full h-full bg-gray-100 rounded-t-6xl">
-      <div class="overflow-auto flex justify-start items-start flex-wrap px-10 py-20 gap-5">
+  <div class="w-full h-full flex justify-start items-start flex-col overflow-auto gap-5">
+    <h1 class="text-6xl font-bold px-10 py-5">User privileges</h1>
+    <search @apply="searchForUsers" :text="text || ''" :noOrder="true" class="bg-gray-50 md:bg-gray-100 m-auto" />
+    <div class="w-full h-full bg-gray-100 rounded-t-6xl shadow-3xl overflow-auto">
+      <loader v-if="loading" />
+      <div v-else class="overflow-auto flex justify-start items-start flex-wrap px-10 py-20 gap-5">
         <div :key="u.uid" v-for="u in usersList" class="w-full relative flex-none">
-          <div class="right-0 top-0 bottom-0 absolute flex justify-end items-center z-50 gap-2 pr-2">
-            <div>a drop down here ples :> </div>
-            <div @click="update(u.uid,'dropdown value passed')" @click.prevent.stop class="btnTransform cursor-pointer w-36 h-10 bg-blue-400 rounded-xl">update Priv</div>
+          <div class="right-0 top-0 bottom-0 absolute flex justify-end items-center z-50 gap-2 pr-4">
+            <base-input :modelValue="u.priv" @update:modelValue="u.priv = $event * 1" :dropDown="true">
+              <option value="-1">Blocked</option>
+              <option value="0">Viewer</option>
+              <option value="1">Host</option>
+              <option value="2">Admin</option>
+            </base-input>
+            <div
+              @click="update(u.uid, u.priv)"
+              class="btnTransform cursor-pointer w-10 h-10 bg-green-400 rounded-xl flex justify-center items-center flex-shrink-0"
+            >
+              <i class="fa fa-check text-xl h-0 w-0 flex justify-center items-center" aria-hidden="true"></i>
+            </div>
           </div>
           <user-card class="z-30" :minimal="true" :userInfo="u" />
         </div>
@@ -23,27 +30,34 @@
 <script>
   import UserCard from '../components/UserCard';
   import Search from '../components/Search';
-  import { getUsersFromSearch, updatePriv} from '../js/dbActions'
+  import { getUsersFromSearch, updatePriv } from '../js/dbActions';
+  import BaseInput from '../components/BaseInput';
+  import Loader from '../components/Loader';
 
   export default {
-    name:"usersDash",
+    name: 'usersDash',
     components: {
       UserCard,
       Search,
+      BaseInput,
+      Loader,
     },
     data() {
-      return{
+      return {
         usersList: [],
-        text:'',
+        text: '',
+        loading: false,
       };
     },
-    methods:{
-      async searchForUsers(t){
+    methods: {
+      async searchForUsers(t) {
+        this.loading = true;
         this.text = t;
         this.usersList = await getUsersFromSearch(t);
+        this.loading = false;
       },
-      async update(uid,dropVal){
-        await updatePriv(uid,dropVal);
+      async update(uid, dropVal) {
+        await updatePriv(uid, dropVal);
       },
     },
   };

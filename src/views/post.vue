@@ -6,13 +6,14 @@
       <!-- post -->
       <div class="flex justify-start items-start flex-col space-y-20 w-full h-full transition duration-300">
         <div :class="{ 'translate-y-5': viewingImg }" class="w-full h-auto relative transform transition duration-300">
-          <loader class="absolute" v-if="imgLoading" />
+          <loader class="absolute" v-if="imgLoading && cover" />
           <!-- upload button -->
           <transition name="fade-y" appear>
-            <div v-if="inEditingMode" class="w-full h-full absolute top-2 z-50 pointer-events-none transform transition duration-300">
+            <div v-if="inEditingMode && !viewingImg" class="w-full h-full absolute top-2 z-50 pointer-events-none transform transition duration-300">
               <div @click="$refs.FileUpload.click()" class="w-10 h-10 mx-auto bg-gray-200 rounded-xl pointer-events-auto cursor-pointer btnTransform shadow-lg">
                 <i class="fa fa-arrow-down text-2xl w-full h-full text-center mt-1" aria-hidden="true"></i>
               </div>
+              <h1 class="text-center font-bold text-4xl p-4">Upload your poster</h1>
               <input ref="FileUpload" type="file" accept="image/*" @change="fileChange($event.target.files)" hidden />
             </div>
           </transition>
@@ -33,6 +34,7 @@
             @click="viewingImg = !viewingImg"
           >
             <img
+              v-show="cover"
               :class="{ 'rounded-3xl': viewingImg }"
               class="object-contain h-auto w-auto"
               :src="cover"
@@ -40,6 +42,7 @@
               ref="postImg"
               alt=""
               crossorigin="anonymous"
+              aria-hidden="true"
             />
           </div>
           <!-- :style="{background: !viewingImg ? color : 'rgba(0,0,0,0)'}" -->
@@ -228,7 +231,7 @@
         }
       },
       async remove() {
-        await removePost(this.pid,this.owner);
+        await removePost(this.pid, this.owner);
         this.$router.push({ name: 'home' });
       },
       getHostingDate() {
@@ -254,12 +257,11 @@
       },
       async imgLoaded() {
         this.imgLoading = false;
-        try{
+        try {
           this.color = await this.palette.getColor(this.$refs.postImg);
           this.color = `rgba(${this.color[0]},${this.color[1]},${this.color[2]},1)`;
           document.documentElement.style.setProperty('--cs', this.color);
-        }
-        catch(e){
+        } catch (e) {
           console.warn(e);
         }
       },
