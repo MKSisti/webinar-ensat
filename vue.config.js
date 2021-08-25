@@ -1,5 +1,6 @@
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const path = require("path");
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   pwa: {
@@ -22,7 +23,8 @@ module.exports = {
         name: "Webinar ENSAT",
         short_name: "Web ENSAT",
         description: "Post and follow webinars",
-        background_color: "#ffffff",
+        background_color: defaultTheme.colors.gray[50],
+        theme_color: defaultTheme.colors.red[300],
         crossorigin: "use-credentials", //can be null, use-credentials or anonymous
         icons: [
           {

@@ -2,6 +2,7 @@
   <div class="flex justify-start items-start flex-col h-full w-full">
     <div class="w-full relative">
       <bubble-menu
+        v-if="editor && editable"
         class="
           flex
           justify-center
@@ -17,10 +18,10 @@
           shadow-2xl
         "
         :editor="editor"
-        v-if="editor && editable"
       >
         <!-- //!set bold -->
         <button
+          :class="{ 'is-active': editor.isActive('bold') }"
           @click="
             editor
               .chain()
@@ -28,13 +29,16 @@
               .toggleBold()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('bold') }"
         >
-          <i class="fa fa-bold text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-bold text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!set italic -->
         <button
+          :class="{ 'is-active': editor.isActive('italic') }"
           @click="
             editor
               .chain()
@@ -42,13 +46,16 @@
               .toggleItalic()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('italic') }"
         >
-          <i class="fa fa-italic text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-italic text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!set striked -->
         <button
+          :class="{ 'is-active': editor.isActive('strike') }"
           @click="
             editor
               .chain()
@@ -56,9 +63,11 @@
               .toggleStrike()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('strike') }"
         >
-          <i class="fa fa-strikethrough text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-strikethrough text-2xl"
+            aria-hidden="true"
+          />
         </button>
       </bubble-menu>
     </div>
@@ -106,6 +115,7 @@
       >
         <!-- //!set bold -->
         <button
+          :class="{ 'is-active': editor.isActive('bold') }"
           @click="
             editor
               .chain()
@@ -113,13 +123,16 @@
               .toggleBold()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('bold') }"
         >
-          <i class="fa fa-bold text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-bold text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!set italic -->
         <button
+          :class="{ 'is-active': editor.isActive('italic') }"
           @click="
             editor
               .chain()
@@ -127,13 +140,16 @@
               .toggleItalic()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('italic') }"
         >
-          <i class="fa fa-italic text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-italic text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!set striked -->
         <button
+          :class="{ 'is-active': editor.isActive('strike') }"
           @click="
             editor
               .chain()
@@ -141,9 +157,11 @@
               .toggleStrike()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('strike') }"
         >
-          <i class="fa fa-strikethrough text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-strikethrough text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!set code (?) -->
@@ -177,6 +195,7 @@
       >
         <!-- //!set h1 -->
         <button
+          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
           @click="
             editor
               .chain()
@@ -184,13 +203,15 @@
               .toggleHeading({ level: 1 })
               .run()
           "
-          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
         >
-          <h1 class="text-4xl font-bold">H1</h1>
+          <h1 class="text-4xl font-bold">
+            H1
+          </h1>
         </button>
 
         <!-- //!set h2 -->
         <button
+          :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
           @click="
             editor
               .chain()
@@ -198,13 +219,15 @@
               .toggleHeading({ level: 2 })
               .run()
           "
-          :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
         >
-          <h1 class="font-bold text-3xl">H2</h1>
+          <h1 class="font-bold text-3xl">
+            H2
+          </h1>
         </button>
 
         <!-- //!set h3 -->
         <button
+          :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
           @click="
             editor
               .chain()
@@ -212,13 +235,15 @@
               .toggleHeading({ level: 3 })
               .run()
           "
-          :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
         >
-          <h1 class="font-semibold text-2xl">H3</h1>
+          <h1 class="font-semibold text-2xl">
+            H3
+          </h1>
         </button>
 
         <!-- //!set h4 -->
         <button
+          :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
           @click="
             editor
               .chain()
@@ -226,13 +251,15 @@
               .toggleHeading({ level: 4 })
               .run()
           "
-          :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
         >
-          <h1 class="font-semibold text-xl">H4</h1>
+          <h1 class="font-semibold text-xl">
+            H4
+          </h1>
         </button>
 
         <!-- //!set h5 -->
         <button
+          :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
           @click="
             editor
               .chain()
@@ -240,13 +267,15 @@
               .toggleHeading({ level: 5 })
               .run()
           "
-          :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
         >
-          <h1 class="font-medium text-lg mt-px -mb-px">H5</h1>
+          <h1 class="font-medium text-lg mt-px -mb-px">
+            H5
+          </h1>
         </button>
 
         <!-- //!set h6 -->
         <button
+          :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
           @click="
             editor
               .chain()
@@ -254,9 +283,10 @@
               .toggleHeading({ level: 6 })
               .run()
           "
-          :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
         >
-          <h1 class="font-normal text-base">h6</h1>
+          <h1 class="font-normal text-base">
+            h6
+          </h1>
         </button>
       </div>
 
@@ -276,6 +306,7 @@
       >
         <!-- //!insert bullet points -->
         <button
+          :class="{ 'is-active': editor.isActive('bulletList') }"
           @click="
             editor
               .chain()
@@ -283,13 +314,16 @@
               .toggleBulletList()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('bulletList') }"
         >
-          <i class="fa fa-list-ul text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-list-ul text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!insert ordered list-->
         <button
+          :class="{ 'is-active': editor.isActive('orderedList') }"
           @click="
             editor
               .chain()
@@ -297,13 +331,16 @@
               .toggleOrderedList()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('orderedList') }"
         >
-          <i class="fa fa-list-ol text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-list-ol text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!insert code block -->
         <button
+          :class="{ 'is-active': editor.isActive('codeBlock') }"
           @click="
             editor
               .chain()
@@ -311,13 +348,16 @@
               .toggleCodeBlock()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('codeBlock') }"
         >
-          <i class="fa fa-code text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-code text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!insert block quotes -->
         <button
+          :class="{ 'is-active': editor.isActive('blockquote') }"
           @click="
             editor
               .chain()
@@ -325,9 +365,11 @@
               .toggleBlockquote()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('blockquote') }"
         >
-          <i class="fa fa-quote-left text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-quote-left text-2xl"
+            aria-hidden="true"
+          />
         </button>
 
         <!-- //!insert horizontal line-->
@@ -340,7 +382,10 @@
               .run()
           "
         >
-          <i class="fa fa-minus text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-minus text-2xl"
+            aria-hidden="true"
+          />
         </button>
       </div>
 
@@ -368,7 +413,10 @@
               .run()
           "
         >
-          <i class="fa fa-undo text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-undo text-2xl"
+            aria-hidden="true"
+          />
         </button>
         <!-- //!redo -->
         <button
@@ -380,12 +428,14 @@
               .run()
           "
         >
-          <i class="fa fa-repeat text-2xl" aria-hidden="true"></i>
+          <i
+            class="fa fa-repeat text-2xl"
+            aria-hidden="true"
+          />
         </button>
       </div>
     </div>
     <editor-content
-      @click="editor.chain().focus()"
       :class="{ 'rounded-xl': !editable, 'ring-2': editable }"
       class="
         ring-black
@@ -400,6 +450,7 @@
         duration-300
       "
       :editor="editor"
+      @click="editor.chain().focus()"
     />
   </div>
 </template>
@@ -414,13 +465,13 @@ import StarterKit from "@tiptap/starter-kit";
 import { debounce } from "../utils";
 
 export default {
-  props: ["modelValue", "editable"],
-  emits: ["update:modelValue"],
   components: {
     EditorContent,
     BubbleMenu
     // FloatingMenu
   },
+  props: ["modelValue", "editable"],
+  emits: ["update:modelValue"],
 
   data() {
     return {
