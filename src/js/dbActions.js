@@ -1,13 +1,13 @@
-import { users, waiting_Room, storage } from '../firebase';
+import { users, waiting_Room, storage } from "../firebase";
 
-import { sendMail } from './emailClient';
+import { sendMail } from "./emailClient";
 
-import { MongoDriver } from './mongoAtlas';
+import { MongoDriver } from "./mongoAtlas";
 let driver = new MongoDriver();
 
 async function getUser(uid) {
   var user = null;
-  await users.child(uid).once('value', async (ds) => {
+  await users.child(uid).once("value", async (ds) => {
     user = await ds.val();
   });
   return user; // no checks are needed if user is found then it's an 'object' otherwise it's 'null'
@@ -16,9 +16,9 @@ async function getUser(uid) {
 const getAdminEmails = async () => {
   var l = [];
   await users
-    .orderByChild('priv')
+    .orderByChild("priv")
     .equalTo(2)
-    .once('value', async (ds) => {
+    .once("value", async (ds) => {
       ds.forEach((chds) => {
         l.push(chds.val().email);
       });
@@ -28,7 +28,7 @@ const getAdminEmails = async () => {
 
 const checkUserInwaitingRoom = async (uid) => {
   var e = false;
-  await waiting_Room.child(uid).once('value', async (ds) => {
+  await waiting_Room.child(uid).once("value", async (ds) => {
     e = ds.exists();
   });
   return e;
@@ -36,17 +36,17 @@ const checkUserInwaitingRoom = async (uid) => {
 
 const getUserFromWR = async (uid) => {
   var user = null;
-  await waiting_Room.child(uid).once('value', async (ds) => {
+  await waiting_Room.child(uid).once("value", async (ds) => {
     user = await ds.val();
   });
   return user;
 };
 
 const getPosts = async (filter, sort, limit, last) => {
-  return (await driver.get('posts', filter, sort, limit, last)) || null;
+  return (await driver.get("posts", filter, sort, limit, last)) || null;
 };
 const getPost = async (pid) => {
-  let l = await driver.get('posts', { pid: pid }, null, 1);
+  let l = await driver.get("posts", { pid: pid }, null, 1);
   return l[0] || null;
 };
 
@@ -56,8 +56,8 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
-  await users.child(owner + '/posts/' + pid).set(true);
-  await driver.insert('posts', {
+  await users.child(owner + "/posts/" + pid).set(true);
+  await driver.insert("posts", {
     pid,
     creation_date: t,
     hosting_date,
@@ -70,7 +70,7 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
 // updated as well
 const updatePost = async (pid, content, hosting_date, title) => {
   await driver.update(
-    'posts',
+    "posts",
     { pid },
     {
       content,
@@ -81,10 +81,10 @@ const updatePost = async (pid, content, hosting_date, title) => {
 };
 const confirmPost = async (pid) => {
   await driver.update(
-    'posts',
+    "posts",
     { pid },
     {
-      approved : true,
+      approved: true,
     }
   );
 };
@@ -94,12 +94,12 @@ const denyPost = async (pid, uid) => {
 
 // updated tp remove from mongo still has logic to change what needs to be changed in firebase for the user
 const removePost = async (pid, uid) => {
-  await users.child(uid + '/posts/' + pid).remove((err) => {
+  await users.child(uid + "/posts/" + pid).remove((err) => {
     err ? console.error(err) : null;
   });
-  await driver.delete('posts', { pid });
+  await driver.delete("posts", { pid });
 
-  await storage.ref('posters/' + pid).delete();
+  await storage.ref("posters/" + pid).delete();
 };
 
 // this is the user request host priv method makes an entry in waiting_room
@@ -127,33 +127,36 @@ const requestHost = async (uid, uni, number) => {
     `
   );
 };
-const getUsersInWaitingRoom = async ()=>{
+const getUsersInWaitingRoom = async () => {
   let l = [];
-  await waiting_Room.once('value', async (ds)=>{
-    ds.forEach((dsch)=>{
+  await waiting_Room.once("value", async (ds) => {
+    ds.forEach((dsch) => {
       l.push({
-        uid:dsch.key,
+        uid: dsch.key,
         ...dsch.val(),
-      })
-    })
-  })
+      });
+    });
+  });
   return l;
-}
+};
 
-const getUsersFromSearch = async (text) =>{
+const getUsersFromSearch = async (text) => {
   let l = [];
   console.log(text.toUpperCase());
-  await users.orderByChild("userName").startAt(text.toUpperCase()).endAt(text.toLowerCase()+"\uf8ff").once("value", async (ds) =>{
-    ds.forEach((dsch)=>{
-      l.push({
-        uid:dsch.key,
-        ...dsch.val(),
-      })
-    })
-  })
+  await users
+    .orderByChild("userName")
+    .startAt(text.toUpperCase())
+    .endAt(text.toLowerCase() + "\uf8ff")
+    .once("value", async (ds) => {
+      ds.forEach((dsch) => {
+        l.push({
+          uid: dsch.key,
+          ...dsch.val(),
+        });
+      });
+    });
   return l;
-}
-
+};
 
 // confirms the request for host priv
 const confirmHost = async (uid) => {
@@ -177,10 +180,9 @@ const confirmHost = async (uid) => {
   );
 };
 
-
-const blockUser = async (uid)=>{
+const blockUser = async (uid) => {
   await users.child(uid).update({
-    priv:-1
+    priv: -1,
   });
   let userInfo = await getUserInfo(uid);
   await sendMail(
@@ -192,10 +194,10 @@ const blockUser = async (uid)=>{
     </p>
     `
   );
-}
-const unblockUser = async (uid)=>{
+};
+const unblockUser = async (uid) => {
   await users.child(uid).update({
-    priv:1
+    priv: 1,
   });
   let userInfo = await getUserInfo(uid);
   await sendMail(
@@ -207,10 +209,10 @@ const unblockUser = async (uid)=>{
     </p>
     `
   );
-}
-const makeAdmin = async (uid)=>{
+};
+const makeAdmin = async (uid) => {
   await users.child(uid).update({
-    priv:2
+    priv: 2,
   });
   let userInfo = await getUserInfo(uid);
   await sendMail(
@@ -222,11 +224,11 @@ const makeAdmin = async (uid)=>{
     </p>
     `
   );
-}
+};
 
-const makeHost = async (uid)=>{
+const makeHost = async (uid) => {
   await users.child(uid).update({
-    priv:1
+    priv: 1,
   });
   let userInfo = await getUserInfo(uid);
   await sendMail(
@@ -238,11 +240,11 @@ const makeHost = async (uid)=>{
     </p>
     `
   );
-}
+};
 
-const makeRegular = async (uid)=>{
+const makeRegular = async (uid) => {
   await users.child(uid).update({
-    priv:0
+    priv: 0,
   });
   let userInfo = await getUserInfo(uid);
   await sendMail(
@@ -254,33 +256,33 @@ const makeRegular = async (uid)=>{
     </p>
     `
   );
-}
+};
 
-const updatePriv = async (uid, val)=>{
+const updatePriv = async (uid, val) => {
   //these force a value should only used by admins
   switch (val) {
     case -1:
       await blockUser(uid);
       break;
-  
+
     case 0:
       await makeRegular(uid);
       break;
-  
+
     case 1:
-      //this forces an account into being a host 
+      //this forces an account into being a host
       await makeHost(uid);
       break;
-  
+
     case 2:
       await makeAdmin(uid);
       break;
-  
+
     default:
       console.error("unsopported action");
       break;
   }
-}
+};
 
 // denies the host priv request to a user and removes the request
 // might add a new data to the user called denied to prevent users from requesting multiple times
@@ -301,7 +303,7 @@ const denyHost = async (uid) => {
 
 const getUserInfo = async (uid) => {
   var u = null;
-  await users.child(uid).once('value', async (ds) => {
+  await users.child(uid).once("value", async (ds) => {
     var data = await ds.val();
     u = {
       uid: ds.key,
@@ -316,11 +318,12 @@ const getUserInfo = async (uid) => {
 const getUsersData = async (List) => {
   var l = [];
   for (const p in List) {
-    l.findIndex((a) => a.uid == p.uid) == -1 ? l.push(await getUserInfo(p.uid)) : null;
+    l.findIndex((a) => a.uid == p.uid) == -1
+      ? l.push(await getUserInfo(p.uid))
+      : null;
   }
   return l;
 };
-
 
 const makeUsersMap = async (PostList, oldMap) => {
   let userIds = [];
@@ -346,11 +349,11 @@ const makeUsersMap = async (PostList, oldMap) => {
 };
 
 const uploadCover = async (img, pid) => {
-  await storage.ref('posters/' + pid).put(img);
+  await storage.ref("posters/" + pid).put(img);
 };
 
 const updateCover = async (img, pid) => {
-  await storage.ref('posters/' + pid).delete();
+  await storage.ref("posters/" + pid).delete();
   await uploadCover(img, pid);
 };
 
@@ -360,14 +363,14 @@ const updateCover = async (img, pid) => {
  * @returns actual image downloaded as blob
  */
 const getCoverImg = async (pid) => {
-  let url = await storage.ref('posters/' + pid).getDownloadURL();
+  let url = await storage.ref("posters/" + pid).getDownloadURL();
   return await new Promise((res) => {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
+    xhr.responseType = "blob";
     xhr.onload = () => {
       res(xhr.response);
     };
-    xhr.open('GET', url);
+    xhr.open("GET", url);
     xhr.send();
   });
 };
@@ -378,7 +381,10 @@ const getCoverImg = async (pid) => {
  * @returns the cover img url
  */
 const getCI2 = async (pid) => {
-  return (await storage.ref('posters/' + pid).getDownloadURL()) || (await storage.ref('posters/fail.png').getDownloadURL());
+  return (
+    (await storage.ref("posters/" + pid).getDownloadURL()) ||
+    (await storage.ref("posters/fail.png").getDownloadURL())
+  );
 };
 
 export {

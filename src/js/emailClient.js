@@ -1,4 +1,4 @@
-import { Email } from './smtp';
+import { Email } from "./smtp";
 
 /**
  *
@@ -8,10 +8,11 @@ import { Email } from './smtp';
  * @returns email request success/failure
  */
 const sendMail = async (to, subject, body) => {
-  if(!(to && subject && body)) throw new Error('incomplete params to, subject and body are required');
-  
+  if (!(to && subject && body))
+    throw new Error("incomplete params to, subject and body are required");
+
   const req = {
-    Host: 'smtp.gmail.com',
+    Host: "smtp.gmail.com",
     Username: process.env.VUE_APP_SMTP_USERNAME,
     Password: process.env.VUE_APP_SMTP_PASSWORD,
     To: to,
@@ -20,14 +21,12 @@ const sendMail = async (to, subject, body) => {
     Body: body,
   };
 
-  try{
+  try {
     let res = await Email.send(req);
     return res;
-  }
-  catch(e){
+  } catch (e) {
     throw new Error(e);
   }
-  
 };
 
 export { sendMail };

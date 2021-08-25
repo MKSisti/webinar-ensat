@@ -31,12 +31,12 @@ export default {
       state.isLoggedIn = false;
       state.privLevel = -99;
     },
-    setToken(state, payload){
+    setToken(state, payload) {
       state.token = payload.token;
-    }
+    },
   },
   actions: {
-    updateToken({commit}, token){
+    updateToken({ commit }, token) {
       commit({
         type: "setToken",
         token,
@@ -46,7 +46,6 @@ export default {
       var p = 0;
       var extraInfo = null;
       await users.child(user.uid).once("value", async (ds) => {
-          
         if (ds.exists()) {
           //user exists in the db already
           //read privilege level
@@ -60,18 +59,17 @@ export default {
               uni: u.uni || "ENSAT",
             };
           }
-        }
-        else{
-            //first time user logged in
-            //create a user entry in db
-            // console.log("first time");
-            var newUser = users.child(user.uid);
-            newUser.set({
-                priv: p,
-                email: user.email,
-                userName: user.displayName,
-                img: user.photoURL,
-            })
+        } else {
+          //first time user logged in
+          //create a user entry in db
+          // console.log("first time");
+          var newUser = users.child(user.uid);
+          newUser.set({
+            priv: p,
+            email: user.email,
+            userName: user.displayName,
+            img: user.photoURL,
+          });
         }
       });
       commit({
@@ -97,8 +95,8 @@ export default {
     getPrivLevel(state) {
       return state.privLevel;
     },
-    getToken(state){
+    getToken(state) {
       return state.token;
-    }
+    },
   },
 };

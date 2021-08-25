@@ -77,14 +77,14 @@ registerRoute(
 );
 
 self.addEventListener('message', async (event) => {
-  console.log('sw root: message event listener hit.');
+  //console.log('sw root: message event listener hit.');
   switch (event.data && event.data.type) {
     case 'SKIP_WAITING':
       self.skipWaiting();
       console.log('sw root: message SKIP_WAITING called.');
       break;
     case 'NOTIFICATION_GRANTED':
-      console.log('sw root: notification permission granted');
+      //console.log('sw root: notification permission granted');
       break;
     case 'NOTIFICATION':
       console.log('sw root: dispatching notification');
@@ -94,7 +94,7 @@ self.addEventListener('message', async (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  console.log('sw root: fetch event listener hit.');
+  //console.log('sw root: fetch event listener hit.');
 });
 
 self.addEventListener('periodicsync', (event) => {

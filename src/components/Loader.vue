@@ -1,6 +1,16 @@
 <template>
   <transition name="fade-y" appear>
-    <div class="w-full h-full flex items-center justify-center transition duration-300">
+    <div
+      class="
+        w-full
+        h-full
+        flex
+        items-center
+        justify-center
+        transition
+        duration-300
+      "
+    >
       <div class="loadingDot"></div>
     </div>
   </transition>
@@ -101,5 +111,4 @@ export default {};
     border-bottom-left-radius: 0rem;
   }
 }
-
 </style>

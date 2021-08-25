@@ -1,8 +1,8 @@
-import * as Realm from 'realm-web';
-const realmApp = new Realm.App({ id: 'webensat-tzkat' });
+import * as Realm from "realm-web";
+const realmApp = new Realm.App({ id: "webensat-tzkat" });
 
-const assert = require('assert');
-var EventEmitter = require('events');
+const assert = require("assert");
+var EventEmitter = require("events");
 class MongoDriver {
   constructor() {
     this.connected = false;
@@ -12,23 +12,26 @@ class MongoDriver {
   }
 
   async connect() {
-    const credentials = Realm.Credentials.apiKey('JqpnSeIDwbamBxoyHMyiZTXI11xyemERCdqoBTquXbZ8TNDFABAZEkKB9MKiq5sF');
+    const credentials = Realm.Credentials.apiKey(
+      "JqpnSeIDwbamBxoyHMyiZTXI11xyemERCdqoBTquXbZ8TNDFABAZEkKB9MKiq5sF"
+    );
     try {
       const user = await realmApp.logIn(credentials);
       assert(user.id === realmApp.currentUser.id);
-      this.client = realmApp.currentUser.mongoClient('mongodb-atlas');
+      this.client = realmApp.currentUser.mongoClient("mongodb-atlas");
       this.connected = true;
-      console.log('connected to db');
+      console.log("connected to db");
     } catch (e) {
-      console.error('Failed to log in', e);
+      console.error("Failed to log in", e);
       this.connected = false;
     }
   }
 
   async init(col) {
     if (!this.connected) await this.connect();
-    if (!this._collections[col]) this._collections[col] = this.client.db('WebEnsat1').collection(col);
-    console.log(col,'connected');
+    if (!this._collections[col])
+      this._collections[col] = this.client.db("WebEnsat1").collection(col);
+    console.log(col, "connected");
     return this._collections[col];
   }
 
@@ -46,19 +49,19 @@ class MongoDriver {
     if (!this._collections[col]) await this.init(col);
     if (filter)
       for (let f of Object.keys(filter)) {
-        if (typeof(filter[f]) == 'string') 
-          filter[f] = { $regex: filter[f], $options: 'i' };
+        if (typeof filter[f] == "string")
+          filter[f] = { $regex: filter[f], $options: "i" };
       }
 
     if (last) {
       if (sort) {
         for (const key of Object.keys(sort)) {
-          sort[key] == 1 ?
-            filter[key] =  { $gt : last[key] }  :
-            filter[key] =  { $lt : last[key] }
+          sort[key] == 1
+            ? (filter[key] = { $gt: last[key] })
+            : (filter[key] = { $lt: last[key] });
         }
-      }else{
-        filter["_id"] =  { $gt : last["_id"] };
+      } else {
+        filter["_id"] = { $gt: last["_id"] };
       }
     }
     let res = await this._collections[col].find(filter, {
