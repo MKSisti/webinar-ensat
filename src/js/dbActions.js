@@ -79,6 +79,15 @@ const updatePost = async (pid, content, hosting_date, title) => {
     }
   );
 };
+
+const updateUser = async (uid, userName, uni, number) =>{
+  await users.child(uid).update({
+    number,
+    uni,
+    userName,
+  })
+}
+
 const confirmPost = async (pid) => {
   await driver.update(
     "posts",
@@ -414,4 +423,5 @@ export {
   confirmPost,
   denyPost,
   updatePriv,
+  updateUser,
 };
