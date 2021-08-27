@@ -10,18 +10,25 @@
       overflow-hidden
     "
   >
-    <nav-bar class="z-50"></nav-bar>
+    <nav-bar class="z-50" />
     <div class="w-full h-full relative max-h-full">
-      <loader class="absolute" v-if="firstTimeInit <= 1" />
+      <loader
+        v-if="firstTimeInit <= 1"
+        class="absolute"
+      />
       <router-view
         v-else
-        class="w-full max-h-full absolute"
         v-slot="{ Component }"
+        class="w-full max-h-full absolute"
       >
-        <transition name="fade-y" appear mode="out-in">
+        <transition
+          name="fade-y"
+          appear
+          mode="out-in"
+        >
           <component
-            class="w-full max-h-full transition duration-300"
             :is="Component"
+            class="w-full max-h-full transition duration-300"
           />
         </transition>
       </router-view>
@@ -35,14 +42,14 @@ import Loader from "./components/Loader";
 
 export default {
   name: "App",
+  components: {
+    NavBar,
+    Loader,
+  },
   data() {
     return {
       firstTimeInit: process.env.NODE_ENV === "production" ? 0 : 2,
     };
-  },
-  components: {
-    NavBar,
-    Loader,
   },
   async mounted() {
     //pwa init stage
@@ -111,6 +118,22 @@ body,
 
 .btnTransform:hover * {
   @apply -translate-y-1;
+}
+
+.btnTransformSm {
+  @apply transform transition duration-300;
+}
+
+.btnTransformSm:hover {
+  @apply -translate-y-0.5;
+}
+
+.btnTransformSm * {
+  @apply transform transition duration-300;
+}
+
+.btnTransformSm:hover * {
+  @apply -translate-y-0.5;
 }
 
 .btnRing {

@@ -1,6 +1,6 @@
 {
   "name": "webinar-ensat",
-  "version": "0.0.1",
+  "version": "0.4.9",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -27,11 +27,9 @@
     "realm-web": "^1.3.0",
     "sass": "^1.36.0",
     "sass-loader": "^10.1.1",
+    "v-calendar": "^3.0.0-alpha.5",
     "vue": "^3.0.0",
     "vue-router": "^4.0.10",
-    "vue3-carousel": "^0.1.23",
-    "vue3-datepicker": "^0.2.5",
-    "vue3-timepicker": "^1.0.0-beta.2",
     "vuex": "^4.0.2",
     "webpack": "^4.46.0",
     "workbox": "^0.0.0",

@@ -3,6 +3,7 @@ import App from './App.vue';
 import store from './store';
 import router from './router';
 import localforage from 'localforage';
+import driver from './js/mongoAtlas';
 
 // createApp(App).mount('#app');
 
@@ -11,6 +12,7 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.config.globalProperties.$lf = localforage;
+app.config.globalProperties.$mongo = driver;
 
 app.mount('#app');
 
