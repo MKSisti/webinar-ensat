@@ -1,18 +1,19 @@
 <template>
-  <div class="px-10 py-4 h-16 w-full bg-gray-100 shadow-md flex items-center justify-start xl:rounded-b-4xl gap-4">
+  <div class="px-5 sm:px-10 py-4 h-16 w-full bg-gray-100 shadow-md flex items-center justify-start xl:rounded-b-4xl gap-4 z-50">
     <div class="flex-grow">
       <router-link to="/">
         <!-- <div>W</div> -->
-        <div class="text-xl font-semibold">
+        <div class="text-lg sm:text-xl font-semibold">
           Webinar Ensat
         </div>
       </router-link>
     </div>
 
-    <!-- //!actions -->
+    <!-- //!actions for admin -->
     <div
       v-if="getPrivLevel > 1"
-      class="flex justify-center items-center gap-2 px-2 py-1 bg-gray-100 rounded-2xl shadow-sm"
+      :class="{'opacity-0 -translate-y-5 sm:translate-y-0 sm:opacity-100 pointer-events-none sm:pointer-events-auto delay-0':!profileMenu,'opacity-100 translate-y-0 pointer-events-auto delay-200':profileMenu}"
+      class="flex absolute shadow-xl sm:relative right-5 top-40 mt-2 sm:mt-0 sm:right-0 sm:top-0 px-6 transition duration-300 sm:delay-0 transform  justify-start items-start flex-col sm:flex-row sm:justify-center sm:items-center  gap-2 sm:px-2 py-1 bg-gray-100 rounded-2xl sm:shadow-sm z-50"
     >
       <h1 class="text-2xl font-bold select-none">
         Actions
@@ -27,7 +28,7 @@
                 class="fa fa-gavel flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
                 aria-hidden="true"
               />
-              <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100">
+              <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform sm:group-hover:w-28 sm:w-0 overflow-hidden whitespace-nowrap duration-300 pl-3 sm:pl-0 sm:group-hover:pl-3 sm:opacity-0 sm:group-hover:opacity-100">
                 Admin dash
               </h1>
             </div>
@@ -46,13 +47,15 @@
               class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
               aria-hidden="true"
             />
-            <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2.5 opacity-0 group-hover:opacity-100">
+            <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform sm:group-hover:w-28 sm:w-0 overflow-hidden whitespace-nowrap duration-300 pl-2.5 sm:pl-0 sm:group-hover:pl-2.5 sm:opacity-0 sm:group-hover:opacity-100">
               Write a post
             </h1>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- //!actions for host -->
     <div v-else-if="getPrivLevel > 0 && getPrivLevel <= 1">
       <div
         class="flex justify-center items-center"
@@ -73,7 +76,8 @@
       </div>
     </div>
 
-    <div>
+    <div class="flex-shrink-0">
+      <!-- //!profile menu and thumbnail -->
       <div
         v-if="getLoggedState"
         class="relative"
@@ -91,9 +95,9 @@
             'h-0 opacity-20': !profileMenu,
             'h-24 opacity-100': profileMenu,
           }"
-          class="absolute overflow-hidden rounded-2xl bg-gray-100 shadow-2xl transition-all duration-300 right-0 top-14 flex justify-center items-start"
+          class="absolute overflow-hidden rounded-2xl bg-gray-100 shadow-xl transition-all duration-300 right-0 top-14 flex justify-center items-start"
         >
-          <div class="px-4 py-2 space-y-2">
+          <div class="px-4 py-2 space-y-2 ">
             <router-link
               :to="'/profile/' + getUserInfo.uid"
               @click="profileMenu = false"
@@ -112,6 +116,8 @@
           </div>
         </div>
       </div>
+
+      <!-- //!sign in btn -->
       <div v-else>
         <div
           class="cursor-pointer py-2 px-4 bg-red-100 rounded-xl btnRing"
