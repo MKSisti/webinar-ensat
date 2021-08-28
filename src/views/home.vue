@@ -103,47 +103,50 @@
       },
     },
     async mounted() {
-      this.$nextTick(async () => {
-        let op = { approved: true };
-        if (this.$route.query?.keyword) {
-          this.keyword = this.$route.query.keyword;
-          op['title'] = this.keyword;
-        }
-        if (this.$route.query?.order) {
-          this.dropVal = this.$route.query.order;
-        }
-        this.posts = await getPosts(op, this.orderBy[this.dropVal], this.postsToShow, null);
-        this.posts.length > 0 ? (this.usersMap = await makeUsersMap(this.posts, this.usersMap)) : null;
-
-        this.carPosts = await getPosts({ approved: true }, { hosting_date: 1 }, 3, null);
-
-        this.carPosts.forEach(async (p) => {
-          const cover = await getCI2(p.pid);
-          this.carPosters[p.pid] = cover;
-        });
-        this.carLoading = false;
-
-        this.loading = false;
-
-        let debScrollBottom = debounce(async () => {
-          if (!this.loading)
-            if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
-              this.extraPosts = true;
-
-              let extra = await getPosts(this.keyword ? { approved: true, title: this.keyword } : { approved: true }, this.orderBy[this.dropVal], this.postsToShow, this.posts[this.posts.length - 1]);
-              if (extra.length > 0) {
-                this.posts.push(...extra);
-                this.usersMap = await makeUsersMap(extra, this.usersMap);
-              } else {
-                setTimeout(() => (this.extraPosts = false), 1000);
-              }
-            }
-        }, 200);
-
-        this.$refs.home.addEventListener('scroll', debScrollBottom, false);
-      });
+      this.init();
     },
     methods: {
+      async init(){
+        this.$nextTick(async () => {
+          let op = { approved: true };
+          if (this.$route.query?.keyword) {
+            this.keyword = this.$route.query.keyword;
+            op['title'] = this.keyword;
+          }
+          if (this.$route.query?.order) {
+            this.dropVal = this.$route.query.order;
+          }
+          this.posts = await getPosts(op, this.orderBy[this.dropVal], this.postsToShow, null);
+          this.posts.length > 0 ? (this.usersMap = await makeUsersMap(this.posts, this.usersMap)) : null;
+
+          this.carPosts = await getPosts({ approved: true }, { hosting_date: 1 }, 3, null);
+
+          this.carPosts.forEach(async (p) => {
+            const cover = await getCI2(p.pid);
+            this.carPosters[p.pid] = cover;
+          });
+          this.carLoading = false;
+
+          this.loading = false;
+
+          let debScrollBottom = debounce(async () => {
+            if (!this.loading)
+              if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
+                this.extraPosts = true;
+
+                let extra = await getPosts(this.keyword ? { approved: true, title: this.keyword } : { approved: true }, this.orderBy[this.dropVal], this.postsToShow, this.posts[this.posts.length - 1]);
+                if (extra.length > 0) {
+                  this.posts.push(...extra);
+                  this.usersMap = await makeUsersMap(extra, this.usersMap);
+                } else {
+                  setTimeout(() => (this.extraPosts = false), 1000);
+                }
+              }
+          }, 200);
+
+          this.$refs.home.addEventListener('scroll', debScrollBottom, false);
+        });
+      },
       goToPost(pid) {
         this.$router.push({
           name: 'post',

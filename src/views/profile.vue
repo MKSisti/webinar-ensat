@@ -3,7 +3,7 @@
     name="fade-y"
     appear
   >
-    <div class="w-full h-full transition duration-300">
+    <div :key="uid" class="w-full h-full transition duration-300">
       <div class="w-full h-full flex justify-start items-start flex-col space-y-10">
         <!-- //TODO user card needs to be a component-->
         <div class="flex w-full sm:w-10/12 sm:max-w-xl justify-center items-center sm:px-10 pt-10 mb-0">
@@ -141,7 +141,7 @@
   import UserCard from '../components/UserCard';
   import PostCard from '../components/PostCard';
   import BaseInput from '../components/BaseInput';
-  import { mapActions } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   import { BSON } from 'realm-web';
 
   export default {
@@ -163,7 +163,39 @@
         awaitingApproval: false,
       };
     },
+    computed: {
+      ...mapGetters('user', ['getUserInfo']),
+    },
+    watch: {
+      $route: async function () {
+        if (this.$route.name == 'profile')
+          await this.init();
+      },
+    },
     methods: {
+      clearData(){
+        this.userInfo = {}
+        this.userPosts = []
+        this.becomingHost = false
+        this.editingProfile = false
+        this.univ = ''
+        this.number = ''
+        this.awaitingApproval = false
+      },
+      async init(){
+        this.clearData();
+        this.$nextTick(async () => {
+        this.userInfo = await getUser(this.uid);
+        if (this.userInfo.priv >= 1)
+          this.$nextTick(async () => {
+            if(this.getUserInfo.email == this.userInfo.email) 
+              this.userPosts = await getPosts({ owner: this.uid });
+            else 
+              this.userPosts = await getPosts({ owner: this.uid, approved: true });
+          });
+        this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
+      });
+      },
       goToCreate() {
         let token = BSON.ObjectID();
         this.updateToken(token);
@@ -185,16 +217,8 @@
       ...mapActions('user', ['updateToken']),
     },
     async created() {
-      this.$nextTick(async () => {
-        this.userInfo = await getUser(this.uid);
-        if (this.userInfo.priv >= 1)
-          this.$nextTick(async () => {
-            this.userPosts = await getPosts({ owner: this.uid });
-          });
-        this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
-      });
+      this.init();
     },
-    async mounted() {},
   };
 </script>
 
