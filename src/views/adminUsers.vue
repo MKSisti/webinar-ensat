@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex justify-start items-start flex-col">
-    <h1 class="text-6xl font-bold px-10 py-5">
+    <h1 class="text-4xl sm:text-6xl font-bold px-10 py-5">
       Host Requests
     </h1>
     <div class="w-full h-full bg-gray-100 rounded-t-6xl shadow-3xl overflow-auto">

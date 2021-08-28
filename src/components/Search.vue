@@ -1,5 +1,8 @@
 <template>
-  <div class="sm:shadow-2xl sm:rounded-3xl py-8 px-6">
+  <div
+    class="sm:shadow-2xl sm:rounded-3xl py-8 px-6"
+    @keypress.enter="apply"
+  >
     <div
       :class="{ 'flex-col': !noOrder }"
       class="w-full flex justify-start items-center gap-8"
@@ -11,9 +14,10 @@
         <base-input
           :name="searchName || 'Search'"
           :model-value="search"
-          size="2"
+          size="1"
           lazy="250"
           @update:modelValue="handleSearch"
+          @clear="clear"
         />
       </div>
       <div
@@ -53,7 +57,7 @@
         </div>
 
         <div
-          class="h-12 bg-red-100 rounded-2xl flex justify-center items-center cursor-pointer btnRing px-6"
+          class="h-11 bg-red-100 rounded-2xl flex justify-center items-center cursor-pointer btnRing px-6"
           tabindex="-1"
           @click="apply"
         >
@@ -95,6 +99,11 @@
       apply() {
         this.$emit('apply', this.search, this.dropDown);
       },
+      clear(){
+        this.search='';
+        this.dropDown = 0;
+        this.apply();
+      }
     },
   };
 </script>

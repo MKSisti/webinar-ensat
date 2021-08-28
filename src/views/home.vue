@@ -13,8 +13,16 @@
         :posts="carPosts"
         :users="usersMap"
       />
-      <div class="w-full xl:w-10/12 2xl:w-8/12 2xl:px-12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10">
-        <div class="flex flex-col order-2 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10 relative">
+      <div class="w-full xl:w-10/12 2xl:w-8/12 2xl:px-12 sm:px-8 xl:px-0 flex flex-col xl:flex-row justify-start items-center xl:justify-between xl:items-start xl:space-x-10 relative">
+        <loader
+          v-if="loading"
+          style="height:100px"
+          class="relative order-2 z-10 xl:order-1"
+        />
+        <div 
+          v-else
+          class="flex flex-col order-2 z-10 xl:order-1 justify-center items-center xl:justify-start xl:w-7/12 w-full md:w-10/12 sm:space-y-10 relative"
+        >
           <transition-group
             name="fade-y"
             mode="in-out"
@@ -33,10 +41,7 @@
             v-if="!loading && extraPosts"
             class="pb-4 pt-4"
           />
-          <loader
-            v-if="loading"
-            class="absolute top-0"
-          />
+          
           <div
             v-else-if="!loading && !extraPosts"
             class="h-20 pt-4"
