@@ -23,9 +23,15 @@ module.exports = {
         name: 'Webinar ENSAT',
         short_name: 'Web ENSAT',
         description: 'Post and follow webinars',
+        orientation: 'portrait',
         background_color: defaultTheme.colors.gray[50],
         theme_color: defaultTheme.colors.red[300],
-        crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+        'theme-color': defaultTheme.colors.red[300],
+        display: 'standalone',
+        crossorigin: 'use-credentials',
+        ios: true,
+        dir: 'ltr',
+        start_url: '/',
         icons: [
           {
             src: path.resolve('./public/img/icons/icon.png'),
