@@ -4,6 +4,7 @@ import store from './store';
 import router from './router';
 import localforage from 'localforage';
 import driver from './js/mongoAtlas';
+import './js/polyfill';
 
 // createApp(App).mount('#app');
 

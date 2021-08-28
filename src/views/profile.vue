@@ -3,7 +3,10 @@
     name="fade-y"
     appear
   >
-    <div :key="uid" class="w-full h-full transition duration-300">
+    <div
+      :key="uid"
+      class="w-full h-full transition duration-300"
+    >
       <div class="w-full h-full flex justify-start items-start flex-col space-y-10">
         <!-- //TODO user card needs to be a component-->
         <div class="flex w-full sm:w-10/12 sm:max-w-xl justify-center items-center sm:px-10 pt-10 mb-0">
@@ -172,6 +175,9 @@
           await this.init();
       },
     },
+    async created() {
+      this.init();
+    },
     methods: {
       clearData(){
         this.userInfo = {}
@@ -215,10 +221,7 @@
         this.awaitingApproval = true;
       },
       ...mapActions('user', ['updateToken']),
-    },
-    async created() {
-      this.init();
-    },
+    }
   };
 </script>
 

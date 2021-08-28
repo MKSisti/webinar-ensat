@@ -136,9 +136,8 @@
 
           let debScrollBottom = debounce(async () => {
             if (!this.loading)
-              if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop === this.$refs.home?.clientHeight) {
+              if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop <= this.$refs.home?.clientHeight) {
                 this.extraPosts = true;
-
                 let extra = await getPosts(this.keyword ? { approved: true, title: this.keyword } : { approved: true }, this.orderBy[this.dropVal], this.postsToShow, this.posts[this.posts.length - 1]);
                 if (extra.length > 0) {
                   this.posts.push(...extra);

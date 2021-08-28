@@ -141,17 +141,17 @@
 
   export default {
     name: 'NavBar',
+    data() {
+      return {
+        profileMenu: false,
+      };
+    },
     computed: {
       ...mapGetters('user', [
         'getLoggedState', //usage : this.getLoggedState()
         'getUserInfo',
         'getPrivLevel',
       ]),
-    },
-    data() {
-      return {
-        profileMenu: false,
-      };
     },
     methods: {
       async logIn() {
