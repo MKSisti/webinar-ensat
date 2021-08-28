@@ -151,7 +151,7 @@
               v-if="inEditingMode && post"
               class="select-none font-semibold shadow-lg px-3 py-1 bg-blue-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
             >
-              <div @click="inEditingMode = false">
+              <div @click="cancel">
                 <h1>Cancel</h1>
               </div>
             </div>
@@ -269,7 +269,36 @@
       }
     },
     async mounted() {
-      this.$nextTick(async () => {
+      await this.init();
+    },
+    watch: {
+      $route: async function () {
+        if (this.$route.name == 'post') 
+          this.clearData();
+          await this.init();
+      },
+    },
+    methods: {
+      clearData(){
+        this.loading = true
+        this.content = ''
+        this.postOwner = {}
+        this.post = {}
+        this.isEditable = false
+        this.inEditingMode = false
+        this.yetToPublish = false
+        this.pickedDate = new Date()
+        this.viewingImg = false
+        this.displayedDate = null
+        this.title = 'Untitled'
+        this.cover = null
+        this.imgLoading = true
+        this.fileToUpload = null
+        this.palette = new ColorThief()
+        this.color = 'rgba(0,0,0,0)'
+      },
+      async init(){
+        this.$nextTick(async () => {
         this.post = await getPost(this.pid);
         if (this.post == null) {
           if (this.getPrivLevel > 0) {
@@ -279,7 +308,6 @@
               this.yetToPublish = true;
               this.isEditable = true;
             } else {
-              console.log('it is not valid');
               this.$router.push({ name: 'home' });
             }
           } else {
@@ -297,15 +325,14 @@
         }
         this.loading = false;
       });
-    },
-    methods: {
+      },
       handleTitle(val) {
         this.title = val;
       },
       updateContent(newVal) {
         this.content = newVal;
       },
-      async publish() {
+      publish() {
         if (this.fileToUpload) {
           const hostingDate = this.pickedDate.getTime();
           const now = new Date();
@@ -314,8 +341,8 @@
           } else {
             this.inEditingMode = false;
             this.yetToPublish = false;
-            await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
-            await uploadCover(this.fileToUpload, this.pid);
+            createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
+            uploadCover(this.fileToUpload, this.pid);
           }
         } else {
           console.error('COVER MISSING');
@@ -325,14 +352,14 @@
         await removePost(this.pid, this.owner);
         this.$router.push({ name: 'home' });
       },
-      async update() {
+      update() {
         this.inEditingMode = false;
-        await updatePost(this.pid, this.content, this.pickedDate.getTime(), this.title);
+        updatePost(this.pid, this.content, this.pickedDate.getTime(), this.title);
         if (this.fileToUpload) {
-          await updateCover(this.fileToUpload, this.pid);
+          updateCover(this.fileToUpload, this.pid);
         }
       },
-      async fileChange(f) {
+      fileChange(f) {
         if (f[0] && f[0].type.split('/')[0] == 'image') {
           this.fileToUpload = f[0];
           var reader = new FileReader();
@@ -352,7 +379,11 @@
           console.warn(e);
         }
       },
-    }
+      cancel(){
+        this.inEditingMode = false;
+        this.$router.go(0);
+      }
+    },
   };
 </script>
 
