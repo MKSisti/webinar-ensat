@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-start items-start flex-col h-full w-full">
+  <div class="flex justify-start items-start flex-col w-full">
     <div class="w-full relative">
       <bubble-menu
         v-if="editor && editable"
@@ -49,7 +49,7 @@
         'py-2': editable,
       }"
       :style="{ 'max-height': editable ? '10rem' : '0rem' }"
-      class="toolbar z-0 select-none flex flex-wrap justify-start items-center px-2.5 bg-black ring-2 ring-black text-white rounded-t-2xl shadow-2xl w-full h-auto transition-all duration-300 gap-2.5"
+      class="toolbar z-0 select-none flex flex-wrap justify-start items-center px-2.5 bg-black ring-2 ring-black text-white sm:rounded-t-2xl shadow-2xl w-full h-auto transition-all duration-300 gap-2.5"
     >
       <!-- font block -->
       <div class="bg-white px-2.5 rounded-xl text-black flex flex-nowrap justify-start items-center h-10 space-x-2">
@@ -239,7 +239,8 @@
     </div>
     <editor-content
       :class="{ 'rounded-xl': !editable, 'ring-2': editable }"
-      class="ring-black w-full h-full cursor-text px-5 py-5 rounded-b-xl z-20 transition-all duration-300"
+      style="min-height: 20rem;"
+      class="ring-black w-full cursor-text px-5 py-5 sm:rounded-b-2xl z-20 transition-all duration-300"
       :editor="editor"
       @click="editor.chain().focus()"
     />

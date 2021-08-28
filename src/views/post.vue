@@ -1,7 +1,7 @@
 <template>
   <div
     :key="pid"
-    class="h-full overflow-auto"
+    class="h-full"
   >
     <loader v-if="loading" />
 
@@ -11,11 +11,11 @@
       appear
     >
       <!-- //!post -->
-      <div class="flex justify-start items-start flex-col space-y-20 w-full h-full transition duration-300">
+      <div class="flex justify-start items-start flex-col w-full h-full transition duration-300 flex-shrink-0 overflow-auto">
         <!-- //!poster -->
         <div
           :class="{ 'translate-y-5': viewingImg }"
-          class="w-full h-auto relative transform transition duration-300"
+          class="w-full h-auto relative transform transition duration-300 flex-shrink-0"
         >
           <loader
             v-if="imgLoading && cover"
@@ -40,8 +40,8 @@
                 />
               </div>
               <h1
-                v-if="!post"
-                class="text-center font-bold text-4xl p-4"
+                v-if="!fileToUpload || !cover"
+                class="text-center font-bold text-xl sm:text-2xl p-4"
               >
                 Upload your poster
               </h1>
@@ -55,10 +55,10 @@
             </div>
           </transition>
 
-          <!-- //!post img -->
+          <!-- //!gradient to black (contrast) -->
           <div
             :style="viewingImg ? 'opacity:0!important' : ''"
-            :class="{ 'rounded-b-6xl': !viewingImg }"
+            :class="{ 'rounded-b-3xl sm:rounded-b-6xl': !viewingImg }"
             class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black opacity-10 transition-all duration-300 pointer-events-none"
           />
 
@@ -67,9 +67,9 @@
             class="w-full cursor-pointer filter aspect-h-1 transition-all duration-300 z-0 overflow-hidden"
             :class="{
               viewingImg: viewingImg,
-              'xl:aspect-w-5 aspect-w-3': !inEditingMode,
-              'xl:aspect-w-8 aspect-w-4': inEditingMode,
-              'rounded-b-6xl': !viewingImg,
+              'xl:aspect-w-5 aspect-w-2 md:aspect-w-3': !inEditingMode,
+              'xl:aspect-w-8 aspect-w-2 md:aspect-w-4': inEditingMode,
+              'rounded-b-3xl sm:rounded-b-6xl': !viewingImg,
             }"
             @click="viewingImg = !viewingImg"
           >
@@ -85,40 +85,45 @@
               @load="imgLoaded"
             >
           </div>
+        </div>
 
-          <!-- //!user and hosting Date -->
-          <div
-            :class="{ 'opacity-0 pointer-events-none': viewingImg}"
-            class="absolute px-10 flex justify-between items-start w-full transition duration-300 pointer-events-none z-50"
+        <!-- //!user and hosting Date -->
+        <div
+          :class="{ obstructingImg: viewingImg}"
+          class="relative px-5 sm:px-10 flex py-5 md:py-0 justify-start items-center md:justify-between md:items-start w-full flex-col md:flex-row transition duration-300 pointer-events-none z-50 gap-5"
+        >
+          <router-link
+            :to="'/profile/' + postOwner.uid"
+            tag="div"
+            class="transform md:-translate-y-2/3 w-full sm:w-10/12 sm:max-w-md"
           >
-            <router-link
-              :to="'/profile/' + postOwner.uid"
-              tag="div"
-              class="transform -translate-y-2/3 w-full sm:w-10/12 sm:max-w-md"
-            >
-              <user-card
-                :user-info="postOwner"
-                :minimal="true"
-                class="cursor-pointer transform hover:-translate-y-2 transition-transform duration-300"
-              />
-            </router-link>
+            <user-card
+              :user-info="postOwner"
+              :minimal="true"
+              class="cursor-pointer transform hover:-translate-y-2 transition-transform duration-300 pointer-events-auto"
+            />
+          </router-link>
 
-            <div class="bg-gray-100 h-10 transform -translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold">
-              Hosting date:
-              {{ formatedDate ? formatedDate.date + ' at ' + formatedDate.time : 'xx/xx/xxxx at xx:xx' }}
-            </div>
+          <div class="bg-gray-100 h-10 transform md:-translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold">
+            Hosting date:
+            {{ formatedDate ? formatedDate.date + ' at ' + formatedDate.time : 'xx/xx/xxxx at xx:xx' }}
           </div>
         </div>
 
         <!-- //!editor -->
-        <div class="px-10 py-5 bg-gray-100 w-full rounded-t-6xl shadow-3xl relative pb-20 flex-grow">
+        <div 
+          :class="{'pt-5 sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
+          class="sm:px-10 sm:mt-10 bg-gray-100 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
+        >
           <div
-            :class="{ 'opacity-0 pointer-events-none': viewingImg }"
-            class="top-0 absolute right-20 flex justify-end items-center transform -translate-y-1/2 gap-x-4 z-50 w-full transition-opacity duration-300"
+            :class="{ obstructingImg: viewingImg }"
+            class=" flex justify-end items-center transform flex-col sm:flex-row translate-y-0 sm:-translate-y-full gap-7 z-50 w-full transition-opacity duration-300"
           >
             <!-- title and date input and commit button-->
 
+            <!-- //!title input -->
             <base-input
+              v-if="inEditingMode"
               name="Title"
               class="max-w-xs"
               :lazy="200"
@@ -126,8 +131,13 @@
               :model-value="title"
               @update:modelValue="handleTitle"
             />
+
+            <!-- //!date input -->
             <DatePicker
+              v-if="inEditingMode"
               v-model="pickedDate"
+              :order="50"
+              :dot="true"
               :min-date="new Date()"
               :class="{ hidden: !inEditingMode }"
               mode="dateTime"
@@ -146,7 +156,8 @@
                 />
               </template>
             </DatePicker>
-            <!-- //? this button can change its text from edit/update and publish to match the action, edit can toggle edit ... -->
+
+            <!-- //!cancel button -->
             <div
               v-if="inEditingMode && post"
               class="select-none font-semibold shadow-lg px-3 py-1 bg-blue-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
@@ -155,6 +166,8 @@
                 <h1>Cancel</h1>
               </div>
             </div>
+
+            <!-- //!publish/update/edit button-->
             <div
               v-if="inEditingMode || yetToPublish || isEditable"
               class="select-none font-semibold shadow-lg px-3 py-1 bg-gray-100 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
@@ -178,6 +191,8 @@
                 Edit
               </div>
             </div>
+
+            <!-- //!remove button -->
             <div
               v-if="inEditingMode && post"
               class="select-none font-semibold shadow-lg px-3 py-1 bg-red-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
@@ -189,7 +204,7 @@
           </div>
 
           <!-- //!post section -->
-          <div class="w-full h-full overflow-hidden py-10">
+          <div class="w-full h-full py-10 z-0">
             <!-- //!title -->
             <div
               :class="{
@@ -198,7 +213,7 @@
               }"
               class="w-8/12 transition-all duration-300 mx-auto overflow-hidden"
             >
-              <h1 class="w-full text-center flex-grow-0 text-6xl font-semibold capitalize">
+              <h1 class="w-full text-center flex-grow-0 text-5xl sm:text-6xl font-bold capitalize">
                 {{ title }}
               </h1>
             </div>
@@ -206,7 +221,7 @@
             <!-- //!tiptap -->
             <Tiptap
               :class="{ 'p-0': !inEditingMode, 'pt-0': inEditingMode }"
-              class="z-0 transition-all duration-300 p-1"
+              class="z-0 transition-all duration-300 p-0.5 flex-grow-0 flex-shrink"
               :model-value="content"
               :editable="inEditingMode || yetToPublish"
               @update:modelValue="updateContent"
@@ -268,15 +283,15 @@
         return formatDate(this.pickedDate);
       }
     },
-    async mounted() {
-      await this.init();
-    },
     watch: {
       $route: async function () {
         if (this.$route.name == 'post') 
           this.clearData();
           await this.init();
       },
+    },
+    async mounted() {
+      await this.init();
     },
     methods: {
       clearData(){
@@ -380,6 +395,7 @@
         }
       },
       cancel(){
+        this.loading = true;
         this.inEditingMode = false;
         this.$router.go(0);
       }
@@ -396,6 +412,14 @@
     background-position-x: center;
     background-size: 90% 700px;
     background-repeat: no-repeat;
+  }
+
+  .viewingImg {
+    @apply aspect-w-1 md:aspect-w-3 xl:aspect-w-4 aspect-h-1 rounded-none drop-shadow-2xl;
+  }
+
+  .obstructingImg {
+    @apply sm:opacity-0 sm:pointer-events-none;
   }
 </style>
 
@@ -445,10 +469,6 @@
     --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
     border-color: rgba(252, 165, 165, 1);
-  }
-
-  .viewingImg {
-    @apply aspect-w-3 xl:aspect-w-4 aspect-h-1 rounded-none drop-shadow-2xl;
   }
 </style>
 

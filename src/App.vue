@@ -291,7 +291,7 @@ button {
   @apply w-2 h-2;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 rounded-full;
+  @apply bg-gray-400 rounded-full border-2 border-transparent bg-clip-padding;
 }
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-red-300;
