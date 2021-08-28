@@ -6,8 +6,6 @@ export default {
     return {
       //basic user info (name, email, uid, img)
       userInfo: {},
-      //extra info collected for hosts (uni, profession, phone ...)
-      extraInfo: {},
       isLoggedIn: false,
       privLevel: -99,
       token: null,
@@ -22,7 +20,8 @@ export default {
         uid: user.uid,
         img: user.photoURL,
       };
-      state.extraInfo = user.extra;
+      user?.number ? state.userInfo['number'] = user.number : null;   
+      user?.uni ? state.userInfo['uni'] = user.uni : null;   
       state.privLevel = user.priv;
     },
 
@@ -49,20 +48,17 @@ export default {
         if (ds.exists()) {
           //user exists in the db already
           //read privilege level
-          // console.log("old user");
           p = await ds.child("priv").val();
-          // console.log(p);
           if (p > 0) {
             var u = await ds.val();
             extraInfo = {
-              phone: u.phone || "0611111111",
+              number: u.number || "0611111111",
               uni: u.uni || "ENSAT",
             };
           }
         } else {
           //first time user logged in
           //create a user entry in db
-          // console.log("first time");
           var newUser = users.child(user.uid);
           newUser.set({
             priv: p,
@@ -71,12 +67,12 @@ export default {
             img: user.photoURL,
           });
         }
-      });
-      commit({
-        type: "setUser",
-        priv: p,
-        extra: extraInfo,
-        ...user,
+        commit({
+          type: "setUser",
+          priv: p,
+          ...extraInfo,
+          ...user,
+        });
       });
     },
     logOut({ commit }) {
