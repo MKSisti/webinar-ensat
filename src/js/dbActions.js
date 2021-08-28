@@ -150,17 +150,20 @@ const getUsersInWaitingRoom = async () => {
 
 const getUsersFromSearch = async (text) => {
   let l = [];
-  console.log(text.toUpperCase());
+  let re = new RegExp(text,"gi");
   await users
     .orderByChild('userName')
     .startAt(text.toUpperCase())
     .endAt(text.toLowerCase() + '\uf8ff')
     .once('value', async (ds) => {
       ds.forEach((dsch) => {
-        l.push({
-          uid: dsch.key,
-          ...dsch.val(),
-        });
+        let v = dsch.val();
+        if (re.test(v.userName)) {
+          l.push({
+            uid: dsch.key,
+            ...v,
+          });
+        } 
       });
     });
   return l;
