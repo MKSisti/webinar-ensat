@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center items-start w-full relative">
     <div
-      v-if="!dropDown && !noClear"
+      v-if="!dropDown && !noClear && !ro"
       class="absolute right-0 px-4 cursor-pointer -mt-0.5"
       @click="clear"
     >
@@ -102,6 +102,7 @@
       clear() {
         this.value = '';
         this.$refs.input.value = '';
+        this.$emit('clear');
       },
     },
   };

@@ -40,7 +40,7 @@
                 />
               </div>
               <h1
-                :v-if="!post"
+                v-if="!post"
                 class="text-center font-bold text-4xl p-4"
               >
                 Upload your poster
@@ -117,17 +117,15 @@
             class="top-0 absolute right-20 flex justify-end items-center transform -translate-y-1/2 gap-x-4 z-50 w-full transition-opacity duration-300"
           >
             <!-- title and date input and commit button-->
-            <div
-              class="w-2/12 flex items-center justify-start relative ml-32"
-            >
-              <base-input
-                name="Title"
-                :lazy="200"
-                size="0"
-                :model-value="title"
-                @update:modelValue="handleTitle"
-              />
-            </div>
+
+            <base-input
+              name="Title"
+              class="max-w-xs"
+              :lazy="200"
+              size="0"
+              :model-value="title"
+              @update:modelValue="handleTitle"
+            />
             <DatePicker
               v-model="pickedDate"
               :min-date="new Date()"

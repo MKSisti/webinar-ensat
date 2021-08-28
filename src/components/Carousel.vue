@@ -54,8 +54,9 @@
           <img :src="posters[this.current]" class="h-full w-auto" alt="" />
         </div> -->
 
+        <!-- bottom info container -->
         <div
-          class="h-16 md:h-20 left-0 bottom-0 absolute w-full group hover:h-20 md:focus:h-28 transition-all duration-300"
+          class="h-16 md:h-20 left-0 bottom-0 absolute w-full group cursor-pointer hover:h-20 md:focus:h-28 transition-all duration-300"
           tabindex="0"
         >
           <!-- bottom fade to white -->
