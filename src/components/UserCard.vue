@@ -46,15 +46,15 @@
         </div>
       </div>
       <div
-        v-if="!minimal"
+        v-if="!minimal && userInfo.priv > 0 "
         class="secondaryInfo w-full h-36 pt-28 bg-gray-200 absolute z-0"
       >
         <div class="w-full flex justify-around items-center py-1">
           <h3 class="font-semibold max-w-full truncate flex-shrink-0 text-base">
-            {{ getAbbreviation('ecole national des science applique tanger') }}
+            {{ getAbbreviation(userInfo.uni) }}
           </h3>
           <h3 class="max-w-full truncate flex-shrink-0 text-base font-normal">
-            +(212)655554244
+            {{userInfo.number }}
           </h3>
         </div>
       </div>
