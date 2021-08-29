@@ -104,7 +104,7 @@
             />
           </router-link>
 
-          <div class="bg-gray-100 h-10 transform md:-translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-5 font-semibold">
+          <div class="bg-gray-100 py-2 transform md:-translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-4 font-semibold">
             Hosting date:
             {{ formatedDate ? formatedDate.date + ' at ' + formatedDate.time : 'xx/xx/xxxx at xx:xx' }}
           </div>

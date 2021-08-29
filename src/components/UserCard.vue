@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ userCardMin: minimal || userInfo.priv < 1 }"
-    class="h-36 w-full"
+    class="h-28 sm:h-32 w-full"
   >
     <div class="w-full h-full relative shadow-xl overflow-hidden rounded-3xl">
       <!-- <div
@@ -19,42 +19,44 @@
         </div>
       </div> -->
 
-      <div class="mainInfo w-full h-28 bg-gray-100 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
-        <div class="h-full flex justify-center items-center px-4 flex-shrink-0">
+      <div class="mainInfo w-full h-20 sm:h-24 bg-gray-100 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
+        <div class="h-full flex justify-center items-center px-2 sm:px-4 flex-shrink-0">
           <img
-            :class="{ 'animate-pulse bg-red-200': loadingImg }"
+            :class="{ 'animate-pulse bg-red-200': loadingImg}"
             :src="userInfo.img"
             alt="avatar"
-            class="rounded-full w-full flex-shrink-0"
+            class="rounded-full  flex-shrink-0 h-16 w-16 sm:h-20 sm:w-20"
             @load="loadingImg = false"
           >
         </div>
-        <div class="flex justify-center items-start flex-col">
-          <h1 class="text-3xl font-bold flex justify-start items-start max-w-full truncate pr-8 sm:pr-36">
-            {{ userInfo.userName }}
+        <div class="flex justify-center items-start flex-col w-full -space-y-1">
+          <div class="flex justify-start items-start w-full pr-24">
+            <h1 class="text-xl sm:text-3xl font-bold truncate">
+              {{ userInfo.userName }}
+            </h1>
             <h4
               v-if="tag != ''"
               :class="color"
-              class="text-xs ml-1 px-1 py-px rounded-md font-semibold"
+              class="text-xs ml-1 px-1 py-px rounded-md font-semibold truncate"
             >
               {{ tag }}
             </h4>
-          </h1>
-          <h2 class="text-xl font-semibold max-w-full truncate pr-8 sm:pr-36">
+          </div>
+          <h2 class="text-base sm:text-xl font-semibold w-full truncate pr-24">
             {{ userInfo.email }}
           </h2>
         </div>
       </div>
       <div
         v-if="!minimal && userInfo.priv > 0 "
-        class="secondaryInfo w-full h-36 pt-28 bg-gray-200 absolute z-0"
+        class="secondaryInfo w-full h-28 pt-20 sm:h-32 sm:pt-24 bg-gray-200 absolute z-0"
       >
         <div class="w-full flex justify-around items-center py-1">
           <h3 class="font-semibold max-w-full truncate flex-shrink-0 text-base">
             {{ getAbbreviation(userInfo.uni) }}
           </h3>
           <h3 class="max-w-full truncate flex-shrink-0 text-base font-normal">
-            {{userInfo.number }}
+            {{ userInfo.number }}
           </h3>
         </div>
       </div>
@@ -96,20 +98,21 @@
 <style lang="scss" scoped>
   .userCardMin {
     @apply h-16;
-
+    
+    
     .mainInfo {
       @apply h-16;
 
-      img {
-        @apply h-14;
+      img{
+        @apply h-14 w-14;
       }
 
-      h1 {
-        @apply text-xl;
+      h1{
+        @apply text-lg sm:text-xl;
       }
 
-      h2 {
-        @apply text-lg;
+      h2{
+        @apply text-base sm:text-lg;
       }
     }
   }

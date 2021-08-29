@@ -306,4 +306,8 @@
   ::-webkit-scrollbar-track {
     @apply bg-transparent rounded-full;
   }
+
+  *{
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  }
 </style>

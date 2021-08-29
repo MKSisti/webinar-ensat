@@ -3,8 +3,11 @@
     <div class="flex-grow">
       <router-link to="/">
         <!-- <div>W</div> -->
-        <div class="text-lg sm:text-xl font-semibold">
-          Webinar Ensat
+        <div
+          class="text-lg sm:text-xl font-bold flex justify-center items-center bg-red-200 btnRing rounded-2xl w-12 h-12"
+          @click="profileMenu = false"
+        >
+          WE
         </div>
       </router-link>
     </div>
@@ -13,7 +16,7 @@
     <div
       v-if="getPrivLevel > 1"
       :class="{'opacity-0 -translate-y-5 sm:translate-y-0 sm:opacity-100 pointer-events-none sm:pointer-events-auto delay-0':!profileMenu,'opacity-100 translate-y-0 pointer-events-auto delay-200':profileMenu}"
-      class="flex absolute shadow-xl sm:relative right-5 top-40 mt-2 sm:mt-0 sm:right-0 sm:top-0 px-6 transition duration-300 sm:delay-0 transform  justify-start items-start flex-col sm:flex-row sm:justify-center sm:items-center  gap-2 sm:px-2 py-1 bg-gray-100 rounded-2xl sm:shadow-sm z-50"
+      class="flex absolute shadow-xl sm:relative right-5 top-40 mt-2 sm:mt-0 sm:right-0 sm:top-0 px-4 py-2 transition duration-300 sm:delay-0 transform  justify-start items-start flex-col sm:flex-row sm:justify-center sm:items-center  gap-2 sm:px-2 bg-gray-100 rounded-2xl sm:shadow-sm z-50"
     >
       <h1 class="text-2xl font-bold select-none">
         Actions
@@ -26,7 +29,7 @@
             class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl"
             @click="profileMenu = false"
           >
-            <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
+            <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-2.5 sm:px-3 py-1.5 relative flex-shrink-0">
               <i
                 class="fa fa-gavel flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
                 aria-hidden="true"
@@ -45,12 +48,12 @@
         @click="goToCreate"
       >
         <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl">
-          <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
+          <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-2.5 sm:px-3 py-1.5 relative flex-shrink-0">
             <i
               class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
               aria-hidden="true"
             />
-            <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform sm:group-hover:w-28 sm:w-0 overflow-hidden whitespace-nowrap duration-300 pl-2.5 sm:pl-0 sm:group-hover:pl-2.5 sm:opacity-0 sm:group-hover:opacity-100">
+            <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform sm:group-hover:w-28 sm:w-0 overflow-hidden whitespace-nowrap duration-300 pl-3 sm:pl-0 sm:group-hover:pl-2.5 sm:opacity-0 sm:group-hover:opacity-100">
               Write a post
             </h1>
           </div>
@@ -95,23 +98,23 @@
         <div
           ref="profileMenu"
           :class="{
-            'h-0 opacity-20': !profileMenu,
-            'h-24 opacity-100': profileMenu,
+            '-translate-y-4 opacity-0': !profileMenu,
+            'translate-y-0 opacity-100': profileMenu,
           }"
-          class="absolute overflow-hidden rounded-2xl bg-gray-100 shadow-xl transition-all duration-300 right-0 top-14 flex justify-center items-start"
+          class="absolute overflow-hidden rounded-2xl bg-gray-100 shadow-xl transform transition duration-300 right-0 top-14 flex justify-center items-start"
         >
           <div class="px-4 py-2 space-y-2 ">
             <router-link
               :to="'/profile/' + getUserInfo.uid"
               @click="profileMenu = false"
             >
-              <div class="text-xl bg-gray-200 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center">
+              <div class="text-xl bg-gray-200 rounded-lg px-6 py-1 w-full font-semibold btnTransform text-center">
                 <h1>Profile</h1>
               </div>
             </router-link>
 
             <div
-              class="text-xl bg-red-400 rounded-lg px-8 py-1 w-full font-semibold btnTransform text-center cursor-pointer"
+              class="text-xl bg-red-400 rounded-lg px-6 py-1 w-full font-semibold btnTransform text-center cursor-pointer"
               @click="logOut"
             >
               <h1>Disconnect</h1>

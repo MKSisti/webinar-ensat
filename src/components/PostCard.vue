@@ -11,14 +11,14 @@
     <!-- //!creation date -->
     <div
       v-if="!noDates"
-      class="absolute text-black font-semibold top-0 right-0 px-5 py-1 sm:py-2 text-xs text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
+      class="absolute text-black font-semibold top-0 right-0 px-5 py-1 sm:py-2 text-xs transform opacity-100 group-hover:opacity-20 group-hover:-translate-y-2 transition duration-300 text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
     >
       Posted {{ createdDate.date + ' ' + createdDate.time }}
     </div>
     <div class="w-full transform group-hover:-translate-y-2 group-hover:scale-105 sm:group-hover:-translate-y-0 sm:group-hover:scale-100 transition duration-300 flex-shrink-0">
       <!-- //!user data -->
       <div 
-        class="pt-4 pb-4 w-full px-8 flex justify-start items-center"
+        class="pt-6 pb-4 w-full px-8 flex justify-start items-center"
       >
         <div class="rounded-full h-14 w-14 sm:h-16 sm:w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center">
           <img

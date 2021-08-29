@@ -20,9 +20,9 @@
         @click="goToPrev()"
       >
         <span
-          class="h-8 w-8 bg-gray-100 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
+          class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
         ><i
-          class="fa fa-chevron-left mr-px"
+          class="fa fa-chevron-left mr-px text-sm mg:text-lg"
           aria-hidden="true"
         />
         </span>
@@ -32,9 +32,9 @@
         @click="goToNext()"
       >
         <span
-          class="h-8 w-8 bg-gray-100 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:-translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
+          class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:-translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
         ><i
-          class="fa fa-chevron-right ml-px"
+          class="fa fa-chevron-right ml-px text-sm mg:text-lg"
           aria-hidden="true"
         /></span>
       </div>
@@ -56,7 +56,7 @@
 
         <!-- bottom info container -->
         <div
-          class="h-16 md:h-20 left-0 bottom-0 absolute w-full group cursor-pointer hover:h-20 md:focus:h-28 transition-all duration-300"
+          class="h-12 md:h-16 left-0 bottom-0 absolute w-full group cursor-pointer focus:h-16 md:focus:h-20 transition-all duration-300"
           tabindex="0"
         >
           <!-- bottom fade to white -->
@@ -72,9 +72,9 @@
           >
             <div
               v-if="!loading"
-              class="absolute left-0 transition duration-300 bottom-0 w-full h-full px-2 md:px-8 flex justify-start items-center z-50 opacity-80 group-focus:opacity-100"
+              class="absolute left-0 transition duration-300 bottom-0 w-full h-full px-2 xl:px-8 flex justify-start items-center z-50 opacity-80 group-focus:opacity-100"
             >
-              <span class="rounded-full bg-yellow-400 h-16 w-16 md:h-20 md:w-20 transform scale-75 group-focus:scale-100 transition duration-300 flex-none overflow-hidden">
+              <span class="rounded-full bg-yellow-400 h-12 w-12 md:h-16 md:w-16 transform scale-75 group-focus:scale-100 transition duration-300 flex-none overflow-hidden">
                 <img
                   :src="user?.img"
                   alt=""
@@ -83,22 +83,18 @@
               <div class="flex flex-col justify-center items-start pl-4 w-full group-focus:pointer-events-auto pointer-events-none">
                 <h1
                   :key="posts[current]?.title + 'title'"
-                  class="font-bold opacity-100 cursor-pointer pb-1 hover:underline text-2xl md:text-3xl truncate w-8/12 transition duration-300 transform translate-y-3 -translate-x-3 group-focus:translate-y-0 group-focus:translate-x-0 z-50"
+                  class="font-bold opacity-100 cursor-pointer hover:underline text-xl md:text-2xl truncate w-8/12 transition duration-300 transform translate-y-3 -translate-x-3 group-focus:translate-y-0 group-focus:translate-x-0 z-50"
                   @click="goToPost(posts[current]?.pid)"
                 >
                   {{ posts[current]?.title }}
                 </h1>
-                <router-link
-                  :to="'/profile/' + user?.uid"
-                  @click.prevent.stop
+                <h2
+                  :key="user?.uid + 'user'"
+                  class="capitalize hover:underline cursor-pointer text-base md:text-lg text-gray-900 transition duration-300 opacity-0 group-focus:opacity-100 z-20"
+                  @click="goToUser(user?.uid)"
                 >
-                  <h2
-                    :key="user?.uid + 'user'"
-                    class="capitalize hover:underline cursor-pointer text-xl md:text-2xl text-gray-900 transition duration-300 opacity-0 group-focus:opacity-100 z-20"
-                  >
-                    {{ user?.userName }}
-                  </h2>
-                </router-link>
+                  {{ user?.userName }}
+                </h2>
               </div>
             </div>
           </transition>
@@ -136,12 +132,15 @@
     },
     methods: {
       goToPost(pid) {
-        console.log('trying to show post');
         this.$router.push({
           name: 'post',
-          params: {
-            pid: pid,
-          },
+          params: { pid },
+        });
+      },
+      goToUser(uid) {
+        this.$router.push({
+          name: 'profile',
+          params: { uid },
         });
       },
       goToNext() {
