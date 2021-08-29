@@ -31,20 +31,20 @@
               class="w-full h-full absolute top-2 z-50 pointer-events-none transform transition duration-300"
             >
               <div
-                class="w-10 h-10 mx-auto bg-gray-200 rounded-xl pointer-events-auto cursor-pointer btnTransform shadow-lg"
+                class="mx-auto max-w-min bg-gray-200 rounded-xl pointer-events-auto cursor-pointer btnTransform shadow-lg flex justify-center items-center gap-2 px-2.5 py-0.5"
                 @click="$refs.FileUpload.click()"
               >
                 <i
-                  class="fa fa-arrow-down text-2xl w-full h-full text-center mt-1"
+                  class="fa fa-arrow-down text-lg h-full mt-1"
                   aria-hidden="true"
                 />
+                <h1
+                  class="font-semibold text-base whitespace-nowrap"
+                >
+                  Edit your poster
+                </h1>
               </div>
-              <h1
-                v-if="!fileToUpload || !cover"
-                class="text-center font-bold text-xl sm:text-2xl p-4"
-              >
-                Upload your poster
-              </h1>
+              
               <input
                 ref="FileUpload"
                 type="file"
