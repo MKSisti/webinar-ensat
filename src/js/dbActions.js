@@ -65,9 +65,25 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
     title,
     approved: false,
   });
+  let user = await getUser(owner);
+  let to = await getAdminEmails();
+  await sendMail(
+    to,
+    `NEW POST CREATED BY ${user.userName} titled: ${title}`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      User ${user.userName} just submitted a new post with title :${title}, please visit the admin dashboard to take action.
+
+      - userName : ${user.userName}
+      - email : ${user.email}
+      - uni : ${user.uni} 
+    </p>
+    `
+  );
 };
 // updated as well
-const updatePost = async (pid, content, hosting_date, title) => {
+const updatePost = async (pid, content, hosting_date, title, uid) => {
+  var tmLoc = new Date();
+  let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
   await driver.update(
     'posts',
     { pid },
@@ -75,7 +91,23 @@ const updatePost = async (pid, content, hosting_date, title) => {
       content,
       hosting_date,
       title,
+      approved: false,
+      last_updated: t,
     }
+  );
+  let user = await getUser(uid);
+  let to = await getAdminEmails();
+  await sendMail(
+    to,
+    `POST UPDATED BY ${user.userName} TITLED: ${title}`,
+    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
+      User ${user.userName} just updated a post with title : ${title} , please visit the admin dashboard to take action.
+
+      - userName : ${user.userName}
+      - email : ${user.email}
+      - uni : ${user.uni} 
+     </p>
+    `
   );
 };
 

@@ -194,7 +194,7 @@
 
             <!-- //!remove button -->
             <div
-              v-if="inEditingMode && post"
+              v-if="(inEditingMode && post) || (getPrivLevel >1 && post && post.owner != getUserInfo.uid)"
               class="select-none font-semibold shadow-lg px-3 py-1 bg-red-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
             >
               <div @click="remove">
@@ -365,12 +365,13 @@
         }
       },
       async remove() {
-        await removePost(this.pid, this.owner);
+        console.log(this.post.owner);
+        await removePost(this.pid, this.post.owner);
         this.$router.push({ name: 'home' });
       },
       update() {
         this.inEditingMode = false;
-        updatePost(this.pid, this.content, this.pickedDate.getTime(), this.title);
+        updatePost(this.pid, this.content, this.pickedDate.getTime(), this.title, this.post.owner);
         if (this.fileToUpload) {
           updateCover(this.fileToUpload, this.pid);
         }
