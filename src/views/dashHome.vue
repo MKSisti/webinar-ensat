@@ -5,7 +5,9 @@
         Dashboard
       </h1>
 
-      <router-link to="/adminUsers">
+      <router-link
+        to="/adminUsers"
+      >
         <div class="flex justify-center items-center">
           <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl">
             <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
@@ -21,7 +23,9 @@
         </div>
       </router-link>
 
-      <router-link to="/adminUsers/postsDash">
+      <router-link
+        to="/adminUsers/postsDash"
+      >
         <div class="flex justify-center items-center">
           <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl">
             <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
@@ -36,7 +40,9 @@
           </div>
         </div>
       </router-link>
-      <router-link to="/adminUsers/changePriv">
+      <router-link
+        to="/adminUsers/changePriv"
+      >
         <div class="flex justify-center items-center">
           <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl">
             <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
