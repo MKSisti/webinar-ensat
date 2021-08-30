@@ -32,7 +32,6 @@
               :minimal="true"
               :user-info="u"
             />
-
             <div class="flex justify-end items-center z-50 w-full">
               <div class="flex justify-center items-center flex-wrap w-full gap-y-7 gap-x-3">
                 <base-input

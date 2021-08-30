@@ -51,7 +51,7 @@
                 aria-hidden="true"
               />
               <h1 class="text-lg font-semibold flex-shrink-0 whitespace-nowrap duration-300">
-                User privileges
+                User information
               </h1>
             </div>
           </div>

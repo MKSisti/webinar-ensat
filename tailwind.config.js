@@ -60,6 +60,7 @@ module.exports = {
       padding: ['hover', 'group-hover'],
       transitionDelay: ['group-hover'],
       pointerEvents: ['focus', 'hover', 'group-hover', 'group-focus'],
+      invert: ['dark'],
     },
   },
   plugins: [

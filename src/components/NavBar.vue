@@ -4,10 +4,19 @@
       <router-link to="/">
         <!-- <div>W</div> -->
         <div
-          class="text-lg sm:text-xl font-bold flex justify-center items-center bg-red-200 dark:bg-red-400 btnRing rounded-2xl w-12 h-12"
+          class="flex justify-center filter dark:invert items-center rounded-2xl gap-2"
           @click="profileMenu = false"
         >
-          WE
+          <img
+            class="h-12 w-12"
+            src="/img/icons/icon_192x192.png"
+            alt=""
+          >
+          <img
+            class="h-12 hidden sm:block"
+            src="/img/icons/text_512.png"
+            alt=""
+          >
         </div>
       </router-link>
     </div>

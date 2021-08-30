@@ -21,21 +21,15 @@ function debounce(func, wait, immediate) {
 }
 
 function getAbbreviation(text) {
-  if (typeof text != "string" || !text) {
+  if (typeof text != 'string' || !text) {
     return text;
   }
 
-  if (text.includes(" ")) {
-    text = text.replaceAll(/ De| des| du| la| le| les| un| une/gi, "");
-
+  if (text.includes(' ')) {
+    text = text.replaceAll(/ des| De| du| d'| les| la| le| une| un/gi, '  ');
     const acronym = text
       .match(/[\p{Alpha}\p{Nd}]+/gu)
-      .reduce(
-        (previous, next) =>
-          previous +
-          (+next === 0 || parseInt(next) ? parseInt(next) : next[0] || ""),
-        ""
-      )
+      .reduce((previous, next) => previous + (+next === 0 || parseInt(next) ? parseInt(next) : next[0] || ''), '')
       .toUpperCase();
     return acronym;
   } else {
@@ -45,19 +39,15 @@ function getAbbreviation(text) {
 
 function formatDate(d) {
   var sda = new Date(d).toJSON();
-  sda =
-    sda.split("T")[0].replaceAll("-", "/") +
-    " " +
-    sda.split("T")[1].split(".")[0];
+  sda = sda.split('T')[0].replaceAll('-', '/') + ' ' + sda.split('T')[1].split('.')[0];
   let dateTime = {};
 
-  sda = sda.split(" ");
-  dateTime.date = sda[0].split("/");
-  dateTime.date =
-    dateTime.date[2] + "/" + dateTime.date[1] + "/" + dateTime.date[0];
+  sda = sda.split(' ');
+  dateTime.date = sda[0].split('/');
+  dateTime.date = dateTime.date[2] + '/' + dateTime.date[1] + '/' + dateTime.date[0];
 
-  dateTime.time = sda[1].split(":");
-  dateTime.time = dateTime.time[0] + ":" + dateTime.time[1];
+  dateTime.time = sda[1].split(':');
+  dateTime.time = dateTime.time[0] + ':' + dateTime.time[1];
 
   return dateTime;
 }
