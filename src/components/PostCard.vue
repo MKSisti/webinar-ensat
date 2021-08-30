@@ -6,12 +6,12 @@
       'max-h-20 justify-center': noPoster,
       'opacity-80': !eventUpcoming
     }"
-    class="postCard transform transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full sm:shadow-2xl flex flex-col items-center overflow-hidden border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
+    class="postCard transform transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full sm:shadow-2xl flex flex-col items-center overflow-hidden border-0 border-b-2 border-gray-200 dark:border-gray-600 border-opacity-70 sm:border-b-0 bg-gray-100 dark:bg-gray-800"
   > 
     <!-- //!creation date -->
     <div
       v-if="!noDates"
-      class="absolute text-black font-semibold top-0 right-0 px-5 py-1 sm:py-2 text-xs transform opacity-100 group-hover:opacity-20 group-hover:-translate-y-2 transition duration-300 text-opacity-60 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-bl-4xl"
+      class="absolute text-black dark:text-white font-semibold top-0 right-0 px-5 py-1 sm:py-2 text-xs transform opacity-100 group-hover:opacity-20 group-hover:-translate-y-1 transition duration-300 text-opacity-60"
     >
       Posted {{ createdDate.date + ' ' + createdDate.time }}
     </div>
@@ -73,7 +73,7 @@
           <img
             v-if="!loading"
             :src="cover"
-            alt="yeet"
+            alt=""
           >
         </div>
       </div>

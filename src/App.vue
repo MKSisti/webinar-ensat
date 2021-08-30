@@ -87,10 +87,10 @@
   }
 
   ::-moz-selection {
-    @apply bg-red-300;
+    @apply bg-red-300 dark:bg-red-400;
   }
   ::selection {
-    @apply bg-red-300;
+    @apply bg-red-300 dark:bg-red-400;
   }
 
   @property --cs {

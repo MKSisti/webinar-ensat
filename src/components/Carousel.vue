@@ -60,7 +60,7 @@
         <!-- bottom fade to white -->
         <div
           :class="{ 'animate-pulse': loading }"
-          class="absolute left-0 bottom-0 w-full h-full bg-gray-50 dark:bg-black pointer-events-none opacity-40 group-focus:opacity-90 transition duration-300"
+          class="absolute left-0 bottom-0 w-full h-full bg-gray-50 dark:bg-gray-900 pointer-events-none opacity-40 group-focus:opacity-90 transition duration-300"
         />
 
         <!-- bottom user/article info -->
@@ -90,7 +90,7 @@
               </h1>
               <h2
                 :key="user?.uid + 'user'"
-                class="capitalize hover:underline cursor-pointer text-base md:text-lg text-gray-900 transition duration-300 opacity-0 group-focus:opacity-100 z-20"
+                class="capitalize hover:underline cursor-pointer text-base md:text-lg transition duration-300 opacity-0 group-focus:opacity-100 z-20"
                 @click="goToUser(user?.uid)"
               >
                 {{ user?.userName }}

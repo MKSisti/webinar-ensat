@@ -1,12 +1,12 @@
 <template>
   <div
     :class="{'shadow-2xl rounded-3xl': float}"
-    class="sm:shadow-2xl sm:rounded-3xl py-6 sm:py-8 px-4 sm:px-6"
+    class="sm:shadow-2xl sm:rounded-3xl py-6 sm:py-8 px-4 sm:px-6 bg-gray-100 dark:bg-gray-900"
     @keypress.enter="apply"
   >
     <div
       :class="{ 'flex-col': !noOrder }"
-      class="w-full flex justify-center items-center gap-4 sm:gap-8"
+      class="w-full flex justify-center items-center gap-6 sm:gap-8"
     >
       <!-- //!search top section -->
       <div

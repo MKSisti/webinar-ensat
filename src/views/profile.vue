@@ -44,7 +44,7 @@
 
             <div class="w-full h-full">
               <div class="w-full h-full flex-col text-4xl ">
-                <div class="w-full sm:px-8 xl:px-0 flex flex-row justify-around items-start flex-wrap gap-y-10 py-10">
+                <div class="w-full sm:px-8 xl:px-0 flex flex-row justify-around items-start flex-wrap sm:gap-y-10 rounded-t-3xl overflow-hidden sm:py-5 sm:overflow-visible">
                   <transition-group
                     v-if="userPosts.length > 0"
                     name="fade-y"
@@ -159,7 +159,9 @@
     props: ['uid'],
     data() {
       return {
-        userInfo: {},
+        userInfo: {
+          priv: 0
+        },
         userPosts: [],
         becomingHost: false,
         editingProfile: false,

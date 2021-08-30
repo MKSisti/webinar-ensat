@@ -59,7 +59,7 @@
           <div
             :style="viewingImg ? 'opacity:0!important' : ''"
             :class="{ 'rounded-b-3xl sm:rounded-b-6xl': !viewingImg }"
-            class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black dark:to-white opacity-10 transition-all duration-300 pointer-events-none"
+            class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent to-black dark:to-gray-900 opacity-10 dark:opacity-80 transition-all duration-300 pointer-events-none"
           />
 
           <!-- //!cover image-->
@@ -112,7 +112,7 @@
 
         <!-- //!editor -->
         <div 
-          :class="{'sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
+          :class="{'pt-6 sm:pt-0 sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
           class="sm:px-10 sm:mt-10 bg-gray-100 dark:bg-gray-900 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
         >
           <div

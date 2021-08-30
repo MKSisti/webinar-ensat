@@ -55,7 +55,7 @@
         <search
           :text="$route.query.keyword || ''"
           :drop="$route.query.order || 0"
-          class="w-full bg-gray-100 dark:bg-gray-900 md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky border-0 border-b-2 border-gray-200 border-opacity-70 sm:border-b-0"
+          class="w-full md:8/12 sm:mb-10 xl:w-5/12 md:w-7/12 order-1 xl:order-2 xl:top-10 xl:sticky border-0 border-b-2 border-gray-200 dark:border-gray-600 border-opacity-70 sm:border-b-0"
           @apply="search"
         />
       </div>

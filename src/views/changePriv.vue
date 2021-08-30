@@ -9,7 +9,7 @@
         :text="text || ''"
         search-name="Search"
         :no-order="true"
-        class="bg-gray-100 dark:bg-gray-900 mx-auto"
+        class="mx-auto"
         :float="true"
         @apply="searchForUsers"
       />
