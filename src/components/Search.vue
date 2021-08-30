@@ -1,12 +1,14 @@
 <template>
   <div
-    class="sm:shadow-2xl sm:rounded-3xl py-8 px-6"
+    :class="{'shadow-2xl rounded-3xl': float}"
+    class="sm:shadow-2xl sm:rounded-3xl py-6 sm:py-8 px-4 sm:px-6"
     @keypress.enter="apply"
   >
     <div
       :class="{ 'flex-col': !noOrder }"
-      class="w-full flex justify-start items-center gap-8"
+      class="w-full flex justify-center items-center gap-4 sm:gap-8"
     >
+      <!-- //!search top section -->
       <div
         :class="{ 'w-full': !noOrder }"
         class="flex flex-col justify-center items-start relative"
@@ -14,12 +16,14 @@
         <base-input
           :name="searchName || 'Search'"
           :model-value="search"
-          size="1"
+          size="0"
           lazy="250"
           @update:modelValue="handleSearch"
           @clear="clear"
         />
       </div>
+
+      <!-- //!search bottom section -->
       <div
         :class="{ 'w-full': !noOrder }"
         class="flex justify-between flex-grow items-center gap-x-2"
@@ -31,7 +35,7 @@
           <base-input
             name="Order By"
             :model-value="dropDown"
-            size="1"
+            size="0"
             drop-down="true"
             @update:modelValue="handleDropdown"
           >
@@ -57,11 +61,11 @@
         </div>
 
         <div
-          class="h-11 bg-red-100 rounded-2xl flex justify-center items-center cursor-pointer btnRing px-6"
+          class="bg-red-100 rounded-2xl flex justify-center items-center cursor-pointer btnRing px-4 sm:px-6 py-1"
           tabindex="-1"
           @click="apply"
         >
-          <h1 class="text-2xl font-bold mb-1 transition duration-300 transform">
+          <h1 class="text-base sm:text-lg font-bold mb-1 transition duration-300 transform">
             Apply
           </h1>
         </div>
@@ -79,7 +83,7 @@
     components: {
       BaseInput,
     },
-    props: ['text', 'drop', 'noOrder', 'searchName'],
+    props: ['text', 'drop', 'noOrder', 'searchName','float'],
     data() {
       return {
         search: this.text || '',

@@ -23,7 +23,7 @@
             v-if="userInfo.priv >= 1"
             class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
           >
-            <div class="text-7xl font-bold px-10">
+            <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">
               Posts
             </div>
             <!-- //!Create post button -->
@@ -31,12 +31,12 @@
               class="flex justify-center items-center space-x-2 px-10"
               @click="goToCreate"
             >
-              <div class="flex-grow-0 flex justify-start items-center bg-gray-100 rounded-2xl shadow-xl overflow-hidden group duration-300 cursor-pointer btnRing px-4 py-3 space-x-3 relative flex-shrink-0">
+              <div class="flex-grow-0 flex justify-start items-center bg-gray-100 rounded-xl shadow-xl overflow-hidden group duration-300 cursor-pointer btnRing px-4 py-1 space-x-3 relative flex-shrink-0">
                 <i
-                  class="fa fa-file-o flex-shrink-0 flex items-center justify-center text-3xl transition transform duration-300 group-hover:-translate-y-1 mt-px ml-px"
+                  class="fa fa-file flex-shrink-0 flex items-center justify-center text-2xl transition transform duration-300 group-hover:-translate-y-1 mt-px ml-px"
                   aria-hidden="true"
                 />
-                <h1 class="text-2xl font-semibold flex-shrink-0 transition transform group-hover:-translate-y-1 -mt-0.5 duration-300 pl-1">
+                <h1 class="text-xl font-semibold flex-shrink-0 transition transform group-hover:-translate-y-1 -mt-0.5 duration-300">
                   Write a post
                 </h1>
               </div>

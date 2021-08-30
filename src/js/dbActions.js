@@ -1,6 +1,7 @@
 import { users, waiting_Room, storage } from '../firebase';
 
 import { sendMail } from './emailClient';
+import { formatDate } from '../utils';
 
 import driver from './mongoAtlas';
 
@@ -65,18 +66,19 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
     title,
     approved: false,
   });
+  const formattedDate = formatDate(hosting_date);
   let user = await getUser(owner);
   let to = await getAdminEmails();
   await sendMail(
     to,
-    `NEW POST CREATED BY ${user.userName} titled: ${title}`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      User ${user.userName} just submitted a new post with title :${title}, please visit the admin dashboard to take action.
-
-      - userName : ${user.userName}
-      - email : ${user.email}
-      - uni : ${user.uni} 
-    </p>
+    `NEW POST FROM ${user.userName}`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} is hosting a new webinar </h1>
+      <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <li><strong>Title:</strong> ${title}</li>
+      <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
+      </ul>
+      <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
     `
   );
 };
@@ -99,14 +101,14 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
   let to = await getAdminEmails();
   await sendMail(
     to,
-    `POST UPDATED BY ${user.userName} TITLED: ${title}`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      User ${user.userName} just updated a post with title : ${title} , please visit the admin dashboard to take action.
-
-      - userName : ${user.userName}
-      - email : ${user.email}
-      - uni : ${user.uni} 
-     </p>
+    `UPDATED POST FROM ${user.userName}`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} has updated their webinar </h1>
+      <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <li><strong>Title:</strong> ${title}</li>
+      <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
+      </ul>
+      <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
     `
   );
 };
@@ -156,14 +158,14 @@ const requestHost = async (uid, uni, number) => {
     to,
     `NEW USER REQUESTING HOST ${user.userName}`,
     `
-      <h1 style="text-align:center; font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName} requesting hosting privileges <h1>
-      <ul style="list-style-type: none; margin: 0; padding: 0;font-size: 20px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName} requesting hosting privileges </h1>
+      <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
       <li><strong>Username:</strong> ${user.userName}</li>
       <li><strong>Email:</strong> ${user.email}</li>
       <li><strong>Phone:</strong> (+212) - ${number}</li>
       <li><strong>University:</strong> ${uni}</li>
       </ul>
-      <h1 style="text-align:center; font-size: 26px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action <h1>
+      <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
     `
   );
 };
@@ -182,7 +184,7 @@ const getUsersInWaitingRoom = async () => {
 
 const getUsersFromSearch = async (text) => {
   let l = [];
-  let re = new RegExp(text,"gi");
+  let re = new RegExp(text, 'gi');
   await users
     .orderByChild('userName')
     .startAt(text.toUpperCase())
@@ -195,7 +197,7 @@ const getUsersFromSearch = async (text) => {
             uid: dsch.key,
             ...v,
           });
-        } 
+        }
       });
     });
   return l;
@@ -215,10 +217,15 @@ const confirmHost = async (uid) => {
 
   await sendMail(
     user.email,
-    `HOST REQUEST APPROVER FOR ${user.userName}`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      Your request to become a host has been approved, you can start posting right away. Please be respectful or you will be blocked.
-    </p>
+    `USER ${user.userName} WAS ACCEPTED AS A HOST`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName} has been given the privilege to host </h1>
+      <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <li><strong>Username:</strong> ${user.userName}</li>
+      <li><strong>Email:</strong> ${user.email}</li>
+      <li><strong>Phone:</strong> (+212) - ${user.number}</li>
+      <li><strong>University:</strong> ${user.uni}</li>
+      </ul>
     `
   );
 };
@@ -227,14 +234,12 @@ const blockUser = async (uid) => {
   await users.child(uid).update({
     priv: -1,
   });
-  let userInfo = await getUserInfo(uid);
+  let user = await getUserInfo(uid);
   await sendMail(
     userInfo.email,
-    `HI ${userInfo.userName},`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      We are sorry to inform you that your account is blocked, you can still browse the website but you can no longer post.
-      Contact an admin for more information.
-    </p>
+    `${user.userName}, YOUR ACCOUNT HAS BEEN BLOCKED`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, you have been blocked from hosting by an administrator, please contact them to resolve this issue.</h1>
     `
   );
 };
@@ -242,14 +247,12 @@ const unblockUser = async (uid) => {
   await users.child(uid).update({
     priv: 1,
   });
-  let userInfo = await getUserInfo(uid);
+  let user = await getUserInfo(uid);
   await sendMail(
-    userInfo.email,
-    `HI ${userInfo.userName},`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      We are happy to inform you that your account is unlocked again, you can start posting right away.
-      Contact an admin for more information.
-    </p>
+    user.email,
+    `${user.userName}, YOUR ACCOUNT HAS BEEN UNBLOCKED`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, you have been blocked from hosting by an administrator, please contact them to resolve this issue.</h1>
     `
   );
 };
@@ -257,14 +260,12 @@ const makeAdmin = async (uid) => {
   await users.child(uid).update({
     priv: 2,
   });
-  let userInfo = await getUserInfo(uid);
+  let user = await getUserInfo(uid);
   await sendMail(
-    userInfo.email,
-    `HI ${userInfo.userName},`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      We are happy to inform you that your account is upgraded to admin status, you have all the admin privileges now.
-      Contact an admin for more information.
-    </p>
+    user.email,
+    `${user.userName}, YOUR ACCOUNT HAS BEEN UPGRADED TO ADMIN`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>administrative</strong> privileges, you can now access the admin panel in the app</h1>
     `
   );
 };
@@ -273,14 +274,12 @@ const makeHost = async (uid) => {
   await users.child(uid).update({
     priv: 1,
   });
-  let userInfo = await getUserInfo(uid);
+  let user = await getUserInfo(uid);
   await sendMail(
-    userInfo.email,
-    `HI ${userInfo.userName},`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      We are happy to inform you that your account is upgraded to host status.
-      Contact an admin for more information.
-    </p>
+    user.email,
+    `${user.userName}, YOUR ACCOUNT HAS BEEN UPGRADED TO HOST`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>hosting</strong> privileges, you can now host your webinars in the app</h1>
     `
   );
 };
@@ -289,14 +288,12 @@ const makeRegular = async (uid) => {
   await users.child(uid).update({
     priv: 0,
   });
-  let userInfo = await getUserInfo(uid);
+  let user = await getUserInfo(uid);
   await sendMail(
-    userInfo.email,
-    `HI ${userInfo.userName},`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      Your account has been turned into a regular account.
-      Contact an admin for more information.
-    </p>
+    user.email,
+    `${user.userName}, YOUR ACCOUNT WAS REVERTED TO A REGULAR USER`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>hosting</strong> privileges, you can now view the webinars available in the app</h1>
     `
   );
 };
@@ -333,13 +330,12 @@ const denyHost = async (uid) => {
   await waiting_Room.child(uid).remove((err) => {
     console.error(err);
   });
-  let userInfo = await getUserInfo(uid);
+  let user = await getUserInfo(uid);
   await sendMail(
-    userInfo.email,
-    `HOST REQUEST DENIED FOR ${userInfo.userName}`,
-    `<p style="font-size: 32px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;">
-      we are sorry to inform you that your request to become a host has been denied.
-    </p>
+    user.email,
+    `${user.userName}, YOUR ACCOUNT WAS DENIED HOSTING`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account was deinied <strong>hosting</strong> privileges, contact an admin for more info</h1>
     `
   );
 };

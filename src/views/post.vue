@@ -112,12 +112,12 @@
 
         <!-- //!editor -->
         <div 
-          :class="{'pt-5 sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
+          :class="{'sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
           class="sm:px-10 sm:mt-10 bg-gray-100 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
         >
           <div
             :class="{ obstructingImg: viewingImg }"
-            class=" flex justify-end items-center transform flex-col sm:flex-row translate-y-0 sm:-translate-y-full gap-7 z-50 w-full transition-opacity duration-300"
+            class=" flex justify-end items-center transform flex-col sm:flex-row translate-y-0 sm:-translate-y-1/2 gap-7 z-50 w-full transition-opacity duration-300"
           >
             <!-- title and date input and commit button-->
 
@@ -314,7 +314,7 @@
         this.color = 'rgba(0,0,0,0)'
       },
       async init(){
-        this.$nextTick(async () => {
+        // this.$nextTick(async () => {
         this.post = await getPost(this.pid);
         if (this.post == null) {
           if (this.getPrivLevel > 0) {
@@ -340,7 +340,7 @@
           }
         }
         this.loading = false;
-      });
+      // });
       },
       handleTitle(val) {
         this.title = val;
@@ -403,10 +403,13 @@
           console.warn(e);
         }
       },
-      cancel(){
+      async cancel(){
         this.loading = true;
         this.inEditingMode = false;
-        this.$router.go(0);
+        // this.$router.go(0);
+
+        this.clearData();
+        await this.init();
       }
     },
   };

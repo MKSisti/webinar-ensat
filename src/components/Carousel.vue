@@ -42,65 +42,64 @@
 
     <!-- slide container -->
     <transition
-      name="fade"
+      :name=" dir > 0 ? 'fade-left' : 'fade-right'"
+      mode="in-out"
       appear
     >
       <div
         :key="posts[current]?.pid"
         :style="currentImg"
-        class="w-full h-full bg-cover absolute flex justify-center items-center bg-center transition duration-300 bg-no-repeat"
-      >
-        <!-- <div class="w-full h-full absolute">
-          <img :src="posters[this.current]" class="h-full w-auto" alt="" />
-        </div> -->
-
-        <!-- bottom info container -->
-        <div
-          class="h-12 md:h-16 left-0 bottom-0 absolute w-full group cursor-pointer focus:h-16 md:focus:h-20 transition-all duration-300"
-          tabindex="0"
-        >
-          <!-- bottom fade to white -->
-          <div
-            :class="{ 'animate-pulse': loading }"
-            class="absolute left-0 bottom-0 w-full h-full bg-gray-50 pointer-events-none opacity-40 group-focus:opacity-90 transition duration-300"
-          />
-
-          <!-- bottom user/article info -->
-          <transition
-            name="fade-y"
-            appear
-          >
-            <div
-              v-if="!loading"
-              class="absolute left-0 transition duration-300 bottom-0 w-full h-full px-2 xl:px-8 flex justify-start items-center z-50 opacity-80 group-focus:opacity-100"
-            >
-              <span class="rounded-full bg-yellow-400 h-12 w-12 md:h-16 md:w-16 transform scale-75 group-focus:scale-100 transition duration-300 flex-none overflow-hidden">
-                <img
-                  :src="user?.img"
-                  alt=""
-                >
-              </span>
-              <div class="flex flex-col justify-center items-start pl-4 w-full group-focus:pointer-events-auto pointer-events-none">
-                <h1
-                  :key="posts[current]?.title + 'title'"
-                  class="font-bold opacity-100 cursor-pointer hover:underline text-xl md:text-2xl truncate w-8/12 transition duration-300 transform translate-y-3 -translate-x-3 group-focus:translate-y-0 group-focus:translate-x-0 z-50"
-                  @click="goToPost(posts[current]?.pid)"
-                >
-                  {{ posts[current]?.title }}
-                </h1>
-                <h2
-                  :key="user?.uid + 'user'"
-                  class="capitalize hover:underline cursor-pointer text-base md:text-lg text-gray-900 transition duration-300 opacity-0 group-focus:opacity-100 z-20"
-                  @click="goToUser(user?.uid)"
-                >
-                  {{ user?.userName }}
-                </h2>
-              </div>
-            </div>
-          </transition>
-        </div>
-      </div>
+        class="w-full h-full bg-cover absolute bg-center transform scale-105 transition duration-300 bg-no-repeat"
+      />
     </transition>
+    <div class="relative w-full h-full flex justify-center items-center">
+      <div
+        class="h-12 md:h-16 left-0 bottom-0 absolute w-full group cursor-pointer focus:h-16 md:focus:h-20 transition-all duration-300"
+        tabindex="0"
+      >
+        <!-- bottom fade to white -->
+        <div
+          :class="{ 'animate-pulse': loading }"
+          class="absolute left-0 bottom-0 w-full h-full bg-gray-50 pointer-events-none opacity-40 group-focus:opacity-90 transition duration-300"
+        />
+
+        <!-- bottom user/article info -->
+        <transition
+          name="fade-y"
+          mode="out-in"
+          appear
+        >
+          <div
+            v-if="!loading"
+            :key="posts[current]?.pid + 'info'"
+            class="absolute left-0 transition duration-300 bottom-0 w-full h-full px-2 xl:px-8 flex justify-start items-center z-50 opacity-80 group-focus:opacity-100"
+          >
+            <span class="rounded-full bg-yellow-400 h-12 w-12 md:h-16 md:w-16 transform scale-75 group-focus:scale-100 transition duration-300 flex-none overflow-hidden">
+              <img
+                :src="user?.img"
+                alt=""
+              >
+            </span>
+            <div class="flex flex-col justify-center items-start pl-4 w-full group-focus:pointer-events-auto pointer-events-none">
+              <h1
+                :key="posts[current]?.title + 'title'"
+                class="font-bold opacity-100 cursor-pointer hover:underline text-xl md:text-2xl truncate w-8/12 transition duration-300 transform translate-y-3 -translate-x-3 group-focus:translate-y-0 group-focus:translate-x-0 z-50"
+                @click="goToPost(posts[current]?.pid)"
+              >
+                {{ posts[current]?.title }}
+              </h1>
+              <h2
+                :key="user?.uid + 'user'"
+                class="capitalize hover:underline cursor-pointer text-base md:text-lg text-gray-900 transition duration-300 opacity-0 group-focus:opacity-100 z-20"
+                @click="goToUser(user?.uid)"
+              >
+                {{ user?.userName }}
+              </h2>
+            </div>
+          </div>
+        </transition>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -117,6 +116,7 @@
     data() {
       return {
         current: 0,
+        dir: 1
       };
     },
     computed: {
@@ -144,12 +144,12 @@
         });
       },
       goToNext() {
+        this.dir = 1;
         this.current = (this.current + 1) % this.posts.length;
-        // console.log(this.current);
       },
       goToPrev() {
+        this.dir = -1;
         this.current = (this.current - 1 + this.posts.length) % this.posts.length;
-        // console.log(this.current);
       },
       stopInterval() {
         if (this.autoPlayInterval) clearInterval(this.autoPlayInterval);
@@ -157,10 +157,32 @@
       },
       startInterval() {
         this.stopInterval();
-        this.autoPlayInterval = setInterval(this.goToNext, 200000);
+        this.autoPlayInterval = setInterval(this.goToNext, 6000);
       },
-    },
+    }
   };
 </script>
 
-<style></style>
+<style>
+
+  .fade-left-enter-from {
+    transform: translateX(20px) scale(105%);
+    opacity: 0;
+  }
+
+  .fade-left-leave-to {
+    transform: translateX(-20px) scale(105%);
+    /* opacity: 0; */
+  }
+
+  .fade-right-enter-from {
+    transform: translateX(-20px) scale(105%);
+    opacity: 0;
+  }
+
+  .fade-right-leave-to {
+    transform: translateX(20px) scale(105%);
+    /* opacity: 0; */
+  }
+
+</style>

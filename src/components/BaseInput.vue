@@ -7,8 +7,8 @@
     >
       <i
         :class="{
-          'text-base': size == 0,
-          'text-xl': size == 1,
+          'text-sm sm:text-base': size == 0,
+          'text-lg sm:text-xl': size == 1,
           'text-2xl': size == 2,
           'text-4xl': size == 3 || size == 4,
           'text-5xl': size == 5 || size == 6,
@@ -27,8 +27,8 @@
       :name="name"
       :readonly="ro"
       :class="{
-        'text-base pr-8': size == 0,
-        'text-xl pr-10': size == 1,
+        'text-sm sm:text-base pr-8': size == 0,
+        'text-lg sm:text-xl pr-10': size == 1,
         'text-2xl pr-12': size == 2,
         'text-4xl pr-14': size == 3 || size == 4,
         'text-5xl pr-14': size == 5 || size == 6,
@@ -42,8 +42,8 @@
       :name="name"
       :readonly="ro"
       :class="{
-        'text-base': size == 0,
-        'text-xl': size == 1,
+        'text-sm sm:text-base': size == 0,
+        'text-lg sm:text-xl': size == 1,
         'text-2xl': size == 2,
         'text-4xl': size == 3 || size == 4,
         'text-5xl': size == 5 || size == 6,
@@ -55,8 +55,8 @@
     <label
       :for="id || name"
       :class="{
-        'text-base': size == 0,
-        'text-xl': size == 1,
+        'text-sm sm:text-base': size == 0,
+        'text-lg sm:text-xl': size == 1,
         'text-xl': size == 2,
         'text-2xl': size == 3 || size == 4,
         'text-4xl': size == 5 || size == 6,

@@ -10,6 +10,7 @@
         search-name="Search"
         :no-order="true"
         class="bg-gray-50 md:bg-gray-100 mx-auto"
+        :float="true"
         @apply="searchForUsers"
       />
       <loader v-if="loading" />
@@ -36,6 +37,7 @@
               <div class="flex justify-center items-center flex-wrap w-full gap-y-7 gap-x-3">
                 <base-input
                   :id="u.uid + 'user'"
+                  size="0"
                   class="flex-shrink max-w-72"
                   name="Username"
                   :model-value="u.userName"
@@ -44,6 +46,7 @@
 
                 <base-input
                   :id="u.uid + 'uni'"
+                  size="0"
                   class="flex-shrink max-w-72"
                   name="University"
                   :model-value="u.uni"
@@ -52,6 +55,7 @@
 
                 <base-input
                   :id="u.uid + 'num'"
+                  size="0"
                   class="flex-shrink max-w-72"
                   name="Number"
                   :model-value="u.number"
@@ -60,6 +64,7 @@
 
                 <base-input
                   :id="u.uid + 'priv'"
+                  size="0"
                   class="flex-shrink max-w-72"
                   name="privilege"
                   :model-value="u.priv"

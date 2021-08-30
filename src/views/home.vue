@@ -160,22 +160,16 @@
         });
       },
       async doSearch() {
+        this.loading = true;
         if (this.keyword != '') {
           this.searching = true;
-          this.loading = true;
-
           this.posts = await getPosts({ approved: true, title: this.keyword }, this.orderBy[this.dropVal], this.postsToShow);
-          this.usersMap = await makeUsersMap(this.posts, this.usersMap);
-
-          this.loading = false;
         } else {
           this.searching = false;
-          this.loading = true;
-          console.log('here');
           this.posts = await getPosts({ approved: true }, this.orderBy[this.dropVal], this.postsToShow, null);
-          this.usersMap = await makeUsersMap(this.posts, this.usersMap);
-          this.loading = false;
         }
+        this.usersMap = await makeUsersMap(this.posts, this.usersMap);
+        this.loading = false;
       },
       async search(searchVal, dropDownVal) {
         this.$router.push({

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex justify-start items-start flex-col">
-    <div class="px-4 py-3 bg-gray-100 shadow-md flex items-center justify-between rounded-2xl gap-4 font-semibold text-xl mx-auto mt-5">
+    <div class="px-4 py-3 bg-gray-100 shadow-md flex-col md:flex-row flex items-start md:items-center justify-between rounded-2xl gap-4 font-semibold text-xl mx-auto mt-5">
       <h1 class="text-2xl font-bold select-none">
         Dashboard
       </h1>
@@ -9,13 +9,13 @@
         to="/adminUsers"
       >
         <div class="flex justify-center items-center">
-          <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl">
-            <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
+          <div class="btnTransformSm transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl w-44">
+            <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
               <i
-                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
+                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black mt-px ml-px h-4 w-4"
                 aria-hidden="true"
               />
-              <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100">
+              <h1 class="text-lg font-semibold flex-shrink-0 whitespace-nowrap duration-300">
                 Host Requests
               </h1>
             </div>
@@ -27,13 +27,13 @@
         to="/adminUsers/postsDash"
       >
         <div class="flex justify-center items-center">
-          <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl">
-            <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
+          <div class="btnTransformSm transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl w-44">
+            <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
               <i
-                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
+                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black mt-px ml-px h-4 w-4"
                 aria-hidden="true"
               />
-              <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-3 opacity-0 group-hover:opacity-100">
+              <h1 class="text-lg font-semibold flex-shrink-0 whitespace-nowrap duration-300">
                 Post Requests
               </h1>
             </div>
@@ -44,13 +44,13 @@
         to="/adminUsers/changePriv"
       >
         <div class="flex justify-center items-center">
-          <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl">
-            <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
+          <div class="btnTransformSm transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl w-44">
+            <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
               <i
-                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
+                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black mt-px ml-px h-4 w-4"
                 aria-hidden="true"
               />
-              <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-32 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2 opacity-0 group-hover:opacity-100">
+              <h1 class="text-lg font-semibold flex-shrink-0 whitespace-nowrap duration-300">
                 User privileges
               </h1>
             </div>
