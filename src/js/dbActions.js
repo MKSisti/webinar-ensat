@@ -1,8 +1,6 @@
 import { users, waiting_Room, storage } from '../firebase';
-
 import { sendMail } from './emailClient';
 import { formatDate } from '../utils';
-
 import driver from './mongoAtlas';
 
 async function getUser(uid) {

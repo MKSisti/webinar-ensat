@@ -1,6 +1,6 @@
 {
-  "name": "webinar-ensat",
-  "version": "0.4.9",
+  "name": "lighthouse",
+  "version": "0.5.8",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
