@@ -1,3 +1,10 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8.00251 14.9297L0 1.07422H6.14651L8.00251 4.27503L9.84583 1.07422H16L8.00251 14.9297Z" fill="black"/>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
+<g id="XMLID_116_">
+	<path id="XMLID_118_" d="M13,16H3c-1.657,0-3-1.343-3-3L0,3c0-1.657,1.343-3,3-3l10,0c1.657,0,3,1.343,3,3v10
+		C16,14.657,14.657,16,13,16z"/>
+	<polygon id="XMLID_117_" style="fill:#FFFFFF;" points="5.626,16 1.87,3.898 13.618,16 	"/>
+</g>
 </svg>
