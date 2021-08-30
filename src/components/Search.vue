@@ -61,7 +61,7 @@
         </div>
 
         <div
-          class="bg-red-100 rounded-2xl flex justify-center items-center cursor-pointer btnRing px-4 sm:px-6 py-1"
+          class="bg-red-100 dark:bg-red-400 rounded-2xl flex justify-center items-center cursor-pointer btnRing px-4 sm:px-6 py-1"
           tabindex="-1"
           @click="apply"
         >

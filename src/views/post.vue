@@ -31,7 +31,7 @@
               class="w-full h-full absolute top-2 z-50 pointer-events-none transform transition duration-300"
             >
               <div
-                class="mx-auto max-w-min bg-gray-200 rounded-xl pointer-events-auto cursor-pointer btnTransform shadow-lg flex justify-center items-center gap-2 px-2.5 py-0.5"
+                class="mx-auto max-w-min bg-gray-200 dark:bg-gray-800 rounded-xl pointer-events-auto cursor-pointer btnTransform shadow-lg flex justify-center items-center gap-2 px-2.5 py-0.5"
                 @click="$refs.FileUpload.click()"
               >
                 <i
@@ -59,7 +59,7 @@
           <div
             :style="viewingImg ? 'opacity:0!important' : ''"
             :class="{ 'rounded-b-3xl sm:rounded-b-6xl': !viewingImg }"
-            class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black opacity-10 transition-all duration-300 pointer-events-none"
+            class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent via-transparent to-black dark:to-white opacity-10 transition-all duration-300 pointer-events-none"
           />
 
           <!-- //!cover image-->
@@ -104,7 +104,7 @@
             />
           </router-link>
 
-          <div class="bg-gray-100 py-2 transform md:-translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-4 font-semibold">
+          <div class="bg-gray-100 dark:bg-gray-900 py-2 transform md:-translate-y-2/3 shadow-xl rounded-xl flex justify-center items-center px-4 font-semibold">
             Hosting date:
             {{ formatedDate ? formatedDate.date + ' at ' + formatedDate.time : 'xx/xx/xxxx at xx:xx' }}
           </div>
@@ -113,7 +113,7 @@
         <!-- //!editor -->
         <div 
           :class="{'sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
-          class="sm:px-10 sm:mt-10 bg-gray-100 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
+          class="sm:px-10 sm:mt-10 bg-gray-100 dark:bg-gray-900 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
         >
           <div
             :class="{ obstructingImg: viewingImg }"
@@ -170,7 +170,7 @@
             <!-- //!publish/update/edit button-->
             <div
               v-if="inEditingMode || yetToPublish || isEditable"
-              class="select-none font-semibold shadow-lg px-3 py-1 bg-gray-100 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+              class="select-none font-semibold shadow-lg px-3 py-1 bg-gray-100 dark:bg-gray-900 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
             >
               <div
                 v-if="inEditingMode && yetToPublish"

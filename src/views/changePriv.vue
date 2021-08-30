@@ -4,12 +4,12 @@
       User Data
     </h1>
     
-    <div class="w-full h-full bg-gray-100 rounded-t-6xl shadow-3xl overflow-auto flex justify-start items-center flex-col py-10 gap-10">
+    <div class="w-full h-full bg-gray-100 dark:bg-gray-900 rounded-t-6xl shadow-3xl overflow-auto flex justify-start items-center flex-col py-10 gap-10">
       <search
         :text="text || ''"
         search-name="Search"
         :no-order="true"
-        class="bg-gray-50 md:bg-gray-100 mx-auto"
+        class="bg-gray-100 dark:bg-gray-900 mx-auto"
         :float="true"
         @apply="searchForUsers"
       />
@@ -25,7 +25,7 @@
           <div
             v-for="u in usersList"
             :key="u.uid"
-            class="w-full relative transform transition duration-300 flex-none flex justify-center items-start gap-10 flex-col py-5 sm:px-5 bg-gray-100 sm:rounded-3xl sm:shadow-2xl border-b-2 sm:border-b-0"
+            class="w-full relative transform transition duration-300 flex-none flex justify-center items-start gap-10 flex-col py-5 sm:px-5 bg-gray-100 dark:bg-gray-900 sm:rounded-3xl sm:shadow-2xl border-b-2 sm:border-b-0"
           >
             <user-card
               class="z-30"

@@ -83,7 +83,7 @@
   html,
   body,
   #app {
-    @apply bg-gray-50;
+    @apply bg-gray-50 dark:bg-black;
   }
 
   ::-moz-selection {
@@ -182,7 +182,7 @@
   }
 
   html {
-    @apply text-gray-800;
+    @apply text-gray-800 dark:text-gray-200;
   }
 </style>
 
@@ -298,7 +298,7 @@
     @apply w-2 h-2;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-400 rounded-full border-2 border-transparent bg-clip-padding;
+    @apply bg-gray-400 dark:bg-gray-600 rounded-full border-2 border-transparent bg-clip-padding;
   }
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-red-300;

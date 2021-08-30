@@ -11,7 +11,7 @@
     <!-- //!creation date -->
     <div
       v-if="!noDates"
-      class="absolute text-black font-semibold top-0 right-0 px-5 py-1 sm:py-2 text-xs transform opacity-100 group-hover:opacity-20 group-hover:-translate-y-2 transition duration-300 text-opacity-60 bg-gray-200 bg-opacity-70 rounded-bl-4xl"
+      class="absolute text-black font-semibold top-0 right-0 px-5 py-1 sm:py-2 text-xs transform opacity-100 group-hover:opacity-20 group-hover:-translate-y-2 transition duration-300 text-opacity-60 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-bl-4xl"
     >
       Posted {{ createdDate.date + ' ' + createdDate.time }}
     </div>
@@ -28,7 +28,7 @@
           >
           <div
             v-else
-            class="w-full h-full bg-gray-300 animate-pulse"
+            class="w-full h-full bg-gray-300 dark:bg-gray-700 animate-pulse"
           />
         </div>
         <div class="flex flex-col justify-center items-start h-full px-3 w-full gap-y-2">
@@ -40,7 +40,7 @@
           </h1>
           <div
             v-else
-            class="w-full h-6 bg-gray-300 rounded-lg animate-pulse"
+            class="w-full h-6 bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse"
           />
           <router-link
             :to="'/profile/' + userData?.uid"
@@ -55,7 +55,7 @@
             </h1>
             <div
               v-else
-              class="w-4/12 h-4 bg-gray-300 rounded-md animate-pulse"
+              class="w-4/12 h-4 bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse"
             />
           </router-link>
         </div>
@@ -83,7 +83,7 @@
         v-if="!noDates"
         class="px-12 sm:px-36 mt-4"
       >
-        <div class="bg-gray-100 py-1 px-2 rounded-xl shadow-md flex justify-between items-center">
+        <div class="bg-gray-100 dark:bg-gray-900 py-1 px-2 rounded-xl shadow-md flex justify-between items-center">
           <h1 class="text-sm font-semibold flex justify-start items-center gap-1">
             <h2 :class="{'text-red-400': !eventUpcoming}">
               {{ eventUpcoming ? 'Hosting' : 'Hosted' }}

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex justify-start items-start flex-col">
-    <div class="px-4 py-3 bg-gray-100 shadow-md flex-col md:flex-row flex items-start md:items-center justify-between rounded-2xl gap-4 font-semibold text-xl mx-auto mt-5">
+    <div class="px-4 py-3 bg-gray-100 dark:bg-gray-900 shadow-md flex-col md:flex-row flex items-start md:items-center justify-between rounded-2xl gap-4 font-semibold text-xl mx-auto mt-5">
       <h1 class="text-2xl font-bold select-none">
         Dashboard
       </h1>
@@ -9,7 +9,7 @@
         to="/adminUsers"
       >
         <div class="flex justify-center items-center">
-          <div class="btnTransformSm transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl w-44">
+          <div class="btnTransformSm transform transition duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl w-44">
             <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
               <i
                 class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black mt-px ml-px h-4 w-4"
@@ -27,7 +27,7 @@
         to="/adminUsers/postsDash"
       >
         <div class="flex justify-center items-center">
-          <div class="btnTransformSm transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl w-44">
+          <div class="btnTransformSm transform transition duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl w-44">
             <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
               <i
                 class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black mt-px ml-px h-4 w-4"
@@ -44,7 +44,7 @@
         to="/adminUsers/changePriv"
       >
         <div class="flex justify-center items-center">
-          <div class="btnTransformSm transform transition duration-300 bg-gray-200 bg-opacity-70 rounded-xl w-44">
+          <div class="btnTransformSm transform transition duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl w-44">
             <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
               <i
                 class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black mt-px ml-px h-4 w-4"

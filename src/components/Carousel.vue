@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ 'animate-pulse': loading }"
-    class="bg-gradient-to-br from-gray-100 to-gray-200 xl:rounded-6xl xl:w-10/12 2xl:w-4/6 w-full rounded-none overflow-hidden relative select-none aspect-w-2 aspect-h-1 xl:aspect-w-3 2xl:aspect-w-4 shadow-xl"
+    class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 xl:rounded-6xl xl:w-10/12 2xl:w-4/6 w-full rounded-none overflow-hidden relative select-none aspect-w-2 aspect-h-1 xl:aspect-w-3 2xl:aspect-w-4 shadow-xl"
     @mouseenter="stopInterval"
     @mouseleave="startInterval"
   >
@@ -9,7 +9,7 @@
       <span
         v-for="n in posts.length"
         :key="n"
-        class="h-2 w-2 rounded-full bg-gray-100 opacity-50 transition duration-300"
+        class="h-2 w-2 rounded-full bg-gray-100 dark:bg-gray-900 opacity-50 transition duration-300"
         :class="{ 'opacity-100': current == n - 1 }"
       />
     </div>
@@ -20,7 +20,7 @@
         @click="goToPrev()"
       >
         <span
-          class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
+          class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 dark:bg-gray-900 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
         ><i
           class="fa fa-chevron-left mr-px text-sm mg:text-lg"
           aria-hidden="true"
@@ -32,7 +32,7 @@
         @click="goToNext()"
       >
         <span
-          class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:-translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
+          class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 dark:bg-gray-900 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:-translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
         ><i
           class="fa fa-chevron-right ml-px text-sm mg:text-lg"
           aria-hidden="true"
@@ -60,7 +60,7 @@
         <!-- bottom fade to white -->
         <div
           :class="{ 'animate-pulse': loading }"
-          class="absolute left-0 bottom-0 w-full h-full bg-gray-50 pointer-events-none opacity-40 group-focus:opacity-90 transition duration-300"
+          class="absolute left-0 bottom-0 w-full h-full bg-gray-50 dark:bg-black pointer-events-none opacity-40 group-focus:opacity-90 transition duration-300"
         />
 
         <!-- bottom user/article info -->

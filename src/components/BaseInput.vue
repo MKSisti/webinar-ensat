@@ -33,7 +33,7 @@
         'text-4xl pr-14': size == 3 || size == 4,
         'text-5xl pr-14': size == 5 || size == 6,
       }"
-      class="searchInput form-input outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 ring-0 w-full order-2 rounded-2xl"
+      class="searchInput form-input outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 dark:bg-gray-800 ring-0 w-full order-2 rounded-2xl"
     >
     <select
       v-else
@@ -48,7 +48,7 @@
         'text-4xl': size == 3 || size == 4,
         'text-5xl': size == 5 || size == 6,
       }"
-      class="searchInput form-select cursor-pointer outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 ring-0 w-full order-2 rounded-2xl"
+      class="searchInput form-select cursor-pointer outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 dark:bg-gray-800 ring-0 w-full order-2 rounded-2xl"
     >
       <slot>No options</slot>
     </select>

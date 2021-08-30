@@ -3,7 +3,7 @@
     <h1 class="text-4xl sm:text-6xl font-bold px-10 py-5">
       Post Requests
     </h1>
-    <div class="w-full h-full bg-gray-100 rounded-t-6xl shadow-3xl overflow-auto">
+    <div class="w-full h-full bg-gray-100 dark:bg-gray-900 rounded-t-6xl shadow-3xl overflow-auto">
       <loader v-if="loading" />
       <div
         v-else

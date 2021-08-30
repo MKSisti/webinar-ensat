@@ -8,7 +8,7 @@
         v-if="editable"
         class="absolute top-0 right-0 z-50 group cursor-pointer"
       >
-        <div class="relative w-12 h-7 group-hover:w-20 bg-gray-200 hover:bg-red-200 rounded-bl-3xl transition-all duration-300 flex items-center justify-start px-2">
+        <div class="relative w-12 h-7 group-hover:w-20 bg-gray-200 dark:bg-gray-800 hover:bg-red-200 rounded-bl-3xl transition-all duration-300 flex items-center justify-start px-2">
           <i
             class="fa fa-edit flex justify-center items-center w-8 h-8 flex-shrink-0"
             aria-hidden="true"
@@ -19,7 +19,7 @@
         </div>
       </div> -->
 
-      <div class="mainInfo w-full h-20 sm:h-24 bg-gray-100 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
+      <div class="mainInfo w-full h-20 sm:h-24 bg-gray-100 dark:bg-gray-900 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
         <div class="h-full flex justify-center items-center px-2 sm:px-4 flex-shrink-0">
           <img
             :class="{ 'animate-pulse bg-red-200': loadingImg}"
@@ -49,7 +49,7 @@
       </div>
       <div
         v-if="!minimal && userInfo.priv > 0 "
-        class="secondaryInfo w-full h-28 pt-20 sm:h-32 sm:pt-24 bg-gray-200 absolute z-0"
+        class="secondaryInfo w-full h-28 pt-20 sm:h-32 sm:pt-24 bg-gray-200 dark:bg-gray-800 absolute z-0"
       >
         <div class="w-full flex justify-around items-center py-1">
           <h3 class="font-semibold max-w-full truncate flex-shrink-0 text-base">
@@ -86,7 +86,7 @@
         return this.tags[this.userInfo.priv] || '';
       },
       color() {
-        return `bg-${this.colors[this.userInfo.priv]}-200` || '';
+        return `bg-${this.colors[this.userInfo.priv]}-200 dark:bg-${this.colors[this.userInfo.priv]}-600` || '';
       },
     },
     methods: {

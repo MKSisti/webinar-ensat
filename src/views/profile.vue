@@ -21,7 +21,7 @@
         >
           <div
             v-if="userInfo.priv >= 1"
-            class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
+            class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
           >
             <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">
               Posts
@@ -31,7 +31,7 @@
               class="flex justify-center items-center space-x-2 px-10"
               @click="goToCreate"
             >
-              <div class="flex-grow-0 flex justify-start items-center bg-gray-100 rounded-xl shadow-xl overflow-hidden group duration-300 cursor-pointer btnRing px-4 py-1 space-x-3 relative flex-shrink-0">
+              <div class="flex-grow-0 flex justify-start items-center bg-gray-200 dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden group duration-300 cursor-pointer btnRing px-4 py-1 space-x-3 relative flex-shrink-0">
                 <i
                   class="fa fa-file flex-shrink-0 flex items-center justify-center text-2xl transition transform duration-300 group-hover:-translate-y-1 mt-px ml-px"
                   aria-hidden="true"
@@ -71,7 +71,7 @@
           </div>
           <div
             v-else
-            class="w-full h-full transition-opacity duration-300 bg-gray-100 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto"
+            class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto"
           >
             <div
               v-if="!awaitingApproval && userInfo.priv == 0"
@@ -92,7 +92,7 @@
                   @update:modelValue="handleUniv"
                 />
                 <div class="flex justify-center items-center gap-x-2">
-                  <div class="h-14 w-28 text-2xl font-semibold flex justify-center items-center rounded-2xl bg-gray-200 pb-1">
+                  <div class="h-14 w-28 text-2xl font-semibold flex justify-center items-center rounded-2xl bg-gray-200 dark:bg-gray-800 pb-1">
                     (+212)
                   </div>
                   <base-input
@@ -105,7 +105,7 @@
                   />
                 </div>
                 <div
-                  class="w-5/12 h-12 bg-red-100 rounded-2xl flex justify-center items-center cursor-pointer btnRing mx-auto"
+                  class="w-5/12 h-12 bg-red-100 dark:bg-red-400 rounded-2xl flex justify-center items-center cursor-pointer btnRing mx-auto"
                   tabindex="-1"
                   @click="submit"
                 >
