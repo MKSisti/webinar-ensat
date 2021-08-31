@@ -4,7 +4,7 @@
       'group sm:hover:-translate-y-2 sm:hover:scale-105': !noHover,
       'pb-6': !noPoster,
       'max-h-20 justify-center': noPoster,
-      'opacity-80': !eventUpcoming
+      'opacity-80 dark:opacity-60': !eventUpcoming
     }"
     class="postCard transform transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full sm:shadow-2xl flex flex-col items-center overflow-hidden border-0 border-b-2 border-gray-200 dark:border-gray-600 border-opacity-70 sm:border-b-0 bg-gray-100 dark:bg-gray-800"
   > 
