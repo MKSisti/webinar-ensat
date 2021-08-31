@@ -428,7 +428,7 @@ const fileHandler = async (f, q = 1) => {
       var reader = new FileReader();
       new Compressor(f[0], {
           convertSize:0,
-          quality: f[0].size/1049000*(-0.1)*q+0.99,
+          quality: Math.max(Math.min(f[0].size/1049000*(-0.1)*q+0.99,1),0.1),
           success(result) {
             reader.readAsDataURL(result);
             fileToUpload = result;

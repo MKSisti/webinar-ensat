@@ -16,6 +16,7 @@
     "@tailwindcss/typography": "^0.4.1",
     "@tiptap/extension-bubble-menu": "^2.0.0-beta.24",
     "@tiptap/extension-floating-menu": "^2.0.0-beta.18",
+    "@tiptap/extension-image": "^2.0.0-beta.15",
     "@tiptap/extension-typography": "^2.0.0-beta.12",
     "@tiptap/starter-kit": "^2.0.0-beta.82",
     "@tiptap/vue-3": "^2.0.0-beta.45",

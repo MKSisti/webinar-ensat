@@ -14,7 +14,7 @@
           >
           <img
             class="h-12 hidden sm:block"
-            src="/img/icons/text_512.png"
+            src="/img/icons/text.svg"
             alt=""
           >
         </div>
