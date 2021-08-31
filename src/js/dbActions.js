@@ -2,6 +2,7 @@ import { users, waiting_Room, storage } from '../firebase';
 import { sendMail } from './emailClient';
 import { formatDate } from '../utils';
 import driver from './mongoAtlas';
+import Compressor from 'compressorjs';
 
 async function getUser(uid) {
   var user = null;
@@ -419,6 +420,28 @@ const getCI2 = async (pid) => {
   return (await storage.ref('posters/' + pid).getDownloadURL()) || (await storage.ref('posters/fail.png').getDownloadURL());
 };
 
+
+const fileHandler = async (f, q = 1) => {
+  return new Promise((res) =>{
+    if (f[0] && f[0].type.split('/')[0] == 'image') {
+      var fileToUpload = null;
+      var reader = new FileReader();
+      new Compressor(f[0], {
+          convertSize:0,
+          quality: f[0].size/1049000*(-0.1)*q+0.99,
+          success(result) {
+            reader.readAsDataURL(result);
+            fileToUpload = result;
+          },
+        });
+      reader.onload = (e) => {
+        res( [fileToUpload, e.target.result] )
+      };
+    }
+  })
+  
+}
+
 export {
   getUser,
   getPosts,
@@ -447,4 +470,5 @@ export {
   denyPost,
   updatePriv,
   updateUser,
+  fileHandler,
 };

@@ -240,9 +240,8 @@
   import Loader from '../components/Loader';
   const ColorThief = require('colorthief').default;
   import { Calendar, DatePicker } from 'v-calendar';
-  import Compressor from 'compressorjs';
 
-  import { getUserInfo as getU, createPost, uploadCover, getCI2, updateCover, updatePost, removePost, getPost } from '../js/dbActions';
+  import { getUserInfo as getU, createPost, uploadCover, getCI2, updateCover, updatePost, removePost, getPost , fileHandler} from '../js/dbActions';
   import { formatDate } from '../utils';
   import { mapGetters } from 'vuex';
 
@@ -377,21 +376,7 @@
         }
       },
       async fileChange(f) {
-        if (f[0] && f[0].type.split('/')[0] == 'image') {
-          var that = this;
-          var reader = new FileReader();
-          new Compressor(f[0], {
-              convertSize:1.5*1049000,
-              quality: f[0].size/1049000*(-0.1)+0.99,
-              success(result) {
-                reader.readAsDataURL(result);
-                that.fileToUpload = result;
-              },
-            });
-          reader.onload = (e) => {
-            this.cover = e.target.result;
-          };
-        }
+        [this.fileToUpload,this.cover] = await fileHandler(f);
       },
       async imgLoaded() {
         this.imgLoading = false;
