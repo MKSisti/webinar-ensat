@@ -46,6 +46,9 @@ module.exports = {
       transitionDelay: {
         0: '0ms',
       },
+      scale: {
+        25: '.25',
+      },
     },
   },
   variants: {

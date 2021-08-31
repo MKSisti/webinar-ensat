@@ -96,6 +96,7 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
       last_updated: t,
     }
   );
+  const formattedDate = formatDate(hosting_date);
   let user = await getUser(uid);
   let to = await getAdminEmails();
   await sendMail(
@@ -420,27 +421,25 @@ const getCI2 = async (pid) => {
   return (await storage.ref('posters/' + pid).getDownloadURL()) || (await storage.ref('posters/fail.png').getDownloadURL());
 };
 
-
 const fileHandler = async (f, q = 1) => {
-  return new Promise((res) =>{
+  return new Promise((res) => {
     if (f[0] && f[0].type.split('/')[0] == 'image') {
       var fileToUpload = null;
       var reader = new FileReader();
       new Compressor(f[0], {
-          convertSize:0,
-          quality: Math.max(Math.min(f[0].size/1049000*(-0.1)*q+0.99,1),0.1),
-          success(result) {
-            reader.readAsDataURL(result);
-            fileToUpload = result;
-          },
-        });
+        convertSize: 0,
+        quality: Math.max(Math.min((f[0].size / 1049000) * -0.1 * q + 0.99, 1), 0.1),
+        success(result) {
+          reader.readAsDataURL(result);
+          fileToUpload = result;
+        },
+      });
       reader.onload = (e) => {
-        res( [fileToUpload, e.target.result] )
+        res([fileToUpload, e.target.result]);
       };
     }
-  })
-  
-}
+  });
+};
 
 export {
   getUser,

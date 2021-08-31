@@ -227,7 +227,7 @@
     }
     ul,
     ol {
-      padding: 0 1rem;
+      padding: 0rem 2rem;
     }
 
     ul *{
@@ -245,6 +245,10 @@
     h5,
     h6 {
       line-height: 1.1;
+    }
+
+    img{
+      @apply cursor-default;
     }
 
     .image-float-none{
@@ -321,12 +325,11 @@
     }
 
     blockquote {
-      padding-left: 1rem;
-      border-left: 2px solid rgba(#0d0d0d, 0.1);
+       @apply pl-4 border-0 border-l-2 border-gray-800 border-opacity-20 dark:border-gray-200;
     }
 
     hr {
-      @apply border-0 border-t-2 border-gray-800 border-opacity-10 dark:border-gray-200 mt-8;
+      @apply border-0 border-t-2 border-gray-800 border-opacity-20 dark:border-gray-200 mt-8;
     }
   }
 </style>

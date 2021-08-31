@@ -312,6 +312,7 @@
       class="ring-black w-full cursor-text px-5 py-5 sm:rounded-b-2xl z-20 transition-all duration-300"
       :editor="editor"
       @click="editor.chain().focus()"
+      @keydown.tab.prevent="space()"
     />
   </div>
 </template>
@@ -434,8 +435,11 @@
           this.selectedImg.classList.add('image-float-' + float);
           this.selImgFloat = float;
         }
-        
-        
+      },
+
+      space(){
+        const transaction = this.editor.state.tr.insertText('    ');
+        this.editor.view.dispatch(transaction);
       }
     },
   };
