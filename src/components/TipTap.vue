@@ -324,6 +324,8 @@
   import { fileHandler } from '../js/dbActions';
   import Image from '../js/tiptapImg'
 
+  let selectedImg = null;
+
   export default {
     components: {
       EditorContent,
@@ -348,7 +350,7 @@
         return {
           placement:'bottom'
         }
-      }
+      },
     },
     watch: {
       editable: function (val) {
@@ -356,6 +358,12 @@
           editable: val,
         });
       },
+      selectedImg: {
+        handler:function(val){
+          console.log(val)
+        },
+        deep: true
+      }
     },
 
     mounted() {
@@ -382,15 +390,8 @@
       this.editor.on('selectionUpdate', (s) => {
         // console.log(s.transaction.curSelection?.node);
         if(s.transaction.curSelection?.node?.type?.name == 'image') {
-          this.selectedImg = document.getElementById('ref-' + s.transaction.curSelection?.node.attrs.id);
-          this.imgSel = true; 
-          if(this.selectedImg.classList.contains('image-small')) this.selImgSize = 'small';
-          else if(this.selectedImg.classList.contains('image-medium')) this.selImgSize = 'medium';
-          else this.selImgSize = 'large';
-
-          if(this.selectedImg.classList.contains('image-float-none')) this.selImgFloat = 'none';
-          else if(this.selectedImg.classList.contains('image-float-left')) this.selImgFloat = 'left';
-          else this.selImgFloat = 'right';
+          selectedImg = s.transaction.curSelection.node.type;
+          this.imgSel = true;
         }
         else{
           this.imgSel = false;
@@ -419,20 +420,17 @@
       },
 
       setSize(size){
-        this.selectedImg.classList.remove('image-small','image-large','image-medium');
-        this.selectedImg.classList.add('image-' + size);
+        this.editor.commands.updateAttributes(selectedImg, { size });
         this.selImgSize = size;
       },
 
       setFloat(float){
-        if(this.selectedImg.classList.contains('image-float-' + float)){
-          this.selectedImg.classList.remove('image-float-left','image-float-right');
-          this.selectedImg.classList.add('image-float-none');
+        if(float == this.selImgFloat){
+          this.editor.commands.updateAttributes(selectedImg, { float: 'none' });
           this.selImgFloat = 'none';
         }
         else{
-          this.selectedImg.classList.remove('image-float-none');
-          this.selectedImg.classList.add('image-float-' + float);
+          this.editor.commands.updateAttributes(selectedImg, { float });
           this.selImgFloat = float;
         }
       },

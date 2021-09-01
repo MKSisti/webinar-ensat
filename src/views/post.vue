@@ -3,7 +3,14 @@
     :key="pid"
     class="h-full"
   >
-    <loader v-if="loading" />
+    <loader v-if="loading">
+      <h1
+        v-if="updating"
+        class="text-xl font-semibold"
+      >
+        Updating post
+      </h1>
+    </loader>
 
     <transition
       v-else
@@ -260,6 +267,7 @@
     data() {
       return {
         loading: true,
+        updating: false,
         content: '',
         postOwner: {},
         post: {},
@@ -347,7 +355,7 @@
       updateContent(newVal) {
         this.content = newVal;
       },
-      publish() {
+      async publish() {
         if (this.fileToUpload) {
           const hostingDate = this.pickedDate.getTime();
           const now = new Date();
@@ -356,24 +364,27 @@
           } else {
             this.inEditingMode = false;
             this.yetToPublish = false;
-            createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
-            uploadCover(this.fileToUpload, this.pid);
+            await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
+            await uploadCover(this.fileToUpload, this.pid);
           }
         } else {
           console.error('COVER MISSING');
         }
       },
       async remove() {
-        console.log(this.post.owner);
         await removePost(this.pid, this.post.owner);
         this.$router.push({ name: 'home' });
       },
-      update() {
+      async update() {
+        this.loading = true;
+        this.updating = true;
         this.inEditingMode = false;
-        updatePost(this.pid, this.content, this.pickedDate.getTime(), this.title, this.post.owner);
+        await updatePost(this.pid, this.content, this.pickedDate.getTime(), this.title, this.post.owner);
         if (this.fileToUpload) {
-          updateCover(this.fileToUpload, this.pid);
+          await updateCover(this.fileToUpload, this.pid);
         }
+        this.loading = false;
+        this.updating = false;
       },
       async fileChange(f) {
         [this.fileToUpload,this.cover] = await fileHandler(f);

@@ -251,27 +251,27 @@
       @apply cursor-default;
     }
 
-    .image-float-none{
+    img[float="none"]{
       @apply float-none;
     }
 
-    .image-float-left{
+    img[float="left"]{
       @apply float-left pr-4;
     }
 
-    .image-float-right{
+    img[float="right"]{
       @apply float-right pl-4;
     }
 
-    .image-small{
+    img[size="small"]{
       @apply w-auto max-h-36;
     }
 
-    .image-medium{
+    img[size="medium"]{
       @apply w-auto max-h-72;
     }
 
-    .image-large{
+    img[size="large"]{
       @apply w-full h-auto;
     }
 

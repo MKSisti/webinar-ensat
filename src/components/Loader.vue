@@ -3,8 +3,9 @@
     name="fade-y"
     appear
   >
-    <div class="w-full h-full flex items-center justify-center transition duration-300">
+    <div class="w-full h-full flex items-center justify-center flex-col transition duration-300 gap-4">
       <div class="loadingDot" />
+      <slot />
     </div>
   </transition>
 </template>

@@ -9,15 +9,45 @@ export default Image.extend({
       ...Image.config.addAttributes(),
       size: {
         default: 'small',
-        rendered: false,
+        parseHTML: (element) => {
+          return {
+            size: element.getAttribute('size'),
+          };
+        },
+        // … and customize the HTML rendering.
+        renderHTML: (attributes) => {
+          return {
+            size: attributes.size,
+          };
+        },
       },
       float: {
         default: 'none',
-        rendered: false,
+        parseHTML: (element) => {
+          return {
+            float: element.getAttribute('float'),
+          };
+        },
+        // … and customize the HTML rendering.
+        renderHTML: (attributes) => {
+          return {
+            float: attributes.float,
+          };
+        },
       },
       id: {
         default: 'img-1',
-        rendered: false,
+        parseHTML: (element) => {
+          return {
+            id: element.getAttribute('id'),
+          };
+        },
+        // … and customize the HTML rendering.
+        renderHTML: (attributes) => {
+          return {
+            id: attributes.id,
+          };
+        },
       },
     };
   },
@@ -37,13 +67,5 @@ export default Image.extend({
           }
         },
     };
-  },
-
-  renderHTML({ node, HTMLAttributes }) {
-    HTMLAttributes.class = ' image-' + node.attrs.size;
-    HTMLAttributes.class += ' image-float-' + node.attrs.float;
-    HTMLAttributes.id = 'ref-' + node.attrs.id;
-
-    return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)];
   },
 });
