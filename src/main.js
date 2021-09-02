@@ -5,6 +5,7 @@ import router from './router';
 import localforage from 'localforage';
 import driver from './js/mongoAtlas';
 import './js/polyfill';
+import 'remixicon/fonts/remixicon.css';
 
 // createApp(App).mount('#app');
 

@@ -61,11 +61,11 @@
         </div>
 
         <div
-          class="bg-red-100 dark:bg-red-400 rounded-2xl flex justify-center items-center cursor-pointer btnRing px-4 sm:px-6 py-1"
+          class="bg-red-100 dark:bg-red-400 select-none rounded-2xl flex justify-center items-center cursor-pointer btnRing px-4 sm:px-6 py-1"
           tabindex="-1"
           @click="apply"
         >
-          <h1 class="text-base sm:text-lg font-bold mb-1 transition duration-300 transform">
+          <h1 class="text-base sm:text-lg font-bold py-0.5 transition duration-300 transform">
             Apply
           </h1>
         </div>

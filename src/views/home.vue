@@ -47,7 +47,7 @@
             class="h-20 pt-4"
           >
             <i
-              class="fa fa-angle-up transform transition duration-300 text-4xl"
+              class="ri-arrow-up-s-line transform transition duration-300 text-4xl"
               aria-hidden="true"
             />
           </div>

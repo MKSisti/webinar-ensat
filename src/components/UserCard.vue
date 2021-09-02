@@ -10,7 +10,7 @@
       >
         <div class="relative w-12 h-7 group-hover:w-20 bg-gray-200 dark:bg-gray-800 hover:bg-red-200 rounded-bl-3xl transition-all duration-300 flex items-center justify-start px-2">
           <i
-            class="fa fa-edit flex justify-center items-center w-8 h-8 flex-shrink-0"
+            class="ri-file-add-fill flex justify-center items-center w-8 h-8 flex-shrink-0"
             aria-hidden="true"
           />
           <h1 class="opacity-0 group-hover:opacity-100 transition transform group-hover:translate-x-0 translate-x-4 h-full mt-px font-semibold">
@@ -86,7 +86,7 @@
         return this.tags[this.userInfo.priv] || '';
       },
       color() {
-        return `bg-${this.colors[this.userInfo.priv]}-200 dark:bg-${this.colors[this.userInfo.priv]}-600` || '';
+        return `bg-${this.colors[this.userInfo.priv]}-500` || '';
       },
     },
     methods: {

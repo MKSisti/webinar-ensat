@@ -1,5 +1,5 @@
 <template>
-  <div class="px-5 sm:px-10 py-4 h-16 w-full bg-gray-100 dark:bg-gray-900 shadow-md flex items-center justify-between xl:rounded-b-4xl z-50">
+  <div class="select-none px-5 sm:px-10 py-4 h-16 w-full bg-gray-100 dark:bg-gray-900 shadow-md flex items-center justify-between xl:rounded-b-4xl z-50">
     <div>
       <router-link to="/">
         <!-- <div>W</div> -->
@@ -41,7 +41,7 @@
             >
               <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-2.5 sm:px-3 py-1.5 relative flex-shrink-0">
                 <i
-                  class="fa fa-gavel flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
+                  class="ri-settings-3-fill font-thin flex-shrink-0 flex items-center justify-center text-xl transition transform duration-300 mt-px ml-px h-4 w-4"
                   aria-hidden="true"
                 />
                 <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform sm:group-hover:w-28 sm:w-0 overflow-hidden whitespace-nowrap duration-300 pl-3 sm:pl-0 sm:group-hover:pl-3 sm:opacity-0 sm:group-hover:opacity-100">
@@ -60,7 +60,7 @@
           <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl">
             <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-2.5 sm:px-3 py-1.5 relative flex-shrink-0">
               <i
-                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
+                class="ri-file-add-fill font-thin flex-shrink-0 flex items-center justify-center text-xl transition transform duration-300 mt-px ml-px h-4 w-4"
                 aria-hidden="true"
               />
               <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform sm:group-hover:w-28 sm:w-0 overflow-hidden whitespace-nowrap duration-300 pl-3 sm:pl-0 sm:group-hover:pl-2.5 sm:opacity-0 sm:group-hover:opacity-100">
@@ -81,7 +81,7 @@
           <div class="flex justify-center items-center space-x-2 transform transition duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl">
             <div class="flex-grow-0 flex justify-start items-center overflow-hidden group duration-300 cursor-pointer px-3 py-1.5 relative flex-shrink-0">
               <i
-                class="fa fa-file flex-shrink-0 flex items-center justify-center text-xl font-black transition transform duration-300 mt-px ml-px h-4 w-4"
+                class="ri-file-add-fill font-thin flex-shrink-0 flex items-center justify-center text-xl transition transform duration-300 mt-px ml-px h-4 w-4"
                 aria-hidden="true"
               />
               <h1 class="text-lg font-semibold flex-shrink-0 transition-all delay-300 group-hover:delay-0 transform group-hover:w-28 w-0 overflow-hidden whitespace-nowrap duration-300 group-hover:pl-2.5 opacity-0 group-hover:opacity-100">
@@ -99,7 +99,7 @@
           class="relative"
         >
           <img
-            class="rounded-full ring-0 ring-red-300 w-12 h-12 cursor-pointer"
+            class="rounded-full ring-0 ring-red-300 w-12 h-12 cursor-pointer text-sm"
             :src="getUserInfo.img"
             :alt="getUserInfo.userName"
             @click="profileMenu = !profileMenu"

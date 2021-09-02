@@ -33,7 +33,7 @@
             >
               <div class="flex-grow-0 flex justify-start items-center bg-gray-200 dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden group duration-300 cursor-pointer btnRing px-4 py-1 space-x-3 relative flex-shrink-0">
                 <i
-                  class="fa fa-file flex-shrink-0 flex items-center justify-center text-2xl transition transform duration-300 group-hover:-translate-y-1 mt-px ml-px"
+                  class="ri-file-add-fill flex-shrink-0 flex items-center justify-center text-2xl transition transform duration-300 group-hover:-translate-y-1 mt-px ml-px"
                   aria-hidden="true"
                 />
                 <h1 class="text-xl font-semibold flex-shrink-0 transition transform group-hover:-translate-y-1 -mt-0.5 duration-300">
@@ -61,7 +61,7 @@
                   </transition-group>
                   <div
                     v-else
-                    class="text-xl font-semibold"
+                    class="text-xl font-semibold select-none"
                   >
                     Feels empty in here 😢
                   </div>

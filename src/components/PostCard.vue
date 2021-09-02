@@ -6,7 +6,7 @@
       'max-h-20 justify-center': noPoster,
       'opacity-80 dark:opacity-60': !eventUpcoming
     }"
-    class="postCard transform transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full sm:shadow-2xl flex flex-col items-center overflow-hidden border-0 border-b-2 border-gray-200 dark:border-gray-600 border-opacity-70 sm:border-b-0 bg-gray-100 dark:bg-gray-800"
+    class="select-none postCard transform transition duration-300 cursor-pointer rounded-none sm:rounded-4xl relative w-full sm:shadow-2xl flex flex-col items-center overflow-hidden border-0 border-b-2 border-gray-200 dark:border-gray-600 border-opacity-70 sm:border-b-0 bg-gray-100 dark:bg-gray-800"
   > 
     <!-- //!creation date -->
     <div
@@ -81,24 +81,24 @@
       <!-- //!hosting date -->
       <div
         v-if="!noDates"
-        class="px-12 sm:px-36 mt-4"
+        class="px-8 sm:px-36 mt-4"
       >
-        <div class="bg-gray-100 dark:bg-gray-900 py-1 px-2 rounded-xl shadow-md flex justify-between items-center">
+        <div class="bg-gray-100 dark:bg-gray-900 h-9 px-2 rounded-xl shadow-md flex justify-center items-center">
           <h1 class="text-sm font-semibold flex justify-start items-center gap-1">
             <h2 :class="{'text-red-400': !eventUpcoming}">
               {{ eventUpcoming ? 'Hosting' : 'Hosted' }}
             </h2> 
             {{ hostedDate.date + ' at ' + hostedDate.time }}
           </h1>
-          <div
-            class="btnTransformSm cursor-pointer w-7 h-7 bg-red-300 flex-shrink-0 rounded-lg"
+          <!-- <div
+            class="btnTransformSm cursor-pointer w-7 h-7 bg-red-400 flex-shrink-0 rounded-lg"
             @click.prevent.stop
           >
             <i
-              class="fa fa-bell text-xs h-full w-full flex justify-center items-center"
+              class="ri-notification-fill font-thin text-sm h-full w-full flex justify-center items-center"
               aria-hidden="true"
             />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

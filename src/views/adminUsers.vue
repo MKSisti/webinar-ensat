@@ -10,7 +10,14 @@
         class="overflow-auto flex justify-start items-start flex-wrap px-10 py-20 gap-5"
       >
         <div
+          v-if="usersRequests.length <= 0"
+          class="text-xl font-semibold w-full p-5 text-center select-none"
+        >
+          Feels empty in here 😢
+        </div>
+        <div
           v-for="u in usersRequests"
+          v-else
           :key="u.uid"
           class="w-full relative flex-none"
         >
@@ -21,7 +28,7 @@
               @click.prevent.stop
             >
               <i
-                class="fa fa-check text-xl h-0 w-0 flex justify-center items-center"
+                class="ri-check-fill text-xl h-0 w-0 flex justify-center items-center"
                 aria-hidden="true"
               />
             </div>
@@ -31,7 +38,7 @@
               @click.prevent.stop
             >
               <i
-                class="fa fa-times text-xl h-0 w-0 flex justify-center items-center"
+                class="ri-close-fill text-xl h-0 w-0 flex justify-center items-center"
                 aria-hidden="true"
               />
             </div>

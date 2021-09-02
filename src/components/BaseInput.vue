@@ -2,7 +2,7 @@
   <div class="flex flex-col justify-center items-start w-full relative">
     <div
       v-if="!dropDown && !noClear && !ro"
-      class="absolute right-0 px-4 cursor-pointer -mt-0.5"
+      class="absolute right-0 px-4 cursor-pointer -mt-0.5 select-none"
       @click="clear"
     >
       <i
@@ -13,7 +13,7 @@
           'text-4xl': size == 3 || size == 4,
           'text-5xl': size == 5 || size == 6,
         }"
-        class="fa fa-times"
+        class="ri-close-fill"
         aria-hidden="true"
       />
     </div>
@@ -61,7 +61,7 @@
         'text-2xl': size == 3 || size == 4,
         'text-4xl': size == 5 || size == 6,
       }"
-      class="absolute t top-0 w-0 font-bold pl-4 whitespace-nowrap transform -translate-y-2/3 translate-x-2 scale-125 order-1 transition duration-300 flex justify-start items-center -ml-2.5"
+      class="select-none absolute t top-0 w-0 font-bold pl-4 whitespace-nowrap transform -translate-y-2/3 translate-x-2 scale-125 order-1 transition duration-300 flex justify-start items-center -ml-2.5"
     >
       {{ label || name }}
     </label>

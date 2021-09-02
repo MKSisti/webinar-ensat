@@ -18,7 +18,14 @@
         v-else
         class="flex justify-start items-start flex-wrap px-5 sm:px-10 sm:gap-10"
       >
+        <div
+          v-if="usersList.length <= 0 "
+          class="text-xl font-semibold w-full p-5 text-center select-none"
+        >
+          Feels empty in here 😢
+        </div>
         <transition-group
+          v-else
           name="fade-y"
           appear
         >
@@ -90,7 +97,7 @@
                 @click="updateUser(u.uid, u.userName, u.uni, u.number)"
               >
                 <i
-                  class="fa fa-check text-xl h-0 w-0 flex justify-center items-center"
+                  class="ri-check-fill text-xl h-0 w-0 flex justify-center items-center"
                   aria-hidden="true"
                 />
               </div>

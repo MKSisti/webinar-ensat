@@ -52,7 +52,15 @@ class MongoDriver {
     if (last) {
       if (sort) {
         for (const key of Object.keys(sort)) {
-          sort[key] == 1 ? (filter[key] = { $gt: last[key] }) : (filter[key] = { $lt: last[key] });
+          if (Object.keys(filter).includes(key)) {
+            if (sort[key] == 1) {
+              filter[key]['$gt'] = last[key];
+            } else {
+              filter[key]['$lt'] = last[key];
+            }
+          } else {
+            sort[key] == 1 ? (filter[key] = { $gt: last[key] }) : (filter[key] = { $lt: last[key] });
+          }
         }
       } else {
         filter['_id'] = { $gt: last['_id'] };

@@ -3,7 +3,7 @@
     <div class="w-full relative">
       <bubble-menu
         v-if="editor && editable"
-        class="select-none px-2.5 py-1.5 bg-black text-white bg-opacity-100 rounded-2xl shadow-2xl"
+        class="px-2.5 py-1.5 bg-black text-white bg-opacity-100 rounded-2xl shadow-2xl"
         :editor="editor"
         :tippy-options="tippyConfig"
       >
@@ -17,7 +17,7 @@
             @click="editor.chain().focus().toggleBold().run()"
           >
             <i
-              class="fa fa-bold text-2xl"
+              class="ri-bold text-2xl font-thin"
               aria-hidden="true"
             />
           </button>
@@ -28,7 +28,7 @@
             @click="editor.chain().focus().toggleItalic().run()"
           >
             <i
-              class="fa fa-italic text-2xl"
+              class="ri-italic text-2xl font-thin"
               aria-hidden="true"
             />
           </button>
@@ -39,7 +39,7 @@
             @click="editor.chain().focus().toggleStrike().run()"
           >
             <i
-              class="fa fa-strikethrough text-2xl"
+              class="ri-strikethrough text-2xl font-thin"
               aria-hidden="true"
             />
           </button>
@@ -110,7 +110,7 @@
           @click="editor.chain().focus().toggleBold().run()"
         >
           <i
-            class="fa fa-bold text-2xl"
+            class="ri-bold text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -121,7 +121,7 @@
           @click="editor.chain().focus().toggleItalic().run()"
         >
           <i
-            class="fa fa-italic text-2xl"
+            class="ri-italic text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -132,7 +132,7 @@
           @click="editor.chain().focus().toggleStrike().run()"
         >
           <i
-            class="fa fa-strikethrough text-2xl"
+            class="ri-strikethrough text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -148,7 +148,7 @@
           "
           :class="{ 'is-active': editor.isActive('code') }"
         >
-          <i class="fa fa-code text-2xl" aria-hidden="true"></i>
+          <i class="fa fa-code text-2xl font-thin" aria-hidden="true"></i>
         </button> -->
       </div>
 
@@ -160,7 +160,7 @@
             :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
           >
-            <h1 class="text-2xl font-bold flex justify-center items-end">
+            <h1 class="text-2xl flex justify-center items-end">
               H1
             </h1>
           </button>
@@ -170,7 +170,7 @@
             :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
           >
-            <h1 class="font-bold text-xl flex justify-center items-end">
+            <h1 class="text-xl flex justify-center items-end">
               H2
             </h1>
           </button>
@@ -180,7 +180,7 @@
             :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
           >
-            <h1 class="font-semibold text-lg flex justify-center items-end -mb-px">
+            <h1 class="text-lg flex justify-center items-end -mb-px">
               H3
             </h1>
           </button>
@@ -190,7 +190,7 @@
             :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
           >
-            <h1 class="font-semibold text-base flex justify-center items-end">
+            <h1 class="text-base flex justify-center items-end">
               H4
             </h1>
           </button>
@@ -200,7 +200,7 @@
             :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
           >
-            <h1 class="font-medium text-sm flex justify-center items-end mb-px">
+            <h1 class="text-sm flex justify-center items-end mb-px">
               H5
             </h1>
           </button>
@@ -210,7 +210,7 @@
             :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
             @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
           >
-            <h1 class="font-normal text-xs flex justify-center items-end mb-0.5 pb-px">
+            <h1 class="text-xs flex justify-center items-end mb-0.5 pb-px">
               H6
             </h1>
           </button>
@@ -225,7 +225,7 @@
           @click="editor.chain().focus().toggleBulletList().run()"
         >
           <i
-            class="fa fa-list-ul text-2xl"
+            class="ri-list-unordered text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -236,7 +236,7 @@
           @click="editor.chain().focus().toggleOrderedList().run()"
         >
           <i
-            class="fa fa-list-ol text-2xl"
+            class="ri-list-ordered text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -247,7 +247,7 @@
           @click="editor.chain().focus().toggleCodeBlock().run()"
         >
           <i
-            class="fa fa-code text-2xl"
+            class="ri-code-box-fill text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -258,7 +258,7 @@
           @click="editor.chain().focus().toggleBlockquote().run()"
         >
           <i
-            class="fa fa-quote-left text-2xl"
+            class="ri-double-quotes-l text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -266,7 +266,7 @@
         <!-- //!insert image -->
         <button @click="$refs.tiptapImg.click()">
           <i
-            class="fa fa-image text-2xl"
+            class="ri-image-fill text-2xl font-thin"
             aria-hidden="true"
           />
           <input
@@ -282,7 +282,7 @@
         <!-- //!insert horizontal line-->
         <button @click="editor.chain().focus().setHorizontalRule().run()">
           <i
-            class="fa fa-minus text-2xl"
+            class="ri-separator text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
@@ -293,14 +293,14 @@
         <!-- //!undo -->
         <button @click="editor.chain().focus().undo().run()">
           <i
-            class="fa fa-undo text-2xl"
+            class="ri-arrow-go-back-fill text-2xl font-thin"
             aria-hidden="true"
           />
         </button>
         <!-- //!redo -->
         <button @click="editor.chain().focus().redo().run()">
           <i
-            class="fa fa-repeat text-2xl"
+            class="ri-arrow-go-forward-fill text-2xl font-thin"
             aria-hidden="true"
           />
         </button>

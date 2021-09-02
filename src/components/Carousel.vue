@@ -22,7 +22,7 @@
         <span
           class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 dark:bg-gray-900 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
         ><i
-          class="fa fa-chevron-left mr-px text-sm mg:text-lg"
+          class="ri-arrow-left-s-line mr-px text-sm mg:text-lg"
           aria-hidden="true"
         />
         </span>
@@ -34,7 +34,7 @@
         <span
           class="h-6 w-6 md:h-8 md:w-8 bg-gray-100 dark:bg-gray-900 shadow-lg flex items-center justify-center rounded-lg transform opacity-50 group-hover:-translate-x-2 group-hover:scale-125 group-hover:opacity-100 transition duration-300"
         ><i
-          class="fa fa-chevron-right ml-px text-sm mg:text-lg"
+          class="ri-arrow-right-s-line ml-px text-sm mg:text-lg"
           aria-hidden="true"
         /></span>
       </div>
@@ -124,7 +124,7 @@
         return `background-image: url(${this.posters[this.posts[this.current]?.pid]})`;
       },
       user() {
-        return this.users?.get(this.posts[this.current].owner);
+        return this.users?.get(this.posts[this.current]?.owner);
       },
     },
     mounted() {
