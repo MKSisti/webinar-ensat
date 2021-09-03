@@ -13,7 +13,7 @@
           v-if="usersRequests.length <= 0"
           class="text-xl font-semibold w-full p-5 text-center select-none"
         >
-          Feels empty in here 😢
+          No items to show.
         </div>
         <div
           v-for="u in usersRequests"

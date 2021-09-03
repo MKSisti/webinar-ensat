@@ -8,6 +8,10 @@ async function getUser(uid) {
   var user = null;
   await users.child(uid).once('value', async (ds) => {
     user = await ds.val();
+    user = {
+      uid: ds.key,
+      ...user,
+    }
   });
   return user; // no checks are needed if user is found then it's an 'object' otherwise it's 'null'
 }
@@ -121,7 +125,7 @@ const updateUser = async (uid, userName, uni, number) => {
   });
 };
 
-const confirmPost = async (pid) => {
+const confirmPost = async (pid, uid, title) => {
   await driver.update(
     'posts',
     { pid },
@@ -129,6 +133,20 @@ const confirmPost = async (pid) => {
       approved: true,
     }
   );
+  let to = await getFollowersList(uid);
+  let user = await getUser(uid);
+  await sendMail(
+    to,
+    `NEW POST FROM ${user.userName}`,
+    `
+      <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} has updated their webinar </h1>
+      
+      ${user.userName} just posted a new webinar with title <strong>${title}</strong> 
+      
+      <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
+    `
+  );
+
 };
 const denyPost = async (pid, uid) => {
   await removePost(pid, uid);
@@ -441,6 +459,41 @@ const fileHandler = async (f, q = 1) => {
   });
 };
 
+const follow = async (uid, email, hostuid , hostemail) => {
+  await users.child(uid+'/following/'+hostuid).set({
+    uid: hostuid,
+    email: hostemail,
+  });
+  await users.child(hostuid+'/followers/'+uid).set({
+    uid: uid,
+    email: email,
+  });
+}
+
+const unfollow = async (uid, hostuid ) => {
+  await users.child(uid+'/following/'+hostuid).remove();
+  await users.child(hostuid+'/followers/'+uid).remove();
+}
+
+const getFollowersList = async (uid)=> {
+  var l = [];
+  await users.child(uid+'/followers').once('value',async (ds)=>{
+    ds.forEach((dsch) => {
+      l.push(dsch.val());
+    });
+  })
+  return l;
+}
+const getFollowingList = async (uid)=> {
+  var l = [];
+  await users.child(uid+'/following').once('value',async (ds)=>{
+    ds.forEach((dsch) => {
+      l.push(dsch.val());
+    });
+  })
+  return l;
+}
+
 export {
   getUser,
   getPosts,
@@ -470,4 +523,8 @@ export {
   updatePriv,
   updateUser,
   fileHandler,
+  follow,
+  unfollow,
+  getFollowersList,
+  getFollowingList,
 };

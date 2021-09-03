@@ -1,4 +1,5 @@
 import { users } from "../../../firebase";
+import {getFollowingList, getFollowersList} from '../../../js/dbActions'
 
 export default {
   namespaced: true,
@@ -9,6 +10,8 @@ export default {
       isLoggedIn: false,
       privLevel: -99,
       token: null,
+      followers: [],
+      following:[],
     };
   },
   mutations: {
@@ -33,15 +36,48 @@ export default {
     setToken(state, payload) {
       state.token = payload.token;
     },
+    setFollow(state, payload){
+      state.followers = payload.followers;
+      state.following = payload.following;
+    },
+    pushFollow(state, payload){
+      state.following.push(payload.user);
+    },
+    popFollow(state, payload){
+      state.following.splice(state.following.findIndex((f)=>{f.uid == payload.uid}),1);
+    },
   },
   actions: {
+    addFollow({commit},user){
+      commit({
+        type:"pushFollow",
+        user
+      })
+    },
+    removeFollow({commit},uid){
+      commit({
+        type:"popFollow",
+        uid
+      })
+    },
+    async handleFollow({ commit }, payload){
+      let followers = await getFollowersList(payload.uid);
+      let following = await getFollowingList(payload.uid);
+
+      commit({
+        type: "setFollow",
+        followers,
+        following,
+      })
+
+    },
     updateToken({ commit }, token) {
       commit({
         type: "setToken",
         token,
       });
     },
-    async logIn({ commit }, user) {
+    async logIn({ commit , dispatch}, user) {
       var p = 0;
       var extraInfo = null;
       await users.child(user.uid).once("value", async (ds) => {
@@ -74,6 +110,10 @@ export default {
           ...user,
         });
       });
+      dispatch({
+        type: "handleFollow",
+        uid: user.uid,
+      })
     },
     logOut({ commit }) {
       commit({
@@ -93,6 +133,15 @@ export default {
     },
     getToken(state) {
       return state.token;
+    },
+    getFollowers(state){
+      return state.followers;
+    },
+    getFollowing(state){
+      return state.following;
+    },
+    following: (state)=> (uid)=>{
+      return state.following.findIndex((f)=>f.uid == uid) > -1 ? true : false ;
     },
   },
 };

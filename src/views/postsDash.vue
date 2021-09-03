@@ -13,7 +13,7 @@
           v-if="postsRequests.length <= 0"
           class="text-xl font-semibold w-full p-5 text-center select-none"
         >
-          Feels empty in here 😢
+          No items to show.
         </div>
         <div
           v-for="p in postsRequests"
@@ -42,7 +42,7 @@
                 <div class="right-0 top-0 bottom-0 sm:absolute flex sm:justify-end justify-center items-center z-50 gap-2 sm:pr-4">
                   <div
                     class="btnTransform cursor-pointer w-10 h-10 bg-green-400 rounded-xl flex justify-center items-center"
-                    @click="approve(p.pid)"
+                    @click="approve(p.pid, p.owner, p.title)"
                     @click.prevent.stop
                   >
                     <i
@@ -107,8 +107,8 @@
         await denyPost(pid, uid);
         await this.fetchU();
       },
-      async approve(pid) {
-        await confirmPost(pid);
+      async approve(pid, uid, title) {
+        await confirmPost(pid, uid, title);
         await this.fetchU();
       },
       async fetchU() {

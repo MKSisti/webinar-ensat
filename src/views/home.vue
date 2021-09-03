@@ -133,7 +133,6 @@
           this.carLoading = false;
 
           this.loading = false;
-
           let debScrollBottom = debounce(async () => {
             if (!this.loading)
               if (this.$refs.home?.scrollHeight && this.$refs.home?.scrollHeight - this.$refs.home?.scrollTop <= this.$refs.home?.clientHeight) {

@@ -58,6 +58,14 @@
           <h3 class="max-w-full truncate flex-shrink-0 text-base font-normal">
             {{ userInfo.number }}
           </h3>
+          <div v-if="(this.getUserInfo.uid != this.userInfo.uid)">
+            <h3 v-if="!following(userInfo.uid)" @click="followUser" class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer">
+              follow
+            </h3>
+            <h3 v-else @click="unfollowUser" class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer">
+              Unfollow
+            </h3>
+          </div>
         </div>
       </div>
     </div>
@@ -66,6 +74,8 @@
 
 <script>
   import { getAbbreviation } from '../utils';
+  import { follow, unfollow } from '../js/dbActions';
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'UserCard',
@@ -89,8 +99,20 @@
         return `bg-${this.colors[this.userInfo.priv]}-500` || '';
       },
     },
+    computed: {
+      ...mapGetters('user', ['getUserInfo','following']),
+    },
     methods: {
+      ...mapActions('user', ['addFollow','removeFollow']),
       getAbbreviation,
+      async followUser(){
+        follow(this.getUserInfo.uid, this.getUserInfo.email, this.userInfo.uid, this.userInfo.email);
+        this.addFollow( { uid : this.userInfo.uid, email : this.userInfo.email});
+      },
+      async unfollowUser(){
+        this.removeFollow ( this.userInfo.uid );
+        unfollow(this.getUserInfo.uid, this.userInfo.uid);
+      }
     },
   };
 </script>

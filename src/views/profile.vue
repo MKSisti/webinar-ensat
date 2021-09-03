@@ -171,7 +171,7 @@
       };
     },
     computed: {
-      ...mapGetters('user', ['getUserInfo']),
+      ...mapGetters('user', ['getUserInfo','getFollowers','getFollowing']),
     },
     watch: {
       $route: async function () {
@@ -195,16 +195,17 @@
       async init(){
         this.clearData();
         this.$nextTick(async () => {
-        this.userInfo = await getUser(this.uid);
-        if (this.userInfo.priv >= 1)
-          this.$nextTick(async () => {
-            if(this.getUserInfo.email == this.userInfo.email) 
-              this.userPosts = await getPosts({ owner: this.uid });
-            else 
-              this.userPosts = await getPosts({ owner: this.uid, approved: true });
-          });
-        this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
-      });
+          this.userInfo = await getUser(this.uid);
+          if (this.userInfo.priv >= 1)
+            this.$nextTick(async () => {
+              if(this.getUserInfo.email == this.userInfo.email) 
+                this.userPosts = await getPosts({ owner: this.uid });
+              else 
+                this.userPosts = await getPosts({ owner: this.uid, approved: true });
+            });
+          this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
+        });
+        console.log(this.getFollowing);
       },
       goToCreate() {
         let token = BSON.ObjectID();
