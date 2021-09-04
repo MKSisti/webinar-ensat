@@ -7,6 +7,8 @@ import adminUsers from "../views/adminUsers";
 import changePriv from "../views/changePriv";
 import postsDash from "../views/postsDash";
 import dashHome from "../views/dashHome";
+import userPosts from "../views/userPosts";
+import feed from "../views/feed";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -21,6 +23,10 @@ const router = createRouter({
       name: "profile",
       component: profile,
       props: true,
+      children:[
+        { path:"", name:'profile', component: userPosts, props: true, },
+        { path:"feed", name:'feed', component: feed, props: true, },
+      ]
     },
     {
       path: "/post/:pid",
@@ -56,12 +62,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // if ( to.meta?.requiresAuth && store.getters['user/getPrivLevel'] > 1) {
-  //   next();
-  // }
-  // else{
-  //   router.push({name:"home"});
-  // }
   if (to.meta?.requiresAuth) {
     if (store.getters["user/getPrivLevel"] > 1) {
       next();

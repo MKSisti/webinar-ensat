@@ -97,7 +97,6 @@
         orderBy: [{ hosting_date: 1 }, { hosting_date: -1 }, { creation_date: 1 }, { creation_date: -1 }, { title: 1 }, { title: -1 }],
       };
     },
-    computed: {},
     watch: {
       $route: async function () {
         if (this.$route.name == 'home') {

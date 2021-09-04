@@ -522,6 +522,15 @@ const getFollowingList = async (uid) => {
   });
   return l;
 };
+const getFollowingListIds = async (uid) => {
+  var l = [];
+  await users.child(uid + '/following').once('value', async (ds) => {
+    ds.forEach((dsch) => {
+      l.push(dsch.val().uid);
+    });
+  });
+  return l;
+};
 
 export {
   getUser,
@@ -556,4 +565,5 @@ export {
   unfollow,
   getFollowersList,
   getFollowingList,
+  getFollowingListIds,
 };
