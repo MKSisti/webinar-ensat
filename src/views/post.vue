@@ -406,7 +406,7 @@
         this.content = newVal;
       },
       async publish() {
-        if (this.fileToUpload) {
+        if (this.fileToUpload && this.title.length < 65) {
           const hostingDate = this.pickedDate.getTime();
           const now = new Date();
           if (hostingDate < now.getTime() + now.getTimezoneOffset() * 60000) {

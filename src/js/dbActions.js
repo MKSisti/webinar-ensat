@@ -139,7 +139,7 @@ const confirmPost = async (pid, uid, title) => {
       approved: true,
     }
   );
-  let to = await getFollowersList(uid);
+  let to = await getFollowersListEmails(uid);
   let user = await getUser(uid);
   await sendMail(
     to,
@@ -509,6 +509,15 @@ const getFollowersList = async (uid) => {
   await users.child(uid + '/followers').once('value', async (ds) => {
     ds.forEach((dsch) => {
       l.push(dsch.val());
+    });
+  });
+  return l;
+};
+const getFollowersListEmails = async (uid) => {
+  var l = [];
+  await users.child(uid + '/followers').once('value', async (ds) => {
+    ds.forEach((dsch) => {
+      l.push(dsch.val().email);
     });
   });
   return l;
