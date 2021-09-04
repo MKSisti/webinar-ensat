@@ -5,8 +5,9 @@
   >
     <div class="w-full h-full relative shadow-xl overflow-hidden rounded-3xl">
       <div
-        v-if="(getUserInfo.uid != userInfo.uid)"
+        v-if="(getUserInfo.uid != userInfo.uid) && getUserInfo.uid"
         class="absolute top-0 right-0 z-50 group cursor-pointer select-none"
+        @click.prevent.stop
       >
         <div
           :class="{'group-hover:w-24':!following(userInfo.uid),'group-hover:w-28':following(userInfo.uid)}"
