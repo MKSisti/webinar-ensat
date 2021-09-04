@@ -3,36 +3,35 @@
     :class="{ userCardMin: minimal || userInfo.priv < 1 }"
     class="h-28 sm:h-32 w-full"
   >
-    <div class="w-full h-full relative shadow-xl overflow-hidden rounded-3xl">
+    <div class="w-full h-full relative shadow-xl rounded-3xl">
       <div
         v-if="(getUserInfo.uid != userInfo.uid) && getUserInfo.uid"
-        class="absolute top-0 right-0 z-50 group cursor-pointer select-none"
+        class="absolute top-0 right-0 transform -translate-y-1/2 z-50 group cursor-pointer select-none"
         @click.prevent.stop
       >
         <div
-          :class="{'group-hover:w-24':!following(userInfo.uid),'group-hover:w-28':following(userInfo.uid)}"
-          class="relative w-10 h-8 rounded-bl-3xl transition-all duration-300 flex items-center justify-start px-2"
+          class="relative mx-6 px-1 transition-all duration-300 flex items-center justify-start bg-gray-800 gap-1 rounded-lg text-sm sm:text-base btnRing"
         >
           <i
             v-if="!following(userInfo.uid)"
-            class="ri-user-follow-fill flex justify-center items-center w-8 h-8 flex-shrink-0"
+            class="ri-user-follow-fill flex justify-center items-center flex-shrink-0"
             aria-hidden="true"
           />
           <i
             v-else
-            class="ri-user-unfollow-fill flex justify-center items-center w-8 h-8 flex-shrink-0"
+            class="ri-user-unfollow-fill flex justify-center items-center flex-shrink-0"
             aria-hidden="true"
           />
           <h3
             v-if="!following(userInfo.uid)"
-            class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer"
+            class="max-w-full truncate flex-shrink-0 cursor-pointer"
             @click="followUser"
           >
             Follow
           </h3>
           <h3
             v-else
-            class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer"
+            class="max-w-full truncate flex-shrink-0 cursor-pointer"
             @click="unfollowUser"
           >
             Unfollow
@@ -70,7 +69,7 @@
       </div>
       <div
         v-if="!minimal && userInfo.priv > 0 "
-        class="secondaryInfo w-full h-28 pt-20 sm:h-32 sm:pt-24 bg-gray-200 dark:bg-gray-800 absolute z-0"
+        class="secondaryInfo w-full h-28 pt-20 sm:h-32 sm:pt-24 bg-gray-200 dark:bg-gray-800 absolute z-0 rounded-3xl"
       >
         <div class="w-full flex justify-around items-center py-1">
           <h3 class="font-semibold max-w-full truncate flex-shrink-0 text-base">
