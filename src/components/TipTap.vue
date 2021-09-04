@@ -99,7 +99,7 @@
         'transform  pointer-events-none opacity-0': !editable,
         'py-2': editable,
       }"
-      :style="{ 'max-height': editable ? '10rem' : '0rem' }"
+      :style="{ 'max-height': editable ? '13rem' : '0rem' }"
       class="toolbar z-0 select-none flex flex-wrap justify-start items-center px-2.5 bg-black ring-2 ring-black text-white sm:rounded-t-2xl shadow-2xl w-full h-auto transition-all duration-300 gap-2.5"
     >
       <!-- font block -->
@@ -153,7 +153,10 @@
       </div>
 
       <!-- text size block -->
-      <div class="bg-white px-2.5 rounded-xl text-black flex justify-start items-center h-10 ">
+      <div 
+        :class="{'opacity-50': disableHeading}"
+        class="bg-white px-2.5 rounded-xl text-black flex justify-start items-center h-10 transition-opacity duration-300"
+      >
         <div class="flex flex-nowrap justify-start items-end space-x-2">
           <!-- //!set h1 -->
           <button
@@ -351,6 +354,9 @@
           placement:'bottom'
         }
       },
+      disableHeading(){
+        return this.editor.isActive('bulletList') || this.editor.isActive('orderedList');
+      }
     },
     watch: {
       editable: function (val) {

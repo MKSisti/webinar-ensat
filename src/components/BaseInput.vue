@@ -1,8 +1,13 @@
 <template>
-  <div class="flex flex-col justify-center items-start w-full relative">
+  <div
+    :class="{'pb-5 mt-5': $slots.msg}"
+    class="flex flex-col justify-center items-start w-full relative transition-all duration-300"
+    @click="msgShow = false"
+    @keypress="msgShow = false"
+  >
     <div
       v-if="!dropDown && !noClear && !ro"
-      class="absolute right-0 px-4 cursor-pointer -mt-0.5 select-none"
+      class="absolute mt-1 right-0 px-4 cursor-pointer select-none"
       @click="clear"
     >
       <i
@@ -61,10 +66,25 @@
         'text-2xl': size == 3 || size == 4,
         'text-4xl': size == 5 || size == 6,
       }"
-      class="select-none absolute t top-0 w-0 font-bold pl-4 whitespace-nowrap transform -translate-y-2/3 translate-x-2 scale-125 order-1 transition duration-300 flex justify-start items-center -ml-2.5"
+      class="select-none absolute top-0 w-0 font-bold pl-4 whitespace-nowrap transform -translate-y-2/3 translate-x-2 scale-125 order-1 transition duration-300 flex justify-start items-center -ml-2.5"
     >
       {{ label || name }}
     </label>
+    <transition name="fade-y">
+      <div 
+        v-if="$slots.msg"
+        :class="{
+          'text-xs sm:text-sm': size == 0,
+          'text-sm sm:text-base': size == 1,
+          'text-base': size == 2,
+          'text-base': size == 3 || size == 4,
+          'text-lg': size == 5 || size == 6,
+        }"
+        class="absolute w-full h-full -bottom-1 text-left flex justify-center items-end pointer-events-none gap-x-1.5 whitespace-nowrap"
+      >
+        <slot name="msg" />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -86,7 +106,7 @@
           return this.modelValue;
         },
         set(val) {
-          if (this.numeric && !validate.isNum(val)) {
+          if ((this.numeric && !validate.isNum(val)) || this.externValidation) {
             this.$refs.input.value = this.$refs.input.value.substring(0, this.$refs.input.value.length - 1);
           } else {
             if (this.lazyTimeout) clearTimeout(this.lazyTimeout);
@@ -104,7 +124,7 @@
         this.$refs.input.value = '';
         this.$emit('clear');
       },
-    },
+    }
   };
 </script>
 

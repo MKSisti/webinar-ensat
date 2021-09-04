@@ -11,7 +11,7 @@ async function getUser(uid) {
     user = {
       uid: ds.key,
       ...user,
-    }
+    };
   });
   return user; // no checks are needed if user is found then it's an 'object' otherwise it's 'null'
 }
@@ -76,13 +76,16 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
     to,
     `NEW POST FROM ${user.userName}`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} is hosting a new webinar </h1>
       <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-      <li><strong>Title:</strong> ${title}</li>
-      <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
+        <li><strong>Title:</strong> ${title}</li>
+        <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
       </ul>
       <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
-    `
+    </div>
+      `
   );
 };
 // updated as well
@@ -107,13 +110,16 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
     to,
     `UPDATED POST FROM ${user.userName}`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} has updated their webinar </h1>
       <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-      <li><strong>Title:</strong> ${title}</li>
-      <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
+        <li><strong>Title:</strong> ${title}</li>
+        <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
       </ul>
       <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
-    `
+    </div>
+      `
   );
 };
 
@@ -138,15 +144,17 @@ const confirmPost = async (pid, uid, title) => {
   await sendMail(
     to,
     `NEW POST FROM ${user.userName}`,
-    `
+    ` 
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+      
       <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} has updated their webinar </h1>
       
-      ${user.userName} just posted a new webinar with title <strong>${title}</strong> 
+      ${user.userName} just posted a new webinar with title <strong>${title}</strong>
+    </div>
       
-      <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
     `
   );
-
 };
 const denyPost = async (pid, uid) => {
   await removePost(pid, uid);
@@ -176,15 +184,18 @@ const requestHost = async (uid, uni, number) => {
     to,
     `NEW USER REQUESTING HOST ${user.userName}`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName} requesting hosting privileges </h1>
       <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-      <li><strong>Username:</strong> ${user.userName}</li>
-      <li><strong>Email:</strong> ${user.email}</li>
-      <li><strong>Phone:</strong> (+212) - ${number}</li>
-      <li><strong>University:</strong> ${uni}</li>
+        <li><strong>Username:</strong> ${user.userName}</li>
+        <li><strong>Email:</strong> ${user.email}</li>
+        <li><strong>Phone:</strong> (+212) - ${number}</li>
+        <li><strong>University:</strong> ${uni}</li>
       </ul>
       <h1 style="text-align:center; font-size: 24px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> Visit the admin panel to take action </h1>
-    `
+    </div>
+      `
   );
 };
 const getUsersInWaitingRoom = async () => {
@@ -237,14 +248,17 @@ const confirmHost = async (uid) => {
     user.email,
     `USER ${user.userName} WAS ACCEPTED AS A HOST`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:bold;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName} has been given the privilege to host </h1>
       <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-      <li><strong>Username:</strong> ${user.userName}</li>
-      <li><strong>Email:</strong> ${user.email}</li>
-      <li><strong>Phone:</strong> (+212) - ${user.number}</li>
-      <li><strong>University:</strong> ${user.uni}</li>
+        <li><strong>Username:</strong> ${user.userName}</li>
+        <li><strong>Email:</strong> ${user.email}</li>
+        <li><strong>Phone:</strong> (+212) - ${user.number}</li>
+        <li><strong>University:</strong> ${user.uni}</li>
       </ul>
-    `
+    </div>
+      `
   );
 };
 
@@ -270,8 +284,11 @@ const unblockUser = async (uid) => {
     user.email,
     `${user.userName}, YOUR ACCOUNT HAS BEEN UNBLOCKED`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, you have been blocked from hosting by an administrator, please contact them to resolve this issue.</h1>
-    `
+    </div>
+      `
   );
 };
 const makeAdmin = async (uid) => {
@@ -283,8 +300,11 @@ const makeAdmin = async (uid) => {
     user.email,
     `${user.userName}, YOUR ACCOUNT HAS BEEN UPGRADED TO ADMIN`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>administrative</strong> privileges, you can now access the admin panel in the app</h1>
-    `
+    <div>
+      `
   );
 };
 
@@ -297,8 +317,11 @@ const makeHost = async (uid) => {
     user.email,
     `${user.userName}, YOUR ACCOUNT HAS BEEN UPGRADED TO HOST`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>hosting</strong> privileges, you can now host your webinars in the app</h1>
-    `
+    </div>
+      `
   );
 };
 
@@ -311,8 +334,11 @@ const makeRegular = async (uid) => {
     user.email,
     `${user.userName}, YOUR ACCOUNT WAS REVERTED TO A REGULAR USER`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>hosting</strong> privileges, you can now view the webinars available in the app</h1>
-    `
+    </div>
+      `
   );
 };
 
@@ -353,8 +379,11 @@ const denyHost = async (uid) => {
     user.email,
     `${user.userName}, YOUR ACCOUNT WAS DENIED HOSTING`,
     `
+    <div style="display:flex;justify-content:center; align-items:center;flex-direction:column;width:100%;height:100%">
+      <img style="max-width:192px;margin: auto 0px; padding: 0px 5px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
       <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account was deinied <strong>hosting</strong> privileges, contact an admin for more info</h1>
-    `
+    </div>
+      `
   );
 };
 
@@ -459,40 +488,40 @@ const fileHandler = async (f, q = 1) => {
   });
 };
 
-const follow = async (uid, email, hostuid , hostemail) => {
-  await users.child(uid+'/following/'+hostuid).set({
+const follow = async (uid, email, hostuid, hostemail) => {
+  await users.child(uid + '/following/' + hostuid).set({
     uid: hostuid,
     email: hostemail,
   });
-  await users.child(hostuid+'/followers/'+uid).set({
+  await users.child(hostuid + '/followers/' + uid).set({
     uid: uid,
     email: email,
   });
-}
+};
 
-const unfollow = async (uid, hostuid ) => {
-  await users.child(uid+'/following/'+hostuid).remove();
-  await users.child(hostuid+'/followers/'+uid).remove();
-}
+const unfollow = async (uid, hostuid) => {
+  await users.child(uid + '/following/' + hostuid).remove();
+  await users.child(hostuid + '/followers/' + uid).remove();
+};
 
-const getFollowersList = async (uid)=> {
+const getFollowersList = async (uid) => {
   var l = [];
-  await users.child(uid+'/followers').once('value',async (ds)=>{
+  await users.child(uid + '/followers').once('value', async (ds) => {
     ds.forEach((dsch) => {
       l.push(dsch.val());
     });
-  })
+  });
   return l;
-}
-const getFollowingList = async (uid)=> {
+};
+const getFollowingList = async (uid) => {
   var l = [];
-  await users.child(uid+'/following').once('value',async (ds)=>{
+  await users.child(uid + '/following').once('value', async (ds) => {
     ds.forEach((dsch) => {
       l.push(dsch.val());
     });
-  })
+  });
   return l;
-}
+};
 
 export {
   getUser,

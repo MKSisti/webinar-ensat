@@ -4,20 +4,40 @@
     class="h-28 sm:h-32 w-full"
   >
     <div class="w-full h-full relative shadow-xl overflow-hidden rounded-3xl">
-      <!-- <div
-        v-if="editable"
-        class="absolute top-0 right-0 z-50 group cursor-pointer"
+      <div
+        v-if="(getUserInfo.uid != userInfo.uid)"
+        class="absolute top-0 right-0 z-50 group cursor-pointer select-none"
       >
-        <div class="relative w-12 h-7 group-hover:w-20 bg-gray-200 dark:bg-gray-800 hover:bg-red-200 rounded-bl-3xl transition-all duration-300 flex items-center justify-start px-2">
+        <div
+          :class="{'group-hover:w-24':!following(userInfo.uid),'group-hover:w-28':following(userInfo.uid)}"
+          class="relative w-10 h-8 rounded-bl-3xl transition-all duration-300 flex items-center justify-start px-2"
+        >
           <i
-            class="ri-file-add-fill flex justify-center items-center w-8 h-8 flex-shrink-0"
+            v-if="!following(userInfo.uid)"
+            class="ri-user-follow-fill flex justify-center items-center w-8 h-8 flex-shrink-0"
             aria-hidden="true"
           />
-          <h1 class="opacity-0 group-hover:opacity-100 transition transform group-hover:translate-x-0 translate-x-4 h-full mt-px font-semibold">
-            Edit
-          </h1>
+          <i
+            v-else
+            class="ri-user-unfollow-fill flex justify-center items-center w-8 h-8 flex-shrink-0"
+            aria-hidden="true"
+          />
+          <h3
+            v-if="!following(userInfo.uid)"
+            class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer"
+            @click="followUser"
+          >
+            Follow
+          </h3>
+          <h3
+            v-else
+            class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer"
+            @click="unfollowUser"
+          >
+            Unfollow
+          </h3>
         </div>
-      </div> -->
+      </div>
 
       <div class="mainInfo w-full h-20 sm:h-24 bg-gray-100 dark:bg-gray-900 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
         <div class="h-full flex justify-center items-center px-2 sm:px-4 flex-shrink-0">
@@ -58,14 +78,6 @@
           <h3 class="max-w-full truncate flex-shrink-0 text-base font-normal">
             {{ userInfo.number }}
           </h3>
-          <div v-if="(this.getUserInfo.uid != this.userInfo.uid)">
-            <h3 v-if="!following(userInfo.uid)" @click="followUser" class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer">
-              follow
-            </h3>
-            <h3 v-else @click="unfollowUser" class="max-w-full truncate flex-shrink-0 text-base font-normal cursor-pointer">
-              Unfollow
-            </h3>
-          </div>
         </div>
       </div>
     </div>

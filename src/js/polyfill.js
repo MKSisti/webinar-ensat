@@ -15,3 +15,9 @@ if (!String.prototype.replaceAll) {
     return this.replace(new RegExp(str, 'g'), newStr);
   };
 }
+
+Date.prototype.addDays = function (days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};

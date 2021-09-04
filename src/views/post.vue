@@ -21,7 +21,6 @@
       <div class="flex justify-start items-start flex-col w-full h-full transition duration-300 flex-shrink-0 overflow-auto">
         <!-- //!poster -->
         <div
-          :class="{ 'translate-y-5': viewingImg }"
           class="select-none w-full h-auto relative transform transition duration-300 flex-shrink-0"
         >
           <loader
@@ -34,7 +33,7 @@
             appear
           >
             <div
-              v-if="inEditingMode && !viewingImg"
+              v-if="inEditingMode"
               class="w-full h-full absolute top-2 z-50 pointer-events-none transform transition duration-300"
             >
               <div
@@ -51,6 +50,15 @@
                   Edit your poster
                 </h1>
               </div>
+
+              <div
+                v-if="!cover"
+                class="w-full text-center text-red-400"
+              >
+                <h1>
+                  Cover missing
+                </h1>
+              </div>
               
               <input
                 ref="FileUpload"
@@ -64,26 +72,21 @@
 
           <!-- //!gradient to black (contrast) -->
           <div
-            :style="viewingImg ? 'opacity:0!important' : ''"
-            :class="{ 'rounded-b-3xl sm:rounded-b-6xl': !viewingImg }"
             class="w-full h-full absolute z-30 bg-gradient-to-b from-transparent to-black dark:to-gray-900 opacity-10 dark:opacity-80 transition-all duration-300 pointer-events-none"
           />
 
           <!-- //!cover image-->
           <div
-            class="w-full cursor-pointer filter aspect-h-1 transition-all duration-300 z-0 overflow-hidden"
+            class="w-full cursor-pointer filter aspect-h-1 transition-all duration-300 z-0 overflow-hidden rounded-b-3xl sm:rounded-b-6xl"
             :class="{
-              viewingImg: viewingImg,
               'xl:aspect-w-5 aspect-w-2 md:aspect-w-3': !inEditingMode,
               'xl:aspect-w-8 aspect-w-2 md:aspect-w-4': inEditingMode,
-              'rounded-b-3xl sm:rounded-b-6xl': !viewingImg,
             }"
-            @click="viewingImg = !viewingImg"
+            @click="viewingImg = true"
           >
             <img
               v-show="cover"
               ref="postImg"
-              :class="{ 'rounded-3xl': viewingImg }"
               class="object-contain h-auto w-auto"
               :src="cover"
               alt=""
@@ -96,7 +99,6 @@
 
         <!-- //!user and hosting Date -->
         <div
-          :class="{ obstructingImg: viewingImg}"
           class="select-none relative px-5 sm:px-10 flex py-5 md:py-0 justify-start items-center md:justify-between md:items-start w-full flex-col md:flex-row transition duration-300 pointer-events-none z-50 gap-5"
         >
           <router-link
@@ -123,8 +125,7 @@
           class="sm:px-10 sm:mt-10 bg-gray-100 dark:bg-gray-900 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
         >
           <div
-            :class="{ obstructingImg: viewingImg }"
-            class=" flex justify-end items-center transform flex-col sm:flex-row translate-y-0 sm:-translate-y-1/2 gap-7 z-50 w-full transition-opacity duration-300"
+            class=" flex justify-end items-center transform flex-col sm:flex-row translate-y-0 sm:-translate-y-1/2 gap-8 sm:gap-6 z-50 w-full transition-opacity duration-300"
           >
             <!-- title and date input and commit button-->
 
@@ -137,7 +138,17 @@
               size="0"
               :model-value="title"
               @update:modelValue="handleTitle"
-            />
+            >
+              <template
+                v-if="title.length > 64"
+                #msg
+              >
+                <i class="ri-error-warning-fill text-red-400 transform scale-125" />
+                <h1 class="text-red-400">
+                  Can't be more than 64 characters
+                </h1>
+              </template>
+            </base-input>
 
             <!-- //!date input -->
             <DatePicker
@@ -160,52 +171,64 @@
                   :model-value="inputValue"
                   :ro="true" 
                   v-on="inputEvents"
-                />
+                >
+                  <template
+                    v-if="pickedDate < Date.now()"
+                    #msg
+                  >
+                    <i class="ri-error-warning-fill text-red-400 transform scale-125" />
+                    <h1 class="text-red-400">
+                      Has to be a future date
+                    </h1>
+                  </template>
+                </base-input>
               </template>
             </DatePicker>
 
-            <!-- //!cancel button -->
-            <div
-              v-if="inEditingMode && post"
-              class="select-none font-semibold shadow-lg px-3 py-1 bg-blue-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
-            >
-              <div @click="cancel">
-                <h1>Cancel</h1>
+            <div class="flex justify-end items-center flex-col sm:flex-row gap-5 sm:-mt-0">
+              <!-- //!cancel button -->
+              <div
+                v-if="inEditingMode && post"
+                class="select-none font-semibold shadow-lg px-3 py-1 bg-blue-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+              >
+                <div @click="cancel">
+                  <h1>Cancel</h1>
+                </div>
               </div>
-            </div>
 
-            <!-- //!publish/update/edit button-->
-            <div
-              v-if="inEditingMode || yetToPublish || isEditable"
-              class="select-none font-semibold shadow-lg px-3 py-1 bg-gray-100 dark:bg-gray-900 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
-            >
+              <!-- //!publish/update/edit button-->
               <div
-                v-if="inEditingMode && yetToPublish"
-                @click="publish"
+                v-if="inEditingMode || yetToPublish || isEditable"
+                class="select-none font-semibold shadow-lg px-3 py-1 bg-gray-100 dark:bg-gray-900 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
               >
-                Publish
+                <div
+                  v-if="inEditingMode && yetToPublish"
+                  @click="publish"
+                >
+                  Publish
+                </div>
+                <div
+                  v-if="inEditingMode && !yetToPublish"
+                  @click="update"
+                >
+                  Update
+                </div>
+                <div
+                  v-if="!inEditingMode && isEditable"
+                  @click="inEditingMode = true"
+                >
+                  Edit
+                </div>
               </div>
-              <div
-                v-if="inEditingMode && !yetToPublish"
-                @click="update"
-              >
-                Update
-              </div>
-              <div
-                v-if="!inEditingMode && isEditable"
-                @click="inEditingMode = true"
-              >
-                Edit
-              </div>
-            </div>
 
-            <!-- //!remove button -->
-            <div
-              v-if="(inEditingMode && post) || (getPrivLevel >1 && post && post.owner != getUserInfo.uid)"
-              class="select-none font-semibold shadow-lg px-3 py-1 bg-red-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
-            >
-              <div @click="remove">
-                <h1>Remove</h1>
+              <!-- //!remove button -->
+              <div
+                v-if="(inEditingMode && post) || (getPrivLevel >1 && post && post.owner != getUserInfo.uid)"
+                class="select-none font-semibold shadow-lg px-3 py-1 bg-red-400 text-lg border-2 border-red-300 border-opacity-50 hover:border-opacity-0 btnRing cursor-pointer rounded-2xl"
+              >
+                <div @click="remove">
+                  <h1>Remove</h1>
+                </div>
               </div>
             </div>
           </div>
@@ -235,6 +258,36 @@
             />
           </div>
         </div>
+
+        <transition
+          name="fade-y"
+          appear
+        >
+          <div
+            v-if="viewingImg && cover"
+            class="absolute w-full h-full flex items-center justify-center z-50 bg-black bg-opacity-60 absolute transition duration-300"
+            @click="viewingImg = false"
+          >
+            <div
+              class="w-full h-auto sm:h-full sm:w-auto flex items-center justify-center z-40"
+              @click="viewingImg = false"
+            >
+              <img
+                class="max-w-full max-h-full md:p-5"
+                :src="cover"
+                alt=""
+                @click.prevent.stop
+              >
+            </div>
+            <div class="px-8 py-4 absolute top-0 right-0 z-50">
+              <i
+                class="ri-close-fill text-xl p-2 bg-gray-200 dark:bg-gray-800 rounded-xl cursor-pointer"
+                aria-hidden="true"
+                @click="viewingImg = false"
+              />
+            </div>
+          </div>
+        </transition>
       </div>
     </transition>
   </div>
@@ -273,7 +326,7 @@
         isEditable: false,
         inEditingMode: false,
         yetToPublish: false,
-        pickedDate: new Date(),
+        pickedDate: new Date().addDays(1),
         viewingImg: false,
         displayedDate: null,
         title: 'Untitled',
@@ -308,7 +361,7 @@
         this.isEditable = false
         this.inEditingMode = false
         this.yetToPublish = false
-        this.pickedDate = new Date()
+        this.pickedDate = new Date().addDays(1)
         this.viewingImg = false
         this.displayedDate = null
         this.title = 'Untitled'
@@ -388,13 +441,6 @@
       },
       async imgLoaded() {
         this.imgLoading = false;
-        try {
-          this.color = await this.palette.getColor(this.$refs.postImg);
-          this.color = `rgba(${this.color[0]},${this.color[1]},${this.color[2]},1)`;
-          document.documentElement.style.setProperty('--cs', this.color);
-        } catch (e) {
-          console.warn(e);
-        }
       },
       async cancel(){
         this.loading = true;
@@ -407,26 +453,6 @@
     },
   };
 </script>
-
-<style>
-  .bg-dyn {
-    --cs: rgba(0, 0, 0, 0);
-    transition: --cs 2000ms ease;
-    background: radial-gradient(var(--cs), transparent 60%);
-    background-position-y: -350px;
-    background-position-x: center;
-    background-size: 90% 700px;
-    background-repeat: no-repeat;
-  }
-
-  .viewingImg {
-    @apply aspect-w-1 md:aspect-w-3 xl:aspect-w-4 aspect-h-1 rounded-none drop-shadow-2xl;
-  }
-
-  .obstructingImg {
-    @apply sm:opacity-0 sm:pointer-events-none;
-  }
-</style>
 
 <style>
   [type='text']:focus,
