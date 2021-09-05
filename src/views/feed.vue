@@ -1,17 +1,38 @@
 <template>
-    <div v-if="userInfo.priv >= 1" class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
-        <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">Feed</div>
-        <div class="w-full h-full">
-            <div class="w-full h-full flex-col text-4xl">
-                <div class="w-full sm:px-8 xl:px-0 flex flex-row justify-around items-start flex-wrap sm:gap-y-10 rounded-t-3xl overflow-hidden sm:py-5 sm:overflow-visible">
-                    <transition-group v-if="userPosts.length > 0" name="fade-y" appear>
-                        <post-card v-for="p of userPosts" :key="p.pid" class="transform transition duration-300 max-w-2xl" :post="p" :user-data="usersMap?.get(p.owner)" @click="goToPost(p.pid)" />
-                    </transition-group>
-                    <div v-else class="text-xl font-semibold select-none">Feels empty in here 😢</div>
-                </div>
-            </div>
-        </div>
+  <div
+    v-if="userInfo.priv >= 1"
+    class="w-full h-full transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
+  >
+    <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">
+      Feed
     </div>
+    <div class="w-full h-full">
+      <div class="w-full h-full flex-col text-4xl">
+        <div class="w-full sm:px-8 xl:px-0 flex flex-row justify-around items-start flex-wrap sm:gap-y-10 rounded-t-3xl overflow-hidden sm:py-5 sm:overflow-visible">
+          <transition-group
+            v-if="userPosts.length > 0"
+            name="fade-y"
+            appear
+          >
+            <post-card
+              v-for="p of userPosts"
+              :key="p.pid"
+              class="transform transition duration-300 max-w-2xl"
+              :post="p"
+              :user-data="usersMap?.get(p.owner)"
+              @click="goToPost(p.pid)"
+            />
+          </transition-group>
+          <div
+            v-else
+            class="text-xl font-semibold select-none"
+          >
+            Feels empty in here 😢
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -21,10 +42,10 @@ import PostCard from "../components/PostCard";
 
 export default {
   name:'UserPostsView',
-  props:['uid'],
   components: {
     PostCard,
   },
+  props:['uid'],
   data(){
     return{
       userInfo: {
@@ -42,6 +63,10 @@ export default {
     $route: async function () {
       if (this.$route.name == "profile") await this.init();
     },
+  },
+  async created() {
+    // console.log(this.uid);
+    this.init();
   },
   methods:{
     clearData() {
@@ -66,10 +91,6 @@ export default {
     goToPost(pid) {
       this.$router.push({ name: "post", params: { pid: pid } });
     },
-  },
-  async created() {
-    // console.log(this.uid);
-    this.init();
   },
 };
 </script>

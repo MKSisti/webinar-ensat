@@ -1,43 +1,50 @@
 <template>
   <div
     :class="{ userCardMin: minimal || userInfo.priv < 1 }"
-    class="h-28 sm:h-32 w-full"
+    class="h-28 sm:h-32 w-full transition-all duration-300"
   >
     <div class="w-full h-full relative shadow-xl rounded-3xl">
-      <div
-        v-if="(getUserInfo.uid != userInfo.uid) && getUserInfo.uid"
-        class="absolute top-0 right-0 transform -translate-y-1/2 z-50 group cursor-pointer select-none"
-        @click.prevent.stop
+      <transition
+        name="fade-y"
+        appear
       >
         <div
-          class="relative mx-6 px-1 transition-all duration-300 flex items-center justify-start bg-gray-800 gap-1 rounded-lg text-sm sm:text-base btnRing"
+          v-if="(getUserInfo.uid != userInfo.uid) && getUserInfo.uid"
+          :key="following(userInfo.uid)"
+          class="absolute top-0 right-0 transform transition duration-300 -translate-y-1/2 z-50 group cursor-pointer select-none"
+          @click.prevent.stop
         >
-          <i
-            v-if="!following(userInfo.uid)"
-            class="ri-user-follow-fill flex justify-center items-center flex-shrink-0"
-            aria-hidden="true"
-          />
-          <i
-            v-else
-            class="ri-user-unfollow-fill flex justify-center items-center flex-shrink-0"
-            aria-hidden="true"
-          />
-          <h3
-            v-if="!following(userInfo.uid)"
-            class="max-w-full truncate flex-shrink-0 cursor-pointer"
-            @click="followUser"
+          <div
+            class="relative mx-6 px-1 transition-all duration-300 flex items-center justify-start bg-gray-800 gap-1 rounded-lg text-sm sm:text-base btnRing"
           >
-            Follow
-          </h3>
-          <h3
-            v-else
-            class="max-w-full truncate flex-shrink-0 cursor-pointer"
-            @click="unfollowUser"
-          >
-            Unfollow
-          </h3>
+            <i
+              v-if="!following(userInfo.uid)"
+              class="ri-user-follow-fill flex justify-center items-center flex-shrink-0"
+              aria-hidden="true"
+            />
+            <i
+              v-else
+              class="ri-user-unfollow-fill flex justify-center items-center flex-shrink-0"
+              aria-hidden="true"
+            />
+            <h3
+              v-if="!following(userInfo.uid)"
+              class="max-w-full truncate flex-shrink-0 cursor-pointer"
+              @click="followUser"
+            >
+              Follow
+            </h3>
+            <h3
+              v-else
+              class="max-w-full truncate flex-shrink-0 cursor-pointer"
+              @click="unfollowUser"
+            >
+              Unfollow
+            </h3>
+          </div>
         </div>
-      </div>
+      </transition>
+      
 
       <div class="mainInfo w-full h-20 sm:h-24 bg-gray-100 dark:bg-gray-900 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
         <div class="h-full flex justify-center items-center px-2 sm:px-4 flex-shrink-0">
@@ -67,19 +74,24 @@
           </h2>
         </div>
       </div>
-      <div
-        v-if="!minimal && userInfo.priv > 0 "
-        class="secondaryInfo w-full h-28 pt-20 sm:h-32 sm:pt-24 bg-gray-200 dark:bg-gray-800 absolute z-0 rounded-3xl"
+      <transition
+        name="fade"
+        appear
       >
-        <div class="w-full flex justify-around items-center py-1">
-          <h3 class="font-semibold max-w-full truncate flex-shrink-0 text-base">
-            {{ getAbbreviation(userInfo.uni) }}
-          </h3>
-          <h3 class="max-w-full truncate flex-shrink-0 text-base font-normal">
-            {{ userInfo.number }}
-          </h3>
+        <div
+          v-if="!minimal && userInfo.priv > 0 "
+          class="secondaryInfo transform transition duration-300 w-full h-28 pt-20 sm:h-32 sm:pt-24 bg-gray-200 dark:bg-gray-800 absolute z-0 rounded-3xl"
+        >
+          <div class="w-full flex justify-around items-center py-1">
+            <h3 class="font-semibold max-w-full truncate flex-shrink-0 text-base">
+              {{ getAbbreviation(userInfo.uni) }}
+            </h3>
+            <h3 class="max-w-full truncate flex-shrink-0 text-base font-normal">
+              {{ userInfo.number }}
+            </h3>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
