@@ -1,7 +1,8 @@
 <template>
+  <loader v-if="loading" />
   <div
-    v-if="userInfo.priv >= 1"
-    class="w-full h-full transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
+    v-else-if="!loading && userInfo.priv >= 1"
+    class="w-full h-full bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
   >
     <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">
       Posts
@@ -22,7 +23,8 @@
         </h1>
       </div>
     </div>
-
+    
+    <!-- //!posts -->
     <div class="w-full h-full">
       <div class="w-full h-full flex-col text-4xl">
         <div class="w-full sm:px-8 xl:px-0 flex flex-row justify-around items-start flex-wrap sm:gap-y-10 rounded-t-3xl overflow-hidden sm:py-5 sm:overflow-visible">
@@ -50,34 +52,37 @@
       </div>
     </div>
   </div>
+
+  <!-- //!user is not a host -->
   <div
-    v-else
+    v-else-if="!loading && userInfo.priv < 1"
     class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto"
   >
+    <!-- //!user hasn't submitted application -->
     <div
       v-if="!awaitingApproval && userInfo.priv == 0"
       class="flex justify-start items-center flex-col h-full p-5 space-y-3"
     >
-      <h1 class="text-4xl font-bold">
+      <h1 class="text-xl sm:text-4xl font-bold">
         You don't have the necessary privilege to post
       </h1>
-      <h2 class="text-xl font-semibold">
+      <h2 class="text-base sm:text-xl font-normal">
         please fill the necessary details to complete your account
       </h2>
       <div class="py-20 space-y-10">
         <base-input
-          size="4"
+          size="3"
           :model-value="univ"
           lazy="200"
           name="University"
           @update:modelValue="handleUniv"
         />
         <div class="flex justify-center items-center gap-x-2">
-          <div class="h-14 w-28 text-2xl font-semibold flex justify-center items-center rounded-2xl bg-gray-200 dark:bg-gray-800 pb-1">
+          <div class="h-11 sm:h-14 w-28 text-xl sm:text-2xl font-semibold flex justify-center items-center rounded-2xl bg-gray-200 dark:bg-gray-800 pb-1">
             (+212)
           </div>
           <base-input
-            size="4"
+            size="3"
             :model-value="number"
             lazy="200"
             name="Phone Number"
@@ -96,22 +101,26 @@
         </div>
       </div>
     </div>
+
+    <!-- //!user awaiting response-->
     <div
       v-else-if="awaitingApproval && userInfo.priv == 0"
       class="flex justify-center items-center flex-col h-full p-20 space-y-3"
     >
-      <h1 class="text-4xl font-bold text-center">
+      <h1 class="text-xl sm:text-4xl font-bold text-center">
         We are currently processing your profile
       </h1>
-      <h2 class="text-xl font-semibold">
+      <h2 class="text-base sm:text-xl font-normal">
         Please come back at a later date
       </h2>
     </div>
+
+    <!-- //!user blocked -->
     <div
       v-if="userInfo.priv < 0"
       class="flex justify-center items-center flex-col h-full p-20 space-y-3"
     >
-      <h1 class="text-4xl font-bold text-center">
+      <h1 class="text-xl sm:text-4xl font-bold text-center">
         You can no longer Post here. Contact an admin to learn more
       </h1>
     </div>
@@ -124,16 +133,19 @@ import { mapActions, mapGetters } from "vuex";
 import { BSON } from "realm-web";
 import PostCard from "../components/PostCard";
 import BaseInput from "../components/BaseInput";
+import Loader from '../components/Loader'
 
 export default {
   name:'UserPostsView',
   components: {
     PostCard,
     BaseInput,
+    Loader
   },
   props:['uid'],
   data(){
     return{
+      loading:true,
       editingProfile: false,
       univ: "",
       number: "",
@@ -154,6 +166,7 @@ export default {
   },
   methods:{
     clearData() {
+      this.loading = true;
       this.userPosts = [];
       this.editingProfile = false;
       this.univ = "";
@@ -170,6 +183,7 @@ export default {
               else this.userPosts = await getPosts({ owner: this.uid, approved: true });
             });
         this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
+        this.loading = false;
       });
     },
     goToCreate() {

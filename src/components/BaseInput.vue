@@ -14,9 +14,9 @@
         :class="{
           'text-sm sm:text-base': size == 0,
           'text-lg sm:text-xl': size == 1,
-          'text-2xl': size == 2,
-          'text-4xl': size == 3 || size == 4,
-          'text-5xl': size == 5 || size == 6,
+          'text-xl sm:text-2xl': size == 2,
+          'text-xl sm:text-4xl': size == 3 || size == 4,
+          'text-xl sm:text-5xl': size == 5 || size == 6,
         }"
         class="ri-close-fill"
         aria-hidden="true"
@@ -34,9 +34,9 @@
       :class="{
         'text-sm sm:text-base pr-8': size == 0,
         'text-lg sm:text-xl pr-10': size == 1,
-        'text-2xl pr-12': size == 2,
-        'text-4xl pr-14': size == 3 || size == 4,
-        'text-5xl pr-14': size == 5 || size == 6,
+        'text-xl sm:text-2xl pr-12 sm:pr-12': size == 2,
+        'text-xl sm:text-4xl pr-12 sm:pr-14': size == 3 || size == 4,
+        'text-xl sm:text-5xl pr-12 sm:pr-14': size == 5 || size == 6,
       }"
       class="searchInput form-input outline-none focus:border-transparent focus:outline-none focus:ring-0 border-none bg-gray-200 dark:bg-gray-800 ring-0 w-full order-2 rounded-2xl"
     >
@@ -62,9 +62,9 @@
       :class="{
         'text-sm sm:text-base': size == 0,
         'text-lg sm:text-xl': size == 1,
-        'text-xl': size == 2,
-        'text-2xl': size == 3 || size == 4,
-        'text-4xl': size == 5 || size == 6,
+        'text-lg sm:text-xl': size == 2,
+        'text-lg sm:text-2xl': size == 3 || size == 4,
+        'text-lg sm:text-4xl': size == 5 || size == 6,
       }"
       class="select-none absolute top-0 w-0 font-bold pl-4 whitespace-nowrap transform -translate-y-2/3 translate-x-2 scale-125 order-1 transition duration-300 flex justify-start items-center -ml-2.5"
     >
