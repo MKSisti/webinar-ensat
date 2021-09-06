@@ -1,5 +1,9 @@
 <template>
-  <div class="w-full h-full transform transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
+  <div v-if="loading">
+      <loader class="pb-4 pt-4"/>
+  </div>
+  <div v-else
+     class="w-full h-full transform transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
     <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">
       Feed
     </div>
@@ -35,11 +39,13 @@
 <script>
 import { getUser, getPosts, getFollowingListIds, makeUsersMap } from "../js/dbActions.js";
 import PostCard from "../components/PostCard";
+import Loader from '../components/Loader';
 
 export default {
   name:'UserPostsView',
   components: {
     PostCard,
+    Loader,
   },
   props:['uid'],
   data(){
@@ -47,6 +53,7 @@ export default {
       userPosts: [],
       followingList: [],
       usersMap: null,
+      loading: true,
     };
   },
   watch: {
@@ -66,12 +73,14 @@ export default {
       this.userPosts = [];
     },
     async init(){
+      this.loading = true;
       this.clearData();
       this.$nextTick(async () => {
         this.userInfo = await getUser(this.uid);
         this.followingList = await getFollowingListIds(this.uid);
         this.userPosts = await getPosts( { owner: { $in: this.followingList }, approved: true  });
         this.userPosts.length > 0 ? (this.usersMap = await makeUsersMap(this.userPosts, this.usersMap)) : null;
+        this.loading = false;
       });
     },
     goToPost(pid) {

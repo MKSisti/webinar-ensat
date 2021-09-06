@@ -79,7 +79,9 @@ export default {
   },
   watch: {
     $route: async function () {
-      if (this.$route.name == "profile") await this.init();
+      if (this.$route.path.includes("profile")) {
+        await this.init();
+      }
     },
   },
   async mounted() {
