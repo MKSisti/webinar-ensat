@@ -1,5 +1,5 @@
 <template>
-    <div v-if="userInfo.priv >= 1" class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
+    <div class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
         <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">Feed</div>
         <div class="w-full h-full">
             <div class="w-full h-full flex-col text-4xl">
@@ -40,7 +40,9 @@ export default {
   },
   watch: {
     $route: async function () {
-      if (this.$route.name == "profile") await this.init();
+      if (this.$route.name == "profile") {
+        await this.init();
+      }
     },
   },
   methods:{
@@ -56,11 +58,10 @@ export default {
       this.$nextTick(async () => {
         this.userInfo = await getUser(this.uid);
         this.followingList = await getFollowingListIds(this.uid);
-        if (this.userInfo.priv >= 1)
-            this.$nextTick(async () => {
-                this.userPosts = await getPosts( { owner: { $in: this.followingList }, approved: true  });
-                this.userPosts.length > 0 ? (this.usersMap = await makeUsersMap(this.userPosts, this.usersMap)) : null;
-            });
+        if (this.userInfo.priv >= 0)
+          this.userPosts = await getPosts( { owner: { $in: this.followingList }, approved: true  });
+          this.userPosts.length > 0 ? (this.usersMap = await makeUsersMap(this.userPosts, this.usersMap)) : null;
+           
       });
     },
     goToPost(pid) {

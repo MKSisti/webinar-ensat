@@ -76,7 +76,9 @@ export default {
   },
   watch: {
     $route: async function () {
-      if (this.$route.name == "profile") await this.init();
+      if (this.$route.path.includes("profile")) {
+        await this.init();
+      }
     },
   },
   methods:{
@@ -92,10 +94,10 @@ export default {
       this.$nextTick(async () => {
         this.userInfo = await getUser(this.uid);
         if (this.userInfo.priv >= 1)
-            this.$nextTick(async () => {
-              if (this.getUserInfo.email == this.userInfo.email) this.userPosts = await getPosts({ owner: this.uid });
-              else this.userPosts = await getPosts({ owner: this.uid, approved: true });
-            });
+            if (this.getUserInfo.email == this.userInfo.email) 
+              this.userPosts = await getPosts({ owner: this.uid });
+            else 
+              this.userPosts = await getPosts({ owner: this.uid, approved: true });
         this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
       });
     },

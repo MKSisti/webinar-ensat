@@ -38,7 +38,7 @@
 <script>
 import { getUser } from "../js/dbActions.js";
 import UserCard from "../components/UserCard";
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Profile",
