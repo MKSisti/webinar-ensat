@@ -94,7 +94,7 @@
             
               <div
                 class="btnTransform cursor-pointer w-10 h-10 bg-green-400 rounded-xl flex justify-center items-center flex-shrink-0"
-                @click="updateUser(u.uid, u.userName, u.uni, u.number)"
+                @click="updateUser(u.uid, u.userName, u.uni, u.number, u.priv)"
               >
                 <i
                   class="ri-check-fill text-xl h-0 w-0 flex justify-center items-center"
@@ -112,7 +112,7 @@
 <script>
   import UserCard from '../components/UserCard';
   import Search from '../components/Search';
-  import { getUsersFromSearch, updatePriv, updateUser } from '../js/dbActions';
+  import { getUsersFromSearch, updateUser } from '../js/dbActions';
   import BaseInput from '../components/BaseInput';
   import Loader from '../components/Loader';
 

@@ -135,12 +135,13 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
   );
 };
 
-const updateUser = async (uid, userName, uni, number) => {
-  await users.child(uid).update({
-    number,
-    uni,
-    userName,
-  });
+const updateUser = async (uid, userName, uni, number, priv) => {
+  let o = {};
+  userName? o['userName']=userName:null;
+  uni? o['uni']=uni:null;
+  number? o['number']=number:null;
+  await users.child(uid).update(o);
+  await updatePriv(uid, priv);
 };
 
 const confirmPost = async (pid, uid, title) => {
