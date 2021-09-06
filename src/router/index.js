@@ -25,7 +25,19 @@ const router = createRouter({
       props: true,
       children:[
         { path:"", component: userPosts, props: true, },
-        { path:"feed", name:'feed', component: feed, props: true, },
+        { 
+          path:"feed", 
+          name:'feed', 
+          component: feed, 
+          props: true, 
+          beforeEnter: (to, from, next) => {
+            if (store.getters["user/getuid"] != to.params.uid ) {
+              next('/profile/'+to.params.uid);
+            }else{
+              next();
+            }
+          },
+        },
       ]
     },
     {
@@ -52,12 +64,12 @@ const router = createRouter({
         },
       ],
     },
-    // //TODO: 404 view
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   name: '404',
-    //   redirect: {name: 'home'}
-    // }
+    //TODO: 404 view
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      redirect: {name: 'home'}
+    }
   ],
 });
 

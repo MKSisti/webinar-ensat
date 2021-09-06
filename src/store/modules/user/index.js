@@ -5,7 +5,6 @@ export default {
   namespaced: true,
   state() {
     return {
-      //basic user info (name, email, uid, img)
       userInfo: {},
       isLoggedIn: false,
       privLevel: -99,
@@ -127,6 +126,9 @@ export default {
     },
     getUserInfo(state) {
       return state.userInfo;
+    },
+    getuid(state) {
+      return state.userInfo.uid;
     },
     getPrivLevel(state) {
       return state.privLevel;
