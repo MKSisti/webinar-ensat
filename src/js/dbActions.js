@@ -82,7 +82,7 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
       </tr>
       <tr>
         <td style="text-align: center;">
-          <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} is hosting a new webinar </h1>
+          <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} has a new post </h1>
           <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
             <li><strong>Title:</strong> ${title}</li>
             <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
@@ -122,7 +122,7 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
       </tr>
       <tr>
         <td style="text-align: center;">
-          <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} has updated their webinar </h1>
+          <h1 style="text-align:center; font-size: 28px; font-weight:600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} has updated their post </h1>
           <ul style="list-style-type: none;text-align:center; margin: 0; padding: 0;font-size: 18px; font-weight:normal;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
             <li><strong>Title:</strong> ${title}</li>
             <li><strong>Hosting Date:</strong> ${formattedDate.date} at ${formattedDate.time}</li>
@@ -163,7 +163,7 @@ const confirmPost = async (pid, uid, title) => {
     </tr>
     <tr>
     <td style="text-align: center;">
-      <h1 style="text-align:center; font-size: 28px; font-weight:400;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} just posted a new webinar with title <strong>${title}</strong> </h1>
+      <h1 style="text-align:center; font-size: 28px; font-weight:400;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> ${user.userName} just posted a new post with title <strong>${title}</strong> </h1>
     </td>
     </tr>
   </table>
@@ -369,7 +369,7 @@ const makeHost = async (uid) => {
       </tr>
       <tr>
       <td style="text-align: center;">
-        <h1 style="text-align:center; font-size: 28px; font-weight:400;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>hosting</strong> privileges, you can now host your webinars in the app</h1>
+        <h1 style="text-align:center; font-size: 28px; font-weight:400;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>hosting</strong> privileges, you can now post in the app</h1>
       </td>
       </tr>
     </table>
@@ -392,7 +392,7 @@ const makeRegular = async (uid) => {
       </tr>
       <tr>
         <td style="text-align: center;">
-          <h1 style="text-align:center; font-size: 28px; font-weight:400;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>hosting</strong> privileges, you can now view the webinars available in the app</h1>
+          <h1 style="text-align:center; font-size: 28px; font-weight:400;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding:1rem 2rem;"> User ${user.userName}, your account has been given <strong>viewing</strong> privileges, you can't create post in the app</h1>
         </td>
       </tr>
     </table>
