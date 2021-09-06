@@ -12,9 +12,9 @@
       >
         <router-link :to="'/profile/' + getUserInfo.uid">
           <div class="flex justify-center items-center">
-            <div class="btnTransformSm transform transition duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl w-44">
-              <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
-                <h1 class="text-lg font-semibold flex-shrink-0 whitespace-nowrap duration-300">
+            <div class="btnTransformSm transition-transform duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl w-44">
+              <div class="w-full h-full flex justify-center items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
+                <h1 class="text-lg font-semibold">
                   Posts
                 </h1>
               </div>
@@ -23,9 +23,9 @@
         </router-link>
         <router-link :to="{ name: 'feed' }">
           <div class="flex justify-center items-center">
-            <div class="btnTransformSm transform transition duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl w-44">
-              <div class="w-full flex justify-around items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
-                <h1 class="text-lg font-semibold flex-shrink-0 whitespace-nowrap duration-300">
+            <div class="btnTransformSm transition-transform duration-300 bg-gray-200 dark:bg-gray-800 bg-opacity-70 rounded-xl w-44">
+              <div class="w-full h-full flex justify-center items-center overflow-hidden cursor-pointer px-2 py-1.5 relative flex-shrink-0 gap-2">
+                <h1 class="text-lg font-semibold">
                   Feed
                 </h1>
               </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="select-none px-5 sm:px-10 py-4 h-16 w-full bg-gray-100 dark:bg-gray-900 shadow-md flex items-center justify-between xl:rounded-b-4xl z-50">
-    <div>
+    <div class="group">
       <router-link to="/">
         <!-- <div>W</div> -->
         <div
@@ -8,7 +8,7 @@
           @click="profileMenu = false"
         >
           <img
-            class="h-12 w-12"
+            class="h-12 w-12 rounded-md group-hover:rounded-xl transition-all duration-300"
             src="/img/icons/icon_192x192.png"
             alt=""
           >

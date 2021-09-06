@@ -22,12 +22,12 @@
     </div>
     <div v-else class="w-full h-full transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto">
         <div v-if="!awaitingApproval && userInfo.priv == 0" class="flex justify-start items-center flex-col h-full p-5 space-y-3">
-            <h1 class="text-4xl font-bold">You don't have the necessary privilege to post</h1>
-            <h2 class="text-xl font-semibold">please fill the necessary details to complete your account</h2>
+            <h1 class="text-xl sm:text-4xl font-bold text-center">You don't have the necessary privilege to post</h1>
+            <h2 class="text-base sm:text-xl text-center">please fill the necessary details to complete your account</h2>
             <div class="py-20 space-y-10">
                 <base-input size="4" :model-value="univ" lazy="200" name="University" @update:modelValue="handleUniv" />
                 <div class="flex justify-center items-center gap-x-2">
-                    <div class="h-14 w-28 text-2xl font-semibold flex justify-center items-center rounded-2xl bg-gray-200 dark:bg-gray-800 pb-1">(+212)</div>
+                    <div class="h-11 sm:h-14 w-28 text-xl sm:text-2xl font-semibold flex justify-center items-center rounded-2xl bg-gray-200 dark:bg-gray-800 pb-1">(+212)</div>
                     <base-input size="4" :model-value="number" lazy="200" name="Phone Number" :numeric="true" @update:modelValue="handleNumber" />
                 </div>
                 <div class="w-5/12 h-12 bg-red-100 dark:bg-red-400 rounded-2xl flex justify-center items-center cursor-pointer btnRing mx-auto" tabindex="-1" @click="submit">
@@ -36,11 +36,11 @@
             </div>
         </div>
         <div v-else-if="awaitingApproval && userInfo.priv == 0" class="flex justify-center items-center flex-col h-full p-20 space-y-3">
-            <h1 class="text-4xl font-bold text-center">We are currently processing your profile</h1>
-            <h2 class="text-xl font-semibold">Please come back at a later date</h2>
+            <h1 class="text-xl sm:text-4xl font-bold text-center">We are currently processing your profile</h1>
+            <h2 class="text-base sm:text-xl text-center">Please come back at a later date</h2>
         </div>
         <div v-if="userInfo.priv < 0" class="flex justify-center items-center flex-col h-full p-20 space-y-3">
-            <h1 class="text-4xl font-bold text-center">You can no longer Post here. Contact an admin to learn more</h1>
+            <h1 class="text-xl sm:text-4xl font-bold text-center">You can no longer Post here. Contact an admin to learn more</h1>
         </div>
     </div>
 </template>
