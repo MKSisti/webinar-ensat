@@ -1,5 +1,5 @@
 <template>
-    <div v-if="userInfo.priv >= 1" class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
+    <div v-if="userInfo.priv >= 1" class="w-full h-full transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
         <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">Posts</div>
         <!-- //!Create post button -->
         <div v-if="uid == getUserInfo.uid" class="flex justify-center items-center space-x-2 px-10" @click="goToCreate">
@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div v-else class="w-full h-full transition-opacity duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto">
+    <div v-else class="w-full h-full transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-center flex-col rounded-t-6xl shadow-3xl overflow-auto">
         <div v-if="!awaitingApproval && userInfo.priv == 0" class="flex justify-start items-center flex-col h-full p-5 space-y-3">
             <h1 class="text-4xl font-bold">You don't have the necessary privilege to post</h1>
             <h2 class="text-xl font-semibold">please fill the necessary details to complete your account</h2>
@@ -121,9 +121,9 @@ export default {
     },
     ...mapActions("user", ["updateToken"]),
   },
-  async created() {
+  async mounted() {
     // console.log(this.uid);
-    this.init();
+   await this.init();
   },
 };
 </script>

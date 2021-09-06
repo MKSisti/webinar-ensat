@@ -24,7 +24,7 @@ const router = createRouter({
       component: profile,
       props: true,
       children:[
-        { path:"", name:'profile', component: userPosts, props: true, },
+        { path:"", component: userPosts, props: true, },
         { path:"feed", name:'feed', component: feed, props: true, },
       ]
     },
