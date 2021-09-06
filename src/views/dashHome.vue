@@ -8,7 +8,7 @@
         <div
           v-if="alert.text"
           class="px-4 py-1.5 flex justify-center border-transparent items-center gap-4 bg-gray-200 dark:bg-gray-800 shadow-lg rounded-xl btnTransformSm pointer-events-auto cursor-pointer"
-          @click="alert = {}"
+          @click="clearAlert()"
         >
           <i
             :class="[`text-${alert.color}-500`]"
@@ -111,15 +111,14 @@
     },
     methods:{
       showAlert(color,text){
+        this.clearAlert();
+        this.alert = {color,text};
+        this.alertTimeout = setTimeout(() => this.alert = {},4000);
+      },
+      clearAlert(){
         if(this.alertTimeout) clearTimeout(this.alertTimeout);
         this.alertTimeout=null;
-
-        this.alert = {
-          color,
-          text
-        }
-
-        this.alertTimeout = setTimeout(() => this.alert = {},4000);
+        this.alert = {}
       }
     }
   };
