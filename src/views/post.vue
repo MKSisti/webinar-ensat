@@ -381,10 +381,10 @@
               this.yetToPublish = true;
               this.isEditable = true;
             } else {
-              this.$router.push({ name: 'home' });
+              this.$router.push({ name: "error", params: { err: 'Invalid post creation token' } });
             }
           } else {
-            this.$router.push({ name: 'home' });
+            this.$router.push({ name: "error", params: { err: 'User cannot create posts' } });
           }
         } else {
           this.postOwner = await getU(this.post.owner);

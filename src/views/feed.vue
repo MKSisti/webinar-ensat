@@ -1,9 +1,11 @@
 <template>
   <div v-if="loading">
-      <loader class="pb-4 pt-4"/>
+    <loader class="pb-4 pt-4" />
   </div>
-  <div v-else
-     class="w-full h-full transform transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
+  <div
+    v-else
+    class="w-full h-full transform transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
+  >
     <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">
       Feed
     </div>

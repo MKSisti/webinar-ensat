@@ -98,6 +98,7 @@ export default {
       this.clearData();
       this.$nextTick(async () => {
         this.userInfo = await getUser(this.uid);
+        if(!this.userInfo.email || !this.userInfo.userName) this.$router.push({ name: "error", params: { err: 'User doesn\'t exist' } });
       });
     },
 
