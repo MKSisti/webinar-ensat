@@ -11,11 +11,11 @@
         <div
           v-if="(getUserInfo.uid != userInfo.uid) && getUserInfo.uid"
           :key="following(userInfo.uid)"
-          class="absolute top-0 right-0 transform transition duration-300 -translate-y-1/2 z-50 group cursor-pointer select-none"
+          class="absolute top-0 right-0 transform transition duration-300 -translate-y-2/3 z-50 group cursor-pointer select-none"
           @click.prevent.stop
         >
           <div
-            class="relative mx-6 px-1 transition-all duration-300 flex items-center justify-start bg-gray-800 gap-1 rounded-lg text-sm sm:text-base btnRing"
+            class="relative mx-6 px-1 transition-all duration-300 flex items-center justify-start bg-gray-200 dark:bg-gray-800 shadow-sm gap-1 rounded-lg text-sm sm:text-base btnRing"
           >
             <i
               v-if="!following(userInfo.uid)"

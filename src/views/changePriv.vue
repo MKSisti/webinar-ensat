@@ -4,7 +4,7 @@
       User Data
     </h1>
     
-    <div class="w-full h-full bg-gray-100 dark:bg-gray-900 rounded-t-6xl shadow-3xl overflow-auto flex justify-start items-center flex-col py-10 gap-10">
+    <div class="w-full h-full bg-gray-100 dark:bg-gray-900 rounded-t-6xl shadow-3xl overflow-y-auto overflow-x-hidden flex justify-start items-center flex-col py-10 gap-10">
       <search
         :text="text || ''"
         search-name="Search"
@@ -16,7 +16,7 @@
       <loader v-if="loading" />
       <div
         v-else
-        class="flex justify-start items-start flex-wrap px-5 sm:px-10 sm:gap-10"
+        class="w-full flex justify-start items-start flex-wrap px-5 sm:px-10 sm:gap-10"
       >
         <div
           v-if="usersList.length <= 0 "
@@ -91,15 +91,27 @@
                   </option>
                 </base-input>
               </div>
-            
+
               <div
-                class="btnTransform cursor-pointer w-10 h-10 bg-green-400 rounded-xl flex justify-center items-center flex-shrink-0"
-                @click="updateUser(u.uid, u.userName, u.uni, u.number, u.priv)"
+                :class="{'pointer-events-none': transactionInProgress[u.uid]}"
+                class="btnTransform cursor-pointer w-10 h-10 bg-green-500 rounded-xl flex justify-center items-center flex-shrink-0 relative"
+                @click="update(u.uid, u.userName, u.uni, u.number, u.priv)"
+                @click.prevent.stop
               >
-                <i
-                  class="ri-check-fill text-xl h-0 w-0 flex justify-center items-center"
-                  aria-hidden="true"
-                />
+                <transition
+                  name="fade-y"
+                  appear
+                >
+                  <i
+                    v-if="!transactionInProgress[u.uid]"
+                    class="ri-check-fill absolute text-xl h-0 w-0 flex justify-center items-center transform transition duration-300"
+                    aria-hidden="true"
+                  />
+                  <div
+                    v-else
+                    class="w-4 h-4 absolute bg-gray-50 rounded-full transform transition duration-300 animate-ping"
+                  />
+                </transition>
               </div>
             </div>
           </div>
@@ -129,6 +141,7 @@
         usersList: [],
         text: '',
         loading: false,
+        transactionInProgress:{},
       };
     },
     methods: {
@@ -138,7 +151,13 @@
         this.usersList = await getUsersFromSearch(t);
         this.loading = false;
       },
-      updateUser
+      updateUser,
+      async update(uid, userName, uni, number, priv){
+        this.transactionInProgress[uid] = true;
+        await updateUser(uid, userName, uni, number, priv);
+        this.$emit('success','green','User has been updated');
+        this.transactionInProgress[uid] = false;
+      }
     },
   };
 </script>

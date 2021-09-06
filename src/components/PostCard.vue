@@ -18,7 +18,8 @@
     <div class="w-full transform group-hover:-translate-y-2 group-hover:scale-105 sm:group-hover:-translate-y-0 sm:group-hover:scale-100 transition duration-300 flex-shrink-0">
       <!-- //!user data -->
       <div 
-        class="pt-6 pb-4 w-full px-8 flex justify-start items-center"
+        :class="{'pt-6 pb-4':!noDates,'py-4':noDates}"
+        class="w-full px-8 flex justify-start items-center"
       >
         <div class="rounded-full h-14 w-14 sm:h-16 sm:w-16 pointer-events-auto transition duration-300 flex-shrink-0 overflow-hidden object-contain flex justify-center items-center">
           <img

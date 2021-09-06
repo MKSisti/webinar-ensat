@@ -1,5 +1,26 @@
 <template>
-  <div class="w-full h-full flex justify-start items-start flex-col">
+  <div class="w-full h-full flex justify-start items-start flex-col relative">
+    <div class="absolute top-0 right-0 left-0 sm:left-auto p-5 flex justify-center items-center pointer-events-none">
+      <transition
+        name="fade-y"
+        appear
+      >
+        <div
+          v-if="alert.text"
+          class="px-4 py-1.5 flex justify-center border-transparent items-center gap-4 bg-gray-200 dark:bg-gray-800 shadow-lg rounded-xl btnTransformSm pointer-events-auto cursor-pointer"
+          @click="alert = {}"
+        >
+          <i
+            :class="[`text-${alert.color}-500`]"
+            class="ri-check-fill text-xl h-0 w-0 flex justify-center items-center transform transition duration-300"
+            aria-hidden="true"
+          />
+          <h1 class="text-xl">
+            {{ alert.text }}
+          </h1>
+        </div>
+      </transition>
+    </div>
     <div class="px-4 py-3 bg-gray-100 dark:bg-gray-900 shadow-md flex-col md:flex-row flex items-start md:items-center justify-between rounded-2xl gap-4 font-semibold text-xl mx-auto mt-5 select-none">
       <h1 class="text-2xl font-bold">
         Dashboard
@@ -71,6 +92,7 @@
           <component
             :is="Component"
             class="w-full max-h-full transition duration-300"
+            @success="showAlert"
           />
         </transition>
       </router-view>
@@ -81,6 +103,25 @@
 <script>
   export default {
     name: 'DashBoard',
+    data(){
+      return{
+        alert:{},
+        alertTimeout:null
+      }
+    },
+    methods:{
+      showAlert(color,text){
+        if(this.alertTimeout) clearTimeout(this.alertTimeout);
+        this.alertTimeout=null;
+
+        this.alert = {
+          color,
+          text
+        }
+
+        this.alertTimeout = setTimeout(() => this.alert = {},4000);
+      }
+    }
   };
 </script>
 

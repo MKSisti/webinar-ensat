@@ -4,14 +4,16 @@
     appear
   >
     <div class="w-full h-full flex items-center justify-center flex-col transition duration-300 gap-4">
-      <div class="loadingDot" />
+      <div :class="{'noColor':noColor}" class="loadingDot" />
       <slot />
     </div>
   </transition>
 </template>
 
 <script>
-  export default {};
+  export default {
+    props:['noColor']
+  };
 </script>
 
 <style>
@@ -28,6 +30,15 @@
     position: absolute;
     top: 0;
     @apply w-8 h-8 rounded-2xl bg-red-400;
+  }
+
+  .loadingDot.noColor {
+    @apply bg-gray-800 dark:bg-gray-200;
+  }
+
+  .loadingDot.noColor::before,
+  .loadingDot.noColor::after {
+    @apply bg-gray-800 dark:bg-gray-200;
   }
 
   .loadingDot::before {

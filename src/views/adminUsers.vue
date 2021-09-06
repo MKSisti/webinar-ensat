@@ -23,24 +23,46 @@
         >
           <div class="right-0 top-0 bottom-0 absolute flex justify-end items-center z-50 gap-2 pr-2">
             <div
-              class="btnTransform cursor-pointer w-10 h-10 bg-green-400 rounded-xl flex justify-center items-center"
+              :class="{'pointer-events-none': transactionInProgress[u.uid]}"
+              class="btnTransform cursor-pointer w-10 h-10 bg-green-500 rounded-xl flex justify-center items-center flex-shrink-0 relative"
               @click="approve(u.uid)"
               @click.prevent.stop
             >
-              <i
-                class="ri-check-fill text-xl h-0 w-0 flex justify-center items-center"
-                aria-hidden="true"
-              />
+              <transition
+                name="fade-y"
+                appear
+              >
+                <i
+                  v-if="!transactionInProgress[u.uid]"
+                  class="ri-check-fill absolute text-xl h-0 w-0 flex justify-center items-center transform transition duration-300"
+                  aria-hidden="true"
+                />
+                <div
+                  v-else
+                  class="w-4 h-4 absolute bg-gray-50 rounded-full transform transition duration-300 animate-ping"
+                />
+              </transition>
             </div>
             <div
-              class="btnTransform cursor-pointer w-10 h-10 bg-red-400 rounded-xl flex justify-center items-center"
+              :class="{'pointer-events-none': transactionInProgress[u.uid]}"
+              class="btnTransform cursor-pointer w-10 h-10 bg-red-500 rounded-xl flex justify-center items-center flex-shrink-0 relative"
               @click="decline(u.uid)"
               @click.prevent.stop
             >
-              <i
-                class="ri-close-fill text-xl h-0 w-0 flex justify-center items-center"
-                aria-hidden="true"
-              />
+              <transition
+                name="fade-y"
+                appear
+              >
+                <i
+                  v-if="!transactionInProgress[u.uid]"
+                  class="ri-close-fill absolute text-xl h-0 w-0 flex justify-center items-center transform transition duration-300"
+                  aria-hidden="true"
+                />
+                <div
+                  v-else
+                  class="w-4 h-4 absolute bg-gray-50 rounded-full transform transition duration-300 animate-ping"
+                />
+              </transition>
             </div>
           </div>
           <user-card
@@ -70,6 +92,7 @@
         usersRequests: [],
         text: '',
         loading: true,
+        transactionInProgress: {},
       };
     },
     async mounted() {
@@ -78,12 +101,18 @@
     },
     methods: {
       async decline(uid) {
+        this.transactionInProgress[uid]= true;
         await denyHost(uid);
         await this.fetchU();
+        this.$emit('success','red','User hosting request has been declined');
+        this.transactionInProgress[uid]= false;
       },
       async approve(uid) {
+        this.transactionInProgress[uid]= true;
         await confirmHost(uid);
         await this.fetchU();
+        this.$emit('success','green','User hosting request has been approved');
+        this.transactionInProgress[uid]= false;
       },
       async fetchU() {
         this.usersRequests = await getUsersInWaitingRoom();

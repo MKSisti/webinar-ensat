@@ -41,24 +41,46 @@
                 />
                 <div class="right-0 top-0 bottom-0 sm:absolute flex sm:justify-end justify-center items-center z-50 gap-2 sm:pr-4">
                   <div
-                    class="btnTransform cursor-pointer w-10 h-10 bg-green-400 rounded-xl flex justify-center items-center"
+                    :class="{'pointer-events-none': transactionInProgress[p.pid]}"
+                    class="btnTransform cursor-pointer w-10 h-10 bg-green-500 rounded-xl flex justify-center items-center flex-shrink-0 relative"
                     @click="approve(p.pid, p.owner, p.title)"
                     @click.prevent.stop
                   >
-                    <i
-                      class="ri-check-fill text-xl h-0 w-0 flex justify-center items-center"
-                      aria-hidden="true"
-                    />
+                    <transition
+                      name="fade-y"
+                      appear
+                    >
+                      <i
+                        v-if="!transactionInProgress[p.pid]"
+                        class="ri-check-fill absolute text-xl h-0 w-0 flex justify-center items-center transform transition duration-300"
+                        aria-hidden="true"
+                      />
+                      <div
+                        v-else
+                        class="w-4 h-4 absolute bg-gray-50 rounded-full transform transition duration-300 animate-ping"
+                      />
+                    </transition>
                   </div>
                   <div
-                    class="btnTransform cursor-pointer w-10 h-10 bg-red-400 rounded-xl flex justify-center items-center"
+                    :class="{'pointer-events-none': transactionInProgress[p.pid]}"
+                    class="btnTransform cursor-pointer w-10 h-10 bg-red-500 rounded-xl flex justify-center items-center flex-shrink-0 relative"
                     @click="decline(p.pid, p.owner)"
                     @click.prevent.stop
                   >
-                    <i
-                      class="ri-close-fill text-xl h-0 w-0 flex justify-center items-center"
-                      aria-hidden="true"
-                    />
+                    <transition
+                      name="fade-y"
+                      appear
+                    >
+                      <i
+                        v-if="!transactionInProgress[p.pid]"
+                        class="ri-close-fill absolute text-xl h-0 w-0 flex justify-center items-center transform transition duration-300"
+                        aria-hidden="true"
+                      />
+                      <div
+                        v-else
+                        class="w-4 h-4 absolute bg-gray-50 rounded-full transform transition duration-300 animate-ping"
+                      />
+                    </transition>
                   </div>
                 </div>
               </div>
@@ -87,6 +109,7 @@
         postsRequests: [],
         usersMap: null,
         loading: true,
+        transactionInProgress:{},
       };
     },
     async mounted() {
@@ -104,12 +127,18 @@
         });
       },
       async decline(pid, uid) {
+        this.transactionInProgress[pid] = true;
         await denyPost(pid, uid);
         await this.fetchU();
+        this.$emit('success','red','Post has been declined');
+        this.transactionInProgress[pid] = false;
       },
       async approve(pid, uid, title) {
+        this.transactionInProgress[pid] = true;
         await confirmPost(pid, uid, title);
         await this.fetchU();
+        this.$emit('success','green','Post has been approved');
+        this.transactionInProgress[pid] = false;
       },
       async fetchU() {
         this.postsRequests = await getPosts({ approved: false });
