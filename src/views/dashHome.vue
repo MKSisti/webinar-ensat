@@ -133,7 +133,7 @@
 <style>
 
 .progressBar{
-  animation: progress 4s ease-out;
+  animation: progress 6s ease-out;
   animation-iteration-count: 1;
 }
 
