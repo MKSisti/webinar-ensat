@@ -5,10 +5,10 @@
   >
     <loader v-if="loading">
       <h1
-        v-if="updating"
+        v-if="loadingText"
         class="text-xl font-semibold"
       >
-        Updating post
+        {{ loadingText }}
       </h1>
     </loader>
 
@@ -319,7 +319,7 @@
     data() {
       return {
         loading: true,
-        updating: false,
+        loadingText: null,
         content: '',
         postOwner: {},
         post: {},
@@ -412,29 +412,35 @@
           if (hostingDate < now.getTime() + now.getTimezoneOffset() * 60000) {
             console.error('invalid date');
           } else {
+            this.loading = true;
+            this.loadingText = 'Uploading post';
             this.inEditingMode = false;
             this.yetToPublish = false;
             await createPost(this.pid, this.content, this.postOwner.uid, hostingDate, this.title);
             await uploadCover(this.fileToUpload, this.pid);
+            this.loading = false;
+            this.loadingText = null;
           }
         } else {
           console.error('COVER MISSING');
         }
       },
       async remove() {
-        await removePost(this.pid, this.post.owner);
+        this.loading = true;
+        this.loadingText = 'Removing post';
+        removePost(this.pid, this.post.owner);
         this.$router.push({ name: 'home' });
       },
       async update() {
         this.loading = true;
-        this.updating = true;
+        this.loadingText = 'Updating post';
         this.inEditingMode = false;
         await updatePost(this.pid, this.content, this.pickedDate.getTime(), this.title, this.post.owner);
         if (this.fileToUpload) {
           await updateCover(this.fileToUpload, this.pid);
         }
         this.loading = false;
-        this.updating = false;
+        this.loadingText = null;
       },
       async fileChange(f) {
         [this.fileToUpload,this.cover] = await fileHandler(f);
@@ -448,7 +454,9 @@
         // this.$router.go(0);
 
         this.clearData();
+        this.loadingText = 'Undoing edits';
         await this.init();
+        this.loadingText = null;
       }
     },
   };
