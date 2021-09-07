@@ -78,7 +78,9 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
         <td style="text-align: center;">
@@ -118,7 +120,9 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
         <td style="text-align: center;">
@@ -137,9 +141,9 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
 
 const updateUser = async (uid, userName, uni, number, priv) => {
   let o = {};
-  userName? o['userName']=userName:null;
-  uni? o['uni']=uni:null;
-  number? o['number']=number:null;
+  userName ? (o['userName'] = userName) : null;
+  uni ? (o['uni'] = uni) : null;
+  number ? (o['number'] = number) : null;
   await users.child(uid).update(o);
   await updatePriv(uid, priv);
 };
@@ -201,7 +205,9 @@ const requestHost = async (uid, uni, number) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
       <td style="text-align: center;">
@@ -270,7 +276,9 @@ const confirmHost = async (uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
       <td style="text-align: center;">
@@ -299,7 +307,9 @@ const blockUser = async (uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
       <td style="text-align: center;">
@@ -321,7 +331,9 @@ const unblockUser = async (uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
       <td style="text-align: center;">
@@ -343,7 +355,9 @@ const makeAdmin = async (uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
       <td style="text-align: center;">
@@ -366,7 +380,9 @@ const makeHost = async (uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
       <td style="text-align: center;">
@@ -389,7 +405,9 @@ const makeRegular = async (uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
         <td style="text-align: center;">
@@ -440,7 +458,9 @@ const denyHost = async (uid) => {
     `
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="text-align: center;" align="center">
-        <img style="max-width:192px; padding: 5px 0px;" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        <td style="padding:0px;margin:0px; width="350">
+          <img style="margin: 0; border: 0; padding: 0; display: block;" width="192" height="192" src="https://spotlightensat.netlify.app/img/icons/icon_192x192.png" alt=""/>
+        </td>
       </tr>
       <tr>
         <td style="text-align: center;">
