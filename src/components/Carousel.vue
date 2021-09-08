@@ -52,7 +52,7 @@
         class="w-full h-full bg-cover absolute bg-center transform scale-105 transition duration-300 bg-no-repeat"
       />
     </transition>
-    <div class="relative w-full h-full flex justify-center items-center">
+    <div class="w-full h-full flex justify-center items-center">
       <div
         class="h-12 md:h-16 left-0 bottom-0 absolute w-full group cursor-pointer focus:h-16 md:focus:h-20 transition-all duration-300"
         tabindex="0"
@@ -74,7 +74,7 @@
             :key="posts[current]?.pid + 'info'"
             class="absolute left-0 transition duration-300 bottom-0 w-full h-full px-2 xl:px-8 flex justify-start items-center z-50 opacity-80 group-focus:opacity-100"
           >
-            <span class="rounded-full bg-yellow-400 h-12 w-12 md:h-16 md:w-16 transform scale-75 group-focus:scale-100 transition duration-300 flex-none overflow-hidden">
+            <span class="rounded-full bg-red-400 h-12 w-12 md:h-16 md:w-16 transform scale-75 group-focus:scale-100 transition duration-300 flex-none overflow-hidden">
               <img
                 :src="user?.img"
                 alt=""
