@@ -1,12 +1,12 @@
-import { users, waiting_Room, storage } from '../firebase';
-import { sendMail } from './emailClient';
-import { formatDate } from '../utils';
-import driver from './mongoAtlas';
-import Compressor from 'compressorjs';
+import { users, waiting_Room, storage } from "../firebase";
+import { sendMail } from "./emailClient";
+import { formatDate } from "../utils";
+import driver from "./mongoAtlas";
+import Compressor from "compressorjs";
 
 async function getUser(uid) {
   var user = null;
-  await users.child(uid).once('value', async (ds) => {
+  await users.child(uid).once("value", async (ds) => {
     user = await ds.val();
     user = {
       uid: ds.key,
@@ -19,9 +19,9 @@ async function getUser(uid) {
 const getAdminEmails = async () => {
   var l = [];
   await users
-    .orderByChild('priv')
+    .orderByChild("priv")
     .equalTo(2)
-    .once('value', async (ds) => {
+    .once("value", async (ds) => {
       ds.forEach((chds) => {
         l.push(chds.val().email);
       });
@@ -31,7 +31,7 @@ const getAdminEmails = async () => {
 
 const checkUserInwaitingRoom = async (uid) => {
   var e = false;
-  await waiting_Room.child(uid).once('value', async (ds) => {
+  await waiting_Room.child(uid).once("value", async (ds) => {
     e = ds.exists();
   });
   return e;
@@ -39,17 +39,17 @@ const checkUserInwaitingRoom = async (uid) => {
 
 const getUserFromWR = async (uid) => {
   var user = null;
-  await waiting_Room.child(uid).once('value', async (ds) => {
+  await waiting_Room.child(uid).once("value", async (ds) => {
     user = await ds.val();
   });
   return user;
 };
 
 const getPosts = async (filter, sort, limit, last) => {
-  return (await driver.get('posts', filter, sort, limit, last)) || null;
+  return (await driver.get("posts", filter, sort, limit, last)) || null;
 };
 const getPost = async (pid) => {
-  let l = await driver.get('posts', { pid: pid }, null, 1);
+  let l = await driver.get("posts", { pid: pid }, null, 1);
   return l[0] || null;
 };
 
@@ -59,8 +59,8 @@ const createPost = async (pid, content, owner, hosting_date, title) => {
   //The offset is in minutes -- convert it to ms
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
-  await users.child(owner + '/posts/' + pid).set(true);
-  await driver.insert('posts', {
+  await users.child(owner + "/posts/" + pid).set(true);
+  await driver.insert("posts", {
     pid,
     creation_date: t,
     hosting_date,
@@ -101,7 +101,7 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
   var tmLoc = new Date();
   let t = tmLoc.getTime() + tmLoc.getTimezoneOffset() * 60000;
   await driver.update(
-    'posts',
+    "posts",
     { pid },
     {
       content,
@@ -141,16 +141,16 @@ const updatePost = async (pid, content, hosting_date, title, uid) => {
 
 const updateUser = async (uid, userName, uni, number, priv) => {
   let o = {};
-  userName ? (o['userName'] = userName) : null;
-  uni ? (o['uni'] = uni) : null;
-  number ? (o['number'] = number) : null;
+  userName ? (o["userName"] = userName) : null;
+  uni ? (o["uni"] = uni) : null;
+  number ? (o["number"] = number) : null;
   await users.child(uid).update(o);
   await updatePriv(uid, priv);
 };
 
 const confirmPost = async (pid, uid, title) => {
   await driver.update(
-    'posts',
+    "posts",
     { pid },
     {
       approved: true,
@@ -181,12 +181,12 @@ const denyPost = async (pid, uid) => {
 
 // updated tp remove from mongo still has logic to change what needs to be changed in firebase for the user
 const removePost = async (pid, uid) => {
-  await users.child(uid + '/posts/' + pid).remove((err) => {
+  await users.child(uid + "/posts/" + pid).remove((err) => {
     err ? console.error(err) : null;
   });
-  await driver.delete('posts', { pid });
+  await driver.delete("posts", { pid });
 
-  await storage.ref('posters/' + pid).delete();
+  await storage.ref("posters/" + pid).delete();
 };
 
 // this is the user request host priv method makes an entry in waiting_room
@@ -226,7 +226,7 @@ const requestHost = async (uid, uni, number) => {
 };
 const getUsersInWaitingRoom = async () => {
   let l = [];
-  await waiting_Room.once('value', async (ds) => {
+  await waiting_Room.once("value", async (ds) => {
     ds.forEach((dsch) => {
       l.push({
         uid: dsch.key,
@@ -239,21 +239,21 @@ const getUsersInWaitingRoom = async () => {
 
 const getUsersFromSearch = async (text) => {
   let l = [];
-  let re = new RegExp(text, 'gi');
+  let re = new RegExp(`.*${text}.*`,'i');
   await users
-    .orderByChild('userName')
+    .orderByChild("userName")
     .startAt(text.toUpperCase())
-    .endAt(text.toLowerCase() + '\uf8ff')
-    .once('value', async (ds) => {
-      ds.forEach((dsch) => {
-        let v = dsch.val();
-        if (re.test(v.userName)) {
+    .endAt(text.toLowerCase() + "\uf8ff")
+    .once("value", async (ds) => {
+      let v = ds.val();
+      for (const key of Object.keys(v)) {
+        if (re.test(v[key].userName)) {
           l.push({
-            uid: dsch.key,
-            ...v,
+            uid: key,
+            ...v[key],
           });
         }
-      });
+      }
     });
   return l;
 };
@@ -440,7 +440,7 @@ const updatePriv = async (uid, val) => {
       break;
 
     default:
-      console.error('unsopported action');
+      console.error("unsopported action");
       break;
   }
 };
@@ -474,7 +474,7 @@ const denyHost = async (uid) => {
 
 const getUserInfo = async (uid) => {
   var u = null;
-  await users.child(uid).once('value', async (ds) => {
+  await users.child(uid).once("value", async (ds) => {
     var data = await ds.val();
     u = {
       uid: ds.key,
@@ -518,11 +518,11 @@ const makeUsersMap = async (PostList, oldMap) => {
 };
 
 const uploadCover = async (img, pid) => {
-  await storage.ref('posters/' + pid).put(img);
+  await storage.ref("posters/" + pid).put(img);
 };
 
 const updateCover = async (img, pid) => {
-  await storage.ref('posters/' + pid).delete();
+  await storage.ref("posters/" + pid).delete();
   await uploadCover(img, pid);
 };
 
@@ -532,14 +532,14 @@ const updateCover = async (img, pid) => {
  * @returns actual image downloaded as blob
  */
 const getCoverImg = async (pid) => {
-  let url = await storage.ref('posters/' + pid).getDownloadURL();
+  let url = await storage.ref("posters/" + pid).getDownloadURL();
   return await new Promise((res) => {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
+    xhr.responseType = "blob";
     xhr.onload = () => {
       res(xhr.response);
     };
-    xhr.open('GET', url);
+    xhr.open("GET", url);
     xhr.send();
   });
 };
@@ -550,12 +550,12 @@ const getCoverImg = async (pid) => {
  * @returns the cover img url
  */
 const getCI2 = async (pid) => {
-  return (await storage.ref('posters/' + pid).getDownloadURL()) || (await storage.ref('posters/fail.png').getDownloadURL());
+  return (await storage.ref("posters/" + pid).getDownloadURL()) || (await storage.ref("posters/fail.png").getDownloadURL());
 };
 
 const fileHandler = async (f, q = 1) => {
   return new Promise((res) => {
-    if (f[0] && f[0].type.split('/')[0] == 'image') {
+    if (f[0] && f[0].type.split("/")[0] == "image") {
       var fileToUpload = null;
       var reader = new FileReader();
       new Compressor(f[0], {
@@ -574,24 +574,24 @@ const fileHandler = async (f, q = 1) => {
 };
 
 const follow = async (uid, email, hostuid, hostemail) => {
-  await users.child(uid + '/following/' + hostuid).set({
+  await users.child(uid + "/following/" + hostuid).set({
     uid: hostuid,
     email: hostemail,
   });
-  await users.child(hostuid + '/followers/' + uid).set({
+  await users.child(hostuid + "/followers/" + uid).set({
     uid: uid,
     email: email,
   });
 };
 
 const unfollow = async (uid, hostuid) => {
-  await users.child(uid + '/following/' + hostuid).remove();
-  await users.child(hostuid + '/followers/' + uid).remove();
+  await users.child(uid + "/following/" + hostuid).remove();
+  await users.child(hostuid + "/followers/" + uid).remove();
 };
 
 const getFollowersList = async (uid) => {
   var l = [];
-  await users.child(uid + '/followers').once('value', async (ds) => {
+  await users.child(uid + "/followers").once("value", async (ds) => {
     ds.forEach((dsch) => {
       l.push(dsch.val());
     });
@@ -600,7 +600,7 @@ const getFollowersList = async (uid) => {
 };
 const getFollowersListEmails = async (uid) => {
   var l = [];
-  await users.child(uid + '/followers').once('value', async (ds) => {
+  await users.child(uid + "/followers").once("value", async (ds) => {
     ds.forEach((dsch) => {
       l.push(dsch.val().email);
     });
@@ -609,7 +609,7 @@ const getFollowersListEmails = async (uid) => {
 };
 const getFollowingList = async (uid) => {
   var l = [];
-  await users.child(uid + '/following').once('value', async (ds) => {
+  await users.child(uid + "/following").once("value", async (ds) => {
     ds.forEach((dsch) => {
       l.push(dsch.val());
     });
@@ -618,7 +618,7 @@ const getFollowingList = async (uid) => {
 };
 const getFollowingListIds = async (uid) => {
   var l = [];
-  await users.child(uid + '/following').once('value', async (ds) => {
+  await users.child(uid + "/following").once("value", async (ds) => {
     ds.forEach((dsch) => {
       l.push(dsch.val().uid);
     });

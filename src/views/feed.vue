@@ -3,7 +3,7 @@
     <div v-if="loading">
       <loader class="pb-4 pt-4" />
     </div>
-    <div  v-else class="w-full h-full transform transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
+    <div v-else class="w-full h-full transform transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto">
       <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">Feed</div>
       <div class="w-full h-full">
         <div class="w-full h-full flex-col text-4xl">
@@ -66,7 +66,6 @@ export default {
         this.feed = await getPosts({ owner: { $in: this.followingList }, approved: true }, { hosting_date: 1 }, this.postsToshow, null);
         this.feed.length > 0 ? (this.usersMap = await makeUsersMap(this.feed, this.usersMap)) : null;
         this.loading = false;
-
 
         //can't get this to trigger and I'm honestly too tired to debug this,
         //the code below should work once we get the event to trigger
