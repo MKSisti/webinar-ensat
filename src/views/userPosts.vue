@@ -8,6 +8,7 @@
   >
     <div
       v-if="userInfo.priv >= 1"
+      ref="container"
       class="w-full h-full transition duration-300 bg-gray-100 dark:bg-gray-900 flex justify-start items-start flex-col space-y-5 rounded-t-6xl shadow-3xl overflow-auto"
     >
       <div class="text-4xl sm:text-6xl font-bold px-10 pt-5">
@@ -133,6 +134,7 @@ import { BSON } from "realm-web";
 import PostCard from "../components/PostCard";
 import BaseInput from "../components/BaseInput";
 import Loader from '../components/Loader';
+import { debounce } from "../utils";
 
 export default {
   name:'UserPostsView',
@@ -190,6 +192,17 @@ export default {
         this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
         this.loading = false;
       });
+
+      if(this.userInfo.priv >= 1){
+        let debScrollBottom = debounce(async () => {
+          if(!awaitingApproval){
+            if(this.$refs.container?.scrollTop > 100) this.$emit('overScroll');
+            else this.$emit('underScroll');
+          }
+        }, 100);
+        this.$refs.container.addEventListener("scroll", debScrollBottom, false);
+      }
+      
     },
     goToCreate() {
       let token = BSON.ObjectID();

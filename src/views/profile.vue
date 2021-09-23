@@ -2,13 +2,14 @@
   <div
     class="w-full h-full transition duration-300"
   >
-    <div class="w-full h-full flex justify-start items-start flex-col space-y-10">
+    <div class="w-full h-full flex justify-start items-start flex-col">
       <div class="flex w-full sm:w-10/12 sm:max-w-xl justify-center items-center sm:px-10 px-5 sm:pt-10 pt-5 mb-0">
-        <user-card :user-info="userInfo" />
+        <user-card :user-info="userInfo" :minimal="overScroll"/>
       </div>
       <div
         v-if="uid == getUserInfo.uid"
-        class="px-4 py-3 bg-gray-100 dark:bg-gray-900 shadow-md flex-col md:flex-row flex items-start md:items-center justify-between rounded-2xl gap-4 font-semibold text-xl mx-auto mt-5 select-none"
+        :class="{'max-h-0 py-0 m-0': overScroll,'max-h-44 py-3 mt-5': !overScroll}"
+        class="px-4 bg-gray-100 dark:bg-gray-900 shadow-md flex-col md:flex-row flex items-start md:items-center justify-between rounded-2xl gap-4 font-semibold text-xl mx-auto select-none flex-shrink-0 overflow-hidden transition-all duration-300"
       >
         <router-link :to="'/profile/' + getUserInfo.uid">
           <div class="flex justify-center items-center">
@@ -33,7 +34,7 @@
           </div>
         </router-link>
       </div>
-      <div class="w-full h-full relative select-auto">
+      <div class="w-full h-full relative select-auto mt-5">
         <router-view
           v-slot="{ Component }"
           class="w-full max-h-full absolute"
@@ -45,6 +46,8 @@
           >
             <component
               :is="Component"
+              @overScroll="overScroll = true"
+              @underScroll="overScroll = false"
               class="w-full max-h-full"
             />
           </transition>
@@ -72,6 +75,7 @@ export default {
       },
       becomingHost: false,
       editingProfile: false,
+      overScroll:false,
     };
   },
   computed: {

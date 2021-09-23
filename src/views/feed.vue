@@ -16,7 +16,7 @@
         </div>
         <div class="w-full h-full">
           <div class="w-full h-full flex-col text-4xl">
-            <div class="w-full sm:px-8 xl:px-0 flex flex-row justify-around items-start flex-wrap sm:space-y-10 rounded-t-3xl overflow-hidden sm:pt-5 sm:overflow-visible">
+            <div class="w-full sm:px-8 xl:px-0 flex flex-row justify-around items-start flex-wrap sm:gap-y-10 rounded-t-3xl overflow-hidden sm:pt-5 sm:overflow-visible">
               <transition-group
                 v-if="feed.length > 0"
                 name="fade-y"
@@ -105,10 +105,14 @@ export default {
         this.userInfo = await getUser(this.uid);
         this.followingList = await getFollowingListIds(this.uid);
         this.feed = await getPosts({ owner: { $in: this.followingList }, approved: true }, { creation_date: -1 }, this.postsToshow, null);
+        this.feed = this.feed.concat(this.feed);
         this.feed.length > 0 ? (this.usersMap = await makeUsersMap(this.feed, this.usersMap)) : null;
         this.loading = false;
 
         let debScrollBottom = debounce(async () => {
+          if(this.$refs.container?.scrollTop > 100) this.$emit('overScroll');
+          else this.$emit('underScroll');
+
           if (!this.loading)
             if (this.$refs.container?.scrollHeight && this.$refs.container?.scrollHeight - this.$refs.container?.scrollTop <= this.$refs.container?.clientHeight) {
               this.extraPosts = true;
@@ -120,7 +124,7 @@ export default {
                 setTimeout(() => (this.extraPosts = false), 1000);
               }
             }
-        }, 200);
+        }, 100);
         this.$refs.container.addEventListener("scroll", debScrollBottom, false);
       });
     },
