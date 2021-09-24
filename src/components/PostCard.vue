@@ -72,10 +72,11 @@
           class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full rounded-3xl flex-shrink-0 shadow-md overflow-hidden"
         >
           <img
+            ref="cover"
             v-if="!loading"
             :src="cover"
             alt=""
-            onerror="this.onerror=null;this.src='/img/icons/errorCover.jpg';"
+            :onerror="ImgError"
           >
         </div>
       </div>
@@ -118,6 +119,7 @@
       return {
         cover: null,
         loading: true,
+        re: 0,
       };
     },
     computed: {
@@ -130,6 +132,20 @@
       eventUpcoming(){
         return new Date(this.post.hosting_date) - Date.now() > 0;
       }
+    },
+    methods:{
+      ImgError(){
+        this.$refs.cover.src = '/img/icons/errorCover.jpg';
+        // this.$refs.cover.onerror=null;
+        if (this.re < 3) {
+          console.log("time");
+          setTimeout(async () => {
+            console.log("called");
+            this.$refs.cover.src = await getCWithRetry(this.post.pid);
+            this.re++;
+          }, 3000 + this.re * 1000);
+        }
+      },
     },
     async mounted() {
       this.cover = await getCWithRetry(this.post.pid);

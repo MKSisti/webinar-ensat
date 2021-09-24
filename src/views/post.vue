@@ -392,6 +392,13 @@
             this.postOwner = await getU(this.post.owner);
             let uri = await getCWithRetry(this.pid);
             this.cover = uri ? 'https://api.allorigins.win/raw?url=' + encodeURIComponent(uri) : "/img/icons/errorCover.jpg";
+            //retries once on post cause the user will most probably reload the page anyway so no need for fancy code 
+            if (!uri) {
+              setTimeout(async () => {
+                uri = await getCWithRetry(this.pid);
+                this.cover = uri ? 'https://api.allorigins.win/raw?url=' + encodeURIComponent(uri) : "/img/icons/errorCover.jpg";
+              }, 2000 );
+            }
             this.content = this.post.content;
             this.title = this.post.title;
             this.pickedDate = new Date(this.post.hosting_date);
