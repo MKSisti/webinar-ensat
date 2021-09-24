@@ -550,7 +550,24 @@ const getCoverImg = async (pid) => {
  * @returns the cover img url
  */
 const getCI2 = async (pid) => {
-  return (await storage.ref("posters/" + pid).getDownloadURL()) || (await storage.ref("posters/fail.png").getDownloadURL());
+  return await storage.ref("posters/" + pid).getDownloadURL();
+};
+const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const getCWithRetry = async (pid, retries = 3, depth = 0) => {
+  try {   
+		return await getCI2(pid);
+	}catch(e) {
+		if (depth > retries) {
+      // no need to show anything more in the console the error cover will be displayed + the 404 error from firebase will be shown
+			// throw e;
+      // console.error(e); 
+      return false;
+		}
+		await wait(2 ** depth * 10) ;
+	
+		return getCWithRetry(pid, retries, depth + 1);
+	}
 };
 
 const fileHandler = async (f, q = 1) => {
@@ -660,4 +677,5 @@ export {
   getFollowersList,
   getFollowingList,
   getFollowingListIds,
+  getCWithRetry,
 };

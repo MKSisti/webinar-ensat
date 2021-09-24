@@ -121,7 +121,7 @@
     },
     computed: {
       currentImg() {
-        return `background-image: url(${this.posters[this.posts[this.current]?.pid]})`;
+        return `background-image: url(${this.posters[this.posts[this.current]?.pid]||"/img/icons/errorCover.jpg"})`;
       },
       user() {
         return this.users?.get(this.posts[this.current]?.owner);

@@ -71,7 +71,7 @@
 
   import { debounce } from '../utils';
   // import {createPost} from '../js/firebaseActions'
-  import { makeUsersMap, getCI2, getPosts } from '../js/dbActions';
+  import { makeUsersMap, getCWithRetry, getPosts } from '../js/dbActions';
 
   export default {
     name: 'App',
@@ -126,7 +126,7 @@
           this.carPosts = await getPosts({ approved: true }, { hosting_date: 1 }, 3, null);
 
           this.carPosts.forEach(async (p) => {
-            const cover = await getCI2(p.pid);
+            const cover = await getCWithRetry(p.pid);
             this.carPosters[p.pid] = cover;
           });
           this.carLoading = false;

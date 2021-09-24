@@ -75,6 +75,7 @@
             v-if="!loading"
             :src="cover"
             alt=""
+            onerror="this.onerror=null;this.src='/img/icons/errorCover.jpg';"
           >
         </div>
       </div>
@@ -108,7 +109,7 @@
 
 <script>
   import { formatDate } from '../utils';
-  import { getCI2 } from '../js/dbActions';
+  import { getCWithRetry } from '../js/dbActions';
 
   export default {
     name: 'PostCard',
@@ -131,7 +132,7 @@
       }
     },
     async mounted() {
-      this.cover = await getCI2(this.post.pid);
+      this.cover = await getCWithRetry(this.post.pid);
       this.loading = false;
     },
   };

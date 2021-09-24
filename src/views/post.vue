@@ -90,6 +90,7 @@
               class="object-contain h-auto w-auto"
               :src="cover"
               alt=""
+              onerror="this.onerror=null;this.src='/img/icons/errorCover.jpg';"
               crossorigin="anonymous"
               aria-hidden="true"
               @load="imgLoaded"
@@ -300,7 +301,7 @@
   import Loader from '../components/Loader';
   import { Calendar, DatePicker } from 'v-calendar';
 
-  import { getUserInfo as getU, createPost, uploadCover, getCI2, updateCover, updatePost, removePost, getPost , fileHandler} from '../js/dbActions';
+  import { getUserInfo as getU, createPost, uploadCover, getCWithRetry, updateCover, updatePost, removePost, getPost , fileHandler} from '../js/dbActions';
   import { formatDate } from '../utils';
   import { mapGetters } from 'vuex';
 
@@ -389,7 +390,8 @@
             }
           } else {
             this.postOwner = await getU(this.post.owner);
-            this.cover = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(await getCI2(this.pid));
+            let uri = await getCWithRetry(this.pid);
+            this.cover = uri ? 'https://api.allorigins.win/raw?url=' + encodeURIComponent(uri) : "/img/icons/errorCover.jpg";
             this.content = this.post.content;
             this.title = this.post.title;
             this.pickedDate = new Date(this.post.hosting_date);
