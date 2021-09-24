@@ -17,7 +17,6 @@
           :name="searchName || 'Search'"
           :model-value="search"
           size="0"
-          lazy="250"
           @update:modelValue="handleSearch"
           @clear="clear"
         />

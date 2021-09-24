@@ -344,9 +344,10 @@
     },
     watch: {
       $route: async function () {
-        if (this.$route.name == 'post') 
-          this.clearData();
-          await this.init();
+        if (this.$route.name == 'post') {
+            this.clearData();
+            await this.init();
+        }
       },
     },
     async mounted() {
@@ -371,33 +372,33 @@
         this.color = 'rgba(0,0,0,0)'
       },
       async init(){
-        // this.$nextTick(async () => {
-        this.post = await getPost(this.pid);
-        if (this.post == null) {
-          if (this.getPrivLevel > 0) {
-            if (this.getToken && this.getToken == this.pid) {
-              this.postOwner = this.getUserInfo;
-              this.inEditingMode = true;
-              this.yetToPublish = true;
-              this.isEditable = true;
+        this.$nextTick(async () => {
+          this.post = await getPost(this.pid);
+          if (this.post == null) {
+            if (this.getPrivLevel > 0) {
+              if (this.getToken && this.getToken == this.pid) {
+                this.postOwner = this.getUserInfo;
+                this.inEditingMode = true;
+                this.yetToPublish = true;
+                this.isEditable = true;
+              } else {
+                this.$router.push({ name: "error", params: { err: 'Invalid post creation token' } });
+              }
             } else {
-              this.$router.push({ name: "error", params: { err: 'Invalid post creation token' } });
+              this.$router.push({ name: "error", params: { err: 'User cannot create posts' } });
             }
           } else {
-            this.$router.push({ name: "error", params: { err: 'User cannot create posts' } });
+            this.postOwner = await getU(this.post.owner);
+            this.cover = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(await getCI2(this.pid));
+            this.content = this.post.content;
+            this.title = this.post.title;
+            this.pickedDate = new Date(this.post.hosting_date);
+            if (this.post.owner == this.getUserInfo.uid) {
+              this.isEditable = true;
+            }
           }
-        } else {
-          this.postOwner = await getU(this.post.owner);
-          this.cover = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(await getCI2(this.pid));
-          this.content = this.post.content;
-          this.title = this.post.title;
-          this.pickedDate = new Date(this.post.hosting_date);
-          if (this.post.owner == this.getUserInfo.uid) {
-            this.isEditable = true;
-          }
-        }
-        this.loading = false;
-      // });
+          this.loading = false;
+        }); 
       },
       handleTitle(val) {
         this.title = val;

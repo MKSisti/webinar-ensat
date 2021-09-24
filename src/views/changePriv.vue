@@ -148,8 +148,7 @@
       async searchForUsers(t) {
         this.loading = true;
         this.text = t;
-        if(this.text == t) this.usersList = await getUsersFromSearch(t);
-        else return this.searchForUsers(t);
+        this.usersList = await getUsersFromSearch(t);
         this.loading = false;
       },
       updateUser,
