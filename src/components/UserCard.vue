@@ -3,7 +3,10 @@
     :class="{ userCardMin: minimal || userInfo.priv < 1 }"
     class="h-28 sm:h-32 w-full transition-all duration-300"
   >
-    <div class="w-full h-full relative shadow-xl rounded-3xl">
+    <loader class="bg-gray-100 dark:bg-gray-900 rounded-3xl shadow-sm" v-if="loading" />
+    <div v-else class="w-full h-full relative shadow-xl rounded-3xl">
+
+      <!-- follow/unfollow -->
       <transition
         name="fade-y"
         appear
@@ -46,19 +49,19 @@
       </transition>
       
 
-      <div class="mainInfo w-full h-20 sm:h-24 bg-gray-100 dark:bg-gray-900 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm">
+      <div class="mainInfo w-full h-20 sm:h-24 bg-gray-100 dark:bg-gray-900 z-10 absolute flex justify-start items-center rounded-3xl shadow-sm translate-all duration-300">
         <div class="h-full flex justify-center items-center px-2 sm:px-4 flex-shrink-0">
           <img
             :class="{ 'animate-pulse bg-red-200': loadingImg}"
             :src="userInfo.img"
             alt="avatar"
-            class="rounded-full  flex-shrink-0 h-16 w-16 sm:h-20 sm:w-20"
+            class="rounded-full flex-shrink-0 h-16 w-16 sm:h-20 sm:w-20 translate-all duration-300"
             @load="loadingImg = false"
           >
         </div>
         <div class="flex justify-center items-start flex-col w-full -space-y-1">
           <div class="flex justify-start items-start w-full pr-24">
-            <h1 class="text-xl sm:text-3xl font-bold truncate">
+            <h1 class="text-xl sm:text-3xl font-bold truncate translate-all duration-300">
               {{ userInfo.userName }}
             </h1>
             <h4
@@ -69,7 +72,7 @@
               {{ tag }}
             </h4>
           </div>
-          <h2 class="text-base sm:text-xl font-semibold w-full truncate pr-24">
+          <h2 class="text-base sm:text-xl font-semibold w-full truncate pr-24 translate-all duration-300">
             {{ userInfo.email }}
           </h2>
         </div>
@@ -100,6 +103,7 @@
   import { getAbbreviation } from '../utils';
   import { follow, unfollow } from '../js/dbActions';
   import { mapGetters, mapActions } from 'vuex';
+  import Loader from './Loader';
 
   export default {
     name: 'UserCard',
@@ -108,23 +112,25 @@
       editable: Boolean,
       minimal: Boolean,
     },
+    components:{
+      Loader
+    },
     data() {
       return {
         tags: ['User', 'Host', 'Admin'],
         colors: ['yellow', 'red', 'green'],
         loadingImg: true,
+        loading:true,
       };
     },
     computed: {
+      ...mapGetters('user', ['getUserInfo','following']),
       tag() {
-        return this.tags[this.userInfo.priv] || '';
+        return this.tags[this.userInfo.priv];
       },
       color() {
         return `bg-${this.colors[this.userInfo.priv]}-500` || '';
       },
-    },
-    computed: {
-      ...mapGetters('user', ['getUserInfo','following']),
     },
     methods: {
       ...mapActions('user', ['addFollow','removeFollow']),
@@ -138,6 +144,12 @@
         unfollow(this.getUserInfo.uid, this.userInfo.uid);
       }
     },
+    watch:{
+      userInfo: function(){
+        this.loading= false;
+        console.log('changed');
+      }
+    }
   };
 </script>
 

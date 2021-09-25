@@ -138,10 +138,8 @@
         this.$refs.cover.src = '/img/icons/errorCover.jpg';
         // this.$refs.cover.onerror=null;
         if (this.re < 3) {
-          console.log("time");
           setTimeout(async () => {
-            console.log("called");
-            this.$refs.cover.src = await getCWithRetry(this.post.pid);
+            if(this.$refs.cover) this.$refs.cover.src = await getCWithRetry(this.post.pid);
             this.re++;
           }, 3000 + this.re * 1000);
         }
