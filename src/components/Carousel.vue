@@ -4,6 +4,7 @@
     class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 xl:rounded-6xl xl:w-10/12 2xl:w-4/6 w-full rounded-none overflow-hidden relative select-none aspect-w-2 aspect-h-1 xl:aspect-w-3 2xl:aspect-w-4 shadow-xl"
     @mouseenter="stopInterval"
     @mouseleave="startInterval"
+    ref="slide"
   >
     <div class="w-full h-full z-40 pointer-events-none flex justify-center items-start absolute space-x-3 px-4 py-4">
       <span
@@ -16,7 +17,8 @@
     <!-- controls -->
     <div class="w-full h-full z-40 pointer-events-none flex justify-between items-center absolute">
       <div
-        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer"
+        :style="[dir == -1 ? transform: '']"
+        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-300"
         @click="goToPrev()"
       >
         <span
@@ -28,7 +30,8 @@
         </span>
       </div>
       <div
-        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer"
+        :style="[dir == 1 ? transform : '']"
+        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-300"
         @click="goToNext()"
       >
         <span
@@ -52,7 +55,9 @@
         class="w-full h-full bg-cover absolute bg-center transform scale-105 transition duration-300 bg-no-repeat"
       />
     </transition>
-    <div class="w-full h-full flex justify-center items-center">
+    <div
+      class="w-full h-full flex justify-center items-center"
+    >
       <div
         class="h-12 md:h-16 left-0 bottom-0 absolute w-full group cursor-pointer focus:h-16 md:focus:h-20 transition-all duration-300"
         tabindex="0"
@@ -116,7 +121,8 @@
     data() {
       return {
         current: 0,
-        dir: 1
+        dir: 1,
+        transform:0,
       };
     },
     computed: {
@@ -129,6 +135,32 @@
     },
     mounted() {
       this.startInterval();
+      
+      let initialTouch, moveTouch, trigger;
+      this.$refs.slide.addEventListener('touchstart',(evt) => {
+        this.stopInterval();
+        initialTouch = evt.touches[0].clientX;
+        trigger = false;
+      },false);
+
+      this.$refs.slide.addEventListener('touchmove',(evt) => {
+        if(trigger == false){
+          moveTouch = evt.touches[0].clientX;
+          this.dir = moveTouch - initialTouch < 0 ? 1 : -1;
+          this.transform = `transform: translateX(${(moveTouch - initialTouch)/8}px) scale(${(Math.abs(moveTouch - initialTouch) * 4 / window.screen.width) + 1})`;
+          if( Math.abs(moveTouch - initialTouch) > window.screen.width / 4){
+            moveTouch - initialTouch < 0 ? this.goToNext() : this.goToPrev();
+            trigger = true
+          }
+        }
+      },false);
+      
+      this.$refs.slide.addEventListener("touchend", ()=>{
+        this.transform = `transform: translateX(0px) scale(1)`;
+        this.startInterval();
+        trigger = false;
+      }, false);
+      // this.$refs.slide.addEventListener("touchcancel", this.startInterval, false);
     },
     methods: {
       goToPost(pid) {

@@ -272,7 +272,7 @@
     }
 
     img[size="large"]{
-      @apply w-full h-auto;
+      @apply w-auto max-h-116;
     }
 
     h1 {

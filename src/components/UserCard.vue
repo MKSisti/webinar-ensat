@@ -142,13 +142,14 @@
       async unfollowUser(){
         this.removeFollow ( this.userInfo.uid );
         unfollow(this.getUserInfo.uid, this.userInfo.uid);
+      },
+      pingInfo(){
+        if(this.userInfo == {} || this.userInfo == null) return setTimeout(this.pingInfo,500);
+        else return setTimeout(() => this.loading = false,500);
       }
     },
-    watch:{
-      userInfo: function(){
-        this.loading= false;
-        console.log('changed');
-      }
+    mounted(){
+      this.pingInfo();
     }
   };
 </script>

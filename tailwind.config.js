@@ -27,8 +27,20 @@ module.exports = {
         112: '29rem',
         116: '31rem',
       },
-      maxWidth: defaultTheme.spacing,
+      maxWidth: {
+        ...defaultTheme.spacing,
+        100: '25rem',
+        108: '27rem',
+        112: '29rem',
+        116: '31rem',
+      },
       height: {
+        100: '25rem',
+        108: '27rem',
+        112: '29rem',
+        116: '31rem',
+      },
+      maxHeight: {
         100: '25rem',
         108: '27rem',
         112: '29rem',
