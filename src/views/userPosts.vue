@@ -191,18 +191,18 @@ export default {
               this.userPosts = await getPosts({ owner: this.uid, approved: true });
         this.awaitingApproval = await checkUserInwaitingRoom(this.uid);
         this.loading = false;
-      });
-
-      if(this.userInfo.priv >= 1){
-        let debScrollBottom = debounce(async () => {
-          if(!awaitingApproval){
-            if(this.$refs.container?.scrollTop > 100) this.$emit('overScroll');
-            else this.$emit('underScroll');
-          }
+        let debScrollBottom = debounce(() => {
+          if(this.$refs.container?.scrollTop > 100) this.$emit('overScroll');
+          else this.$emit('underScroll');
         }, 100);
-        this.$refs.container.addEventListener("scroll", debScrollBottom, false);
-      }
-      
+        
+        const setUpEventListener = () => {
+          if(this.$refs?.container) this.$refs.container.addEventListener("scroll", debScrollBottom, false);
+          else return setTimeout(setUpEventListener,500);
+        }
+
+        setUpEventListener();
+      });
     },
     goToCreate() {
       let token = BSON.ObjectID();

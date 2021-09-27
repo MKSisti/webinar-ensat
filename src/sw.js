@@ -38,6 +38,19 @@ registerRoute(
   })
 );
 
+registerRoute(
+  ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/img/icons/'),
+  new CacheFirst({
+    cacheName: 'icons',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+      }),
+    ],
+  })
+);
+
 // //Cache images with a Cache First strategy
 // registerRoute(
 //   // Check to see if the request's destination is style for an image

@@ -74,13 +74,13 @@ const register = async () => {
       console.log('sw: controlling event listener hit.');
     });
 
-    Notification.requestPermission(function (result) {
-      if (result === 'granted') {
-        wb.messageSW({
-          type: 'NOTIFICATION_GRANTED',
-        });
-      }
-    });
+    // Notification.requestPermission(function (result) {
+    //   if (result === 'granted') {
+    //     wb.messageSW({
+    //       type: 'NOTIFICATION_GRANTED',
+    //     });
+    //   }
+    // });
 
     //for actions that need service worker registration to be installed, get wether the app
     //is setting up for the first time, if so refreshe app to get the up to date registration

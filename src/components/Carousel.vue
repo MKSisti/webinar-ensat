@@ -140,6 +140,7 @@
       this.$refs.slide.addEventListener('touchstart',(evt) => {
         this.stopInterval();
         initialTouch = evt.touches[0].clientX;
+        moveTouch = evt.touches[0].clientX;
       },false);
 
       this.$refs.slide.addEventListener('touchmove',(evt) => {

@@ -72,11 +72,10 @@
           class="aspect-w-2 aspect-h-1 sm:aspect-w-2 sm:aspect-h-1 w-full rounded-3xl flex-shrink-0 shadow-md overflow-hidden"
         >
           <img
-            ref="cover"
             v-if="!loading"
             :src="cover"
             alt=""
-            :onerror="ImgError"
+            @error="ImgError"
           >
         </div>
       </div>
@@ -134,12 +133,11 @@
       }
     },
     methods:{
-      ImgError(){
-        this.$refs.cover.src = '/img/icons/errorCover.jpg';
-        // this.$refs.cover.onerror=null;
+      ImgError(e){
+        this.cover = '/img/icons/errorCover.jpg';
         if (this.re < 3) {
           setTimeout(async () => {
-            if(this.$refs.cover) this.$refs.cover.src = await getCWithRetry(this.post.pid);
+            if(this.cover) this.cover = await getCWithRetry(this.post.pid);
             this.re++;
           }, 3000 + this.re * 1000);
         }

@@ -18,7 +18,7 @@
       appear
     >
       <!-- //!post -->
-      <div class="flex justify-start items-start flex-col w-full h-full transition duration-300 flex-shrink-0 overflow-auto">
+      <div class="flex justify-start items-start flex-col w-full h-full transition duration-300 flex-shrink-0 overflow-y-auto overflow-x-hidden">
         <!-- //!poster -->
         <div
           class="select-none w-full h-auto relative transform transition duration-300 flex-shrink-0"
