@@ -1,10 +1,10 @@
 <template>
   <div
+    ref="slide"
     :class="{ 'animate-pulse': loading }"
     class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 xl:rounded-6xl xl:w-10/12 2xl:w-4/6 w-full rounded-none overflow-hidden relative select-none aspect-w-2 aspect-h-1 xl:aspect-w-3 2xl:aspect-w-4 shadow-xl"
     @mouseenter="stopInterval"
     @mouseleave="startInterval"
-    ref="slide"
   >
     <div class="w-full h-full z-40 pointer-events-none flex justify-center items-start absolute space-x-3 px-4 py-4">
       <span
@@ -18,7 +18,7 @@
     <div class="w-full h-full z-40 pointer-events-none flex justify-between items-center absolute">
       <div
         :style="[dir == -1 ? transform: '']"
-        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-300"
+        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-75"
         @click="goToPrev()"
       >
         <span
@@ -31,7 +31,7 @@
       </div>
       <div
         :style="[dir == 1 ? transform : '']"
-        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-300"
+        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-75"
         @click="goToNext()"
       >
         <span
@@ -136,29 +136,24 @@
     mounted() {
       this.startInterval();
       
-      let initialTouch, moveTouch, trigger;
+      let initialTouch, moveTouch;
       this.$refs.slide.addEventListener('touchstart',(evt) => {
         this.stopInterval();
         initialTouch = evt.touches[0].clientX;
-        trigger = false;
       },false);
 
       this.$refs.slide.addEventListener('touchmove',(evt) => {
-        if(trigger == false){
-          moveTouch = evt.touches[0].clientX;
-          this.dir = moveTouch - initialTouch < 0 ? 1 : -1;
-          this.transform = `transform: translateX(${(moveTouch - initialTouch)/8}px) scale(${(Math.abs(moveTouch - initialTouch) * 4 / window.screen.width) + 1})`;
-          if( Math.abs(moveTouch - initialTouch) > window.screen.width / 4){
-            moveTouch - initialTouch < 0 ? this.goToNext() : this.goToPrev();
-            trigger = true
-          }
-        }
+        moveTouch = evt.touches[0].clientX;
+        this.dir = moveTouch - initialTouch < 0 ? 1 : -1;
+        this.transform = `transform: translateX(${(moveTouch - initialTouch)/4}px) scale(${(Math.abs(moveTouch - initialTouch) * 4 / window.screen.width) + 1})`;
       },false);
       
       this.$refs.slide.addEventListener("touchend", ()=>{
         this.transform = `transform: translateX(0px) scale(1)`;
+        if( Math.abs(moveTouch - initialTouch) > window.screen.width / 4){
+          moveTouch - initialTouch < 0 ? this.goToNext() : this.goToPrev();
+        }
         this.startInterval();
-        trigger = false;
       }, false);
       // this.$refs.slide.addEventListener("touchcancel", this.startInterval, false);
     },
@@ -176,12 +171,16 @@
         });
       },
       goToNext() {
-        this.dir = 1;
-        this.current = (this.current + 1) % this.posts.length;
+        if(this.posts.length > 0){
+          this.dir = 1;
+          this.current = (this.current + 1) % this.posts.length;
+        }
       },
       goToPrev() {
-        this.dir = -1;
-        this.current = (this.current - 1 + this.posts.length) % this.posts.length;
+        if(this.posts.length > 0){
+          this.dir = -1;
+          this.current = (this.current - 1 + this.posts.length) % this.posts.length;
+        }
       },
       stopInterval() {
         if (this.autoPlayInterval) clearInterval(this.autoPlayInterval);
