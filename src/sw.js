@@ -94,13 +94,13 @@ self.addEventListener('message', async (event) => {
   switch (event.data && event.data.type) {
     case 'SKIP_WAITING':
       self.skipWaiting();
-      console.log('sw root: message SKIP_WAITING called.');
+      // console.log('sw root: message SKIP_WAITING called.');
       break;
     case 'NOTIFICATION_GRANTED':
       //console.log('sw root: notification permission granted');
       break;
     case 'NOTIFICATION':
-      console.log('sw root: dispatching notification');
+      // console.log('sw root: dispatching notification');
       event.waitUntil(dispatchNotification(event.data.data.title, event.data.data.options, event.data.data.delay));
       break;
   }
@@ -129,7 +129,7 @@ async function dispatchNotification(title, options, delay) {
     self.registration.showNotification(title, options);
     return true;
   } else {
-    console.log('dispatching notification in:', delay + 'ms');
+    // console.log('dispatching notification in:', delay + 'ms');
     await wait(delay);
     await self.registration.showNotification(title, options);
     return true;

@@ -91,7 +91,6 @@
               :src="cover"
               alt=""
               onerror="this.onerror=null;this.src='/img/icons/errorCover.jpg';"
-              crossorigin="anonymous"
               aria-hidden="true"
               @load="imgLoaded"
             >
@@ -391,12 +390,12 @@
           } else {
             this.postOwner = await getU(this.post.owner);
             let uri = await getCWithRetry(this.pid);
-            this.cover = uri ? 'https://api.allorigins.win/raw?url=' + encodeURIComponent(uri) : "/img/icons/errorCover.jpg";
+            this.cover = uri ? uri : "/img/icons/errorCover.jpg";
             //retries once on post cause the user will most probably reload the page anyway so no need for fancy code 
             if (!uri) {
               setTimeout(async () => {
                 uri = await getCWithRetry(this.pid);
-                this.cover = uri ? 'https://api.allorigins.win/raw?url=' + encodeURIComponent(uri) : "/img/icons/errorCover.jpg";
+                this.cover = uri ? uri : "/img/icons/errorCover.jpg";
               }, 2000 );
             }
             this.content = this.post.content;

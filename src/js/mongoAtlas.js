@@ -18,7 +18,7 @@ class MongoDriver {
       assert(user.id === realmApp.currentUser.id);
       this.client = realmApp.currentUser.mongoClient('mongodb-atlas');
       this.connected = true;
-      console.log('connected to db');
+      // console.log('connected to db');
     } catch (e) {
       console.error('Failed to log in', e);
       this.connected = false;
@@ -28,7 +28,7 @@ class MongoDriver {
   async init(col) {
     if (!this.connected) await this.connect();
     if (!this._collections[col]) this._collections[col] = this.client.db('WebEnsat1').collection(col);
-    console.log(col, 'connected');
+    // console.log(col, 'connected');
     return this._collections[col];
   }
 

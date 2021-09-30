@@ -363,12 +363,6 @@
         this.editor.setOptions({
           editable: val,
         });
-      },
-      selectedImg: {
-        handler:function(val){
-          console.log(val)
-        },
-        deep: true
       }
     },
 
