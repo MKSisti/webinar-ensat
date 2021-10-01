@@ -18,7 +18,7 @@
     <div class="w-full h-full z-40 pointer-events-none flex justify-between items-center absolute">
       <div
         :style="[dir == -1 ? transform: '']"
-        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-75"
+        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer"
         @click="goToPrev()"
       >
         <span
@@ -31,7 +31,7 @@
       </div>
       <div
         :style="[dir == 1 ? transform : '']"
-        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-75"
+        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer"
         @click="goToNext()"
       >
         <span
