@@ -121,7 +121,7 @@
 
         <!-- //!editor -->
         <div 
-          :class="{'pt-6 sm:pt-0 sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
+          :class="{'pt-6 sm:pt-0 sm:pb-5': inEditingMode || (!inEditingMode && isEditable) || (getPrivLevel >1 && post && post.owner != getUserInfo.uid)}"
           class="sm:px-10 sm:mt-10 bg-gray-100 dark:bg-gray-900 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
         >
           <div
