@@ -129,7 +129,7 @@
         return this.tags[this.userInfo.priv];
       },
       color() {
-        return `bg-${this.colors[this.userInfo.priv]}-500` || '';
+        return `bg-${this.colors[this.userInfo.priv]}-500`;
       },
     },
     methods: {

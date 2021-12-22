@@ -91,7 +91,6 @@
               :src="cover"
               alt=""
               onerror="this.onerror=null;this.src='/img/icons/errorCover.jpg';"
-              crossorigin="anonymous"
               aria-hidden="true"
               @load="imgLoaded"
             >
@@ -122,7 +121,7 @@
 
         <!-- //!editor -->
         <div 
-          :class="{'pt-6 sm:pt-0 sm:pb-5': inEditingMode || (!inEditingMode && isEditable)}"
+          :class="{'pt-6 sm:pt-0 sm:pb-5': inEditingMode || (!inEditingMode && isEditable) || (getPrivLevel >1 && post && post.owner != getUserInfo.uid)}"
           class="sm:px-10 sm:mt-10 bg-gray-100 dark:bg-gray-900 w-full flex-grow rounded-t-3xl sm:rounded-t-6xl shadow-3xl relative flex justify-center items-center flex-col"
         >
           <div
@@ -391,12 +390,12 @@
           } else {
             this.postOwner = await getU(this.post.owner);
             let uri = await getCWithRetry(this.pid);
-            this.cover = uri ? 'https://api.allorigins.win/raw?url=' + encodeURIComponent(uri) : "/img/icons/errorCover.jpg";
+            this.cover = uri ? uri : "/img/icons/errorCover.jpg";
             //retries once on post cause the user will most probably reload the page anyway so no need for fancy code 
             if (!uri) {
               setTimeout(async () => {
                 uri = await getCWithRetry(this.pid);
-                this.cover = uri ? 'https://api.allorigins.win/raw?url=' + encodeURIComponent(uri) : "/img/icons/errorCover.jpg";
+                this.cover = uri ? uri : "/img/icons/errorCover.jpg";
               }, 2000 );
             }
             this.content = this.post.content;

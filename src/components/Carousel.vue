@@ -18,7 +18,7 @@
     <div class="w-full h-full z-40 pointer-events-none flex justify-between items-center absolute">
       <div
         :style="[dir == -1 ? transform: '']"
-        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-75"
+        class="w-2/12 h-full flex justify-start items-center px-4 font-bold pointer-events-auto group cursor-pointer"
         @click="goToPrev()"
       >
         <span
@@ -31,7 +31,7 @@
       </div>
       <div
         :style="[dir == 1 ? transform : '']"
-        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer transition-transform duration-75"
+        class="w-2/12 h-full flex justify-end items-center px-4 font-bold pointer-events-auto group cursor-pointer"
         @click="goToNext()"
       >
         <span
@@ -141,13 +141,13 @@
         this.stopInterval();
         initialTouch = evt.touches[0].clientX;
         moveTouch = evt.touches[0].clientX;
-      },false);
+      },{passive: true});
 
       this.$refs.slide.addEventListener('touchmove',(evt) => {
         moveTouch = evt.touches[0].clientX;
         this.dir = moveTouch - initialTouch < 0 ? 1 : -1;
         this.transform = `transform: translateX(${(moveTouch - initialTouch)/4}px) scale(${(Math.abs(moveTouch - initialTouch) * 4 / window.screen.width) + 1})`;
-      },false);
+      },{passive: true});
       
       this.$refs.slide.addEventListener("touchend", ()=>{
         this.transform = `transform: translateX(0px) scale(1)`;
@@ -155,7 +155,7 @@
           moveTouch - initialTouch < 0 ? this.goToNext() : this.goToPrev();
         }
         this.startInterval();
-      }, false);
+      },{passive: true});
       // this.$refs.slide.addEventListener("touchcancel", this.startInterval, false);
     },
     methods: {
