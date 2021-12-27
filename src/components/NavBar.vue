@@ -170,6 +170,8 @@
     methods: {
       async logIn() {
         try {
+          // Todo: reroute to a login form then if no account to a sign up account 
+          // google provider will no longer be used in this version of the app 
           await auth.signInWithPopup(provider);
         } catch (error) {
           console.error(error);

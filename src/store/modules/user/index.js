@@ -11,6 +11,7 @@ export default {
       token: null,
       followers: [],
       following:[],
+      emailVerification: true,
     };
   },
   mutations: {
@@ -31,6 +32,7 @@ export default {
       state.userInfo = {};
       state.isLoggedIn = false;
       state.privLevel = -99;
+      state.emailVerification = true;
     },
     setToken(state, payload) {
       state.token = payload.token;
@@ -44,6 +46,9 @@ export default {
     },
     popFollow(state, payload){
       state.following.splice(state.following.findIndex((f)=>{f.uid == payload.uid}),1);
+    },
+    setEmailVerification(state, payload) {
+      state.emailVerification = payload.value;
     },
   },
   actions: {
@@ -118,6 +123,35 @@ export default {
       commit({
         type: "clearUser",
       });
+    },
+    // new login methods to be used no external login using google Oauth
+    async CreateUser({ commit }, payload) {
+      await auth.createUserWithEmailAndPassword(payload.email, payload.password).then((U) => {
+        // console.log(payload.displayName);
+        //Todo Add profile picture Upload ...
+        U.user.updateProfile({ displayName: payload.displayName });
+        U.user.sendEmailVerification();
+        commit({
+          type: "setEmailVerification",
+          value: U.emailVerified,
+        })
+      }).catch((error) => {
+        console.error(error);
+      })
+    },
+    async SignInUser({commit}, payload){
+      await auth.signInWithEmailAndPassword(payload.email, payload.password).then((U) => {
+        commit({
+          type: "setEmailVerification",
+          value: U.emailVerified,
+        })
+      }).catch((error) => {
+        console.error(error);
+      });
+    },
+    // password reset and email verification is still using google cloud, so far it is not handled inApp maybe TODO
+    async SendPwdResetEmail(_, payload) {
+      await auth.sendPasswordResetEmail(payload.email, { url: "/handleReset" }).catch((error) => { console.error(error); });
     },
   },
   getters: {
